@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.png';
 import './App.css';
 
-function Author() {
+function SingIn() {
     return (
         <div className="Author">
             <header className="Author-header">
@@ -31,4 +31,4 @@ function Author() {
     );
 }
 
-export default Author;
+export default SingIn;
