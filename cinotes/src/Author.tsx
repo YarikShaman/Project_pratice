@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.png';
-import './Author.css';
+import './App.css';
 
 function Author() {
     return (
