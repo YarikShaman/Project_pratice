@@ -4,9 +4,9 @@ import './Author.css';
 
 function Author() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <a className="App-logo">
+        <div className="Author">
+            <header className="Author-header">
+                <a className="Author-logo">
                     Cinotes
                 </a>
                 {/*<p>*/}
@@ -21,10 +21,10 @@ function Author() {
                 {/*  Learn React*/}
                 {/*</a>*/}
             </header>
-            <body className="App-body">
+            <body className="Author-body">
             Lalala1
             </body>
-            <footer className="App-footer">
+            <footer className="Author-footer">
 
             </footer>
         </div>
