@@ -1,12 +1,12 @@
 import React from 'react';
 import logo from '../logo.png';
 import '../App.css';
+import {HomeHeader} from "../Components/HomeHeader";
 
 function Home() {
     return (
         <div className="App">
-            <header className="App-header">
-            </header>
+            <HomeHeader/>
             <body className="App-body">
             Home
             </body>

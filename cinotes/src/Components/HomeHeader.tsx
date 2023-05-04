@@ -1,7 +1,7 @@
 import React from "react";
-import "./App.css";
+import "../App.css";
 
-function HomeHeader() {
+export function HomeHeader() {
     return (
         <header className="App-header">
             <a className="App-logo">
@@ -10,4 +10,3 @@ function HomeHeader() {
         </header>
     );
 }
-export default HomeHeader;
