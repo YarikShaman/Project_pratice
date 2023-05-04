@@ -1,8 +1,6 @@
 import React, {createElement as e, useState} from 'react';
 import {Routes, Route} from "react-router-dom";
 import './App.css';
-//import 'swiper/css';
-//import { Swiper, SwiperSlide } from 'swiper/react';
 import axios from "axios";
 import MainPage from "./Pages/MainPage";
 import Author from "./Pages/Author";
@@ -10,6 +8,7 @@ import Home from "./Pages/Home";
 import {Films} from "./Pages/Films";
 import {Actors} from "./Pages/Actors";
 import {Playlists} from "./Pages/PlayLists";
+import {Account} from "./Pages/Account";
 
 function App() {
   return (
@@ -22,6 +21,7 @@ function App() {
             <Route path="/films" element={<Films/>}/>
             <Route path="/actors" element={<Actors/>}/>
             <Route path="/playlists" element={<Playlists/>}/>
+            <Route path="/account" element={<Account/>}/>
         </Routes>
     </div>
   );
