@@ -8,7 +8,17 @@ function Author() {
             <header className="App-header">
             </header>
             <body className="App-body">
-            Sing in
+                <form>
+                    <p>
+                        Username<br/>
+                        <input type={"text"}/>
+                    </p>
+                    <p>
+                        Password<br/>
+                        <input type={"text"}/>
+                    </p>
+                    <p><input type={"submit"}/></p>
+                </form>
             </body>
             <footer className="App-footer">
 
