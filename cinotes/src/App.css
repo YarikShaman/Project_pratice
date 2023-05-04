@@ -14,11 +14,7 @@
   /*align-items: center;*/
 }
 
-/*@media (prefers-reduced-motion: no-preference) {*/
-/*  .App-logo {*/
-/*    animation: App-logo-spin infinite 5s linear;*/
-/*  }*/
-/*}*/
+
 
 .App-header {
   background-color: #2a2a2a;
@@ -36,20 +32,7 @@
   color: #61dafb;
 }
 
-/*@keyframes App-logo-spin {*/
-/*  from {*/
-/*    transform: rotate(-20deg);*/
-/*  }*/
-/*  to {*/
-/*    transform: rotate(20deg);*/
-/*  }*/
-/*  from {*/
-/*    transform: rotate(20deg);*/
-/*  }*/
-/*  to {*/
-/*    transform: rotate(-20deg);*/
-/*  }*/
-/*}*/
+
 
 .App-body {
   background-color: #282c34;
@@ -71,3 +54,24 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+/*@media (prefers-reduced-motion: no-preference) {*/
+/*  .App-logo {*/
+/*    animation: App-logo-spin infinite 5s linear;*/
+/*  }*/
+/*}*/
+
+/*@keyframes App-logo-spin {*/
+/*  from {*/
+/*    transform: rotate(-20deg);*/
+/*  }*/
+/*  to {*/
+/*    transform: rotate(20deg);*/
+/*  }*/
+/*  from {*/
+/*    transform: rotate(20deg);*/
+/*  }*/
+/*  to {*/
+/*    transform: rotate(-20deg);*/
+/*  }*/
+/*}*/
