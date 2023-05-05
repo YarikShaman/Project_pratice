@@ -9,6 +9,7 @@ import {Films} from "./Pages/Films";
 import {Actors} from "./Pages/Actors";
 import {Playlists} from "./Pages/PlayLists";
 import {Account} from "./Pages/Account";
+import Registr from "./Pages/Registr";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
             <Route path="/" element={<MainPage />}/>
             <Route path="/sign_in" element={<Author/>}/>
+            <Route path="/reg" element={<Registr/>}/>
             <Route path="/home" element={<Home/>}/>
             <Route path="/films" element={<Films/>}/>
             <Route path="/actors" element={<Actors/>}/>
