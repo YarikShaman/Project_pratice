@@ -14,7 +14,7 @@ import Registr from "./Pages/Registr";
 function App() {
   return (
 
-    <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
+    <div className="App">
         <Routes>
             <Route path="/" element={<MainPage />}/>
             <Route path="/sign_in" element={<Author/>}/>
