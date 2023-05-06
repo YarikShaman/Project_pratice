@@ -3,8 +3,8 @@ import "../App.css";
 
 export function HomeHeader() {
     return (
-        <div className="ba">
-            <a className="text-2xl">
+        <div className="bg-neutral-800 h-14" >
+            <a className="pl-6 align-middle text-2xl font-mono font-black text-white select-none italic">
                 Cinotes
             </a>
         </div>

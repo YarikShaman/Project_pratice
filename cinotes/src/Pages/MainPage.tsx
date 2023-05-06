@@ -1,11 +1,11 @@
 import React from 'react';
 import '../App.css';
+import {HomeHeader} from "../Components/HomeHeader";
 
 function MainPage() {
     return (
-        <div className="App">
-            <header className="App-header">
-            </header>
+        <div className="h-screen">
+            <HomeHeader/>
             <body className="App-body">
             Main Page
             </body>
