@@ -1,16 +1,21 @@
 import React from 'react';
 import '../App.css';
+import {Link} from "react-router-dom";
+import logo from "../Img/logo.png";
+import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
+import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 
 function Author() {
     return (
         <>
             <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm text-white">
+                    <Link to={"/"}>
                     <img
-                        className="mx-auto h-10 w-auto"
-                        src=""
+                        className="mx-auto h-20 w-auto"
+                        src={logo}
                         alt="Cinotes"
-                    />
+                    /></Link>
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
                         Sign in to your account
                     </h2>
@@ -67,12 +72,16 @@ function Author() {
                         </div>
                     </form>
 
-                    <p className="mt-10 text-center text-sm text-gray-500">
+                    <p className="mt-10 mb-5 text-center text-sm text-gray-500">
                         Don`t have an account?{' '}
-                        <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                        <a href="/reg" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                             Register now!
                         </a>
                     </p>
+                    <span className={"space-x-3"}>
+                        <a className={"flex-1 w-1/2 justify-center rounded-md bg-white px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
+                        <a className={"flex-1 w-1/2 justify-center rounded-md bg-white px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>
+                    </span>
                 </div>
             </div>
         </>
