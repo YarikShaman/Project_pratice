@@ -13,5 +13,6 @@ export function Trash(){
 {/*    <SwiperSlide>Slide 4</SwiperSlide>*/}
 {/*    ...*/}
 {/*</Swiper>*/}
-//className="bg-neutral-800  flex flex-row align-center content-center"
+//style={{height:"10vh", background:"#2a2a2a", display:"flex"}}
 //style={{marginTop:"1vh", marginBottom:"1vh", }}
+//style={{color:"white", fontSize:"2vh", justifySelf:"center", textAlign:"center", paddingBottom:"0"}}
