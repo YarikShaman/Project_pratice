@@ -9,16 +9,16 @@ export function HomeHeader() {
                 Cinotes
             </a>
             <span className=" self-center flex justify-evenly w-full ">
-                <a className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
+                <a href={"/home"} className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
                     Home
                 </a>
-                <a className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
+                <a href={"/films"} className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
                     Films
                 </a>
-                <a className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
+                <a href={"/playlists"} className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
                     PlayLists
                 </a>
-                <a className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
+                <a href={"/actors"} className="self-end text-base text-white align-middle cursor-pointer hover:text-sky-700">
                     Actors
                 </a>
             </span>
