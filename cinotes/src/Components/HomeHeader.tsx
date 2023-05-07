@@ -23,8 +23,8 @@ export function HomeHeader() {
                 </a>
             </span>
             <span  className="justify-center my-1 flex flex-col w-12 border-2 border-black rounded-lg mr-2 text-white hover:text-sky-700 cursor-pointer select-none">
-                <img className=" w-7 h-7 mt-1 bg-cover bg-repeat self-center rounded-full" src={Acc}></img>
-                <a style={{color:"white", fontSize:"2vh", justifySelf:"center", textAlign:"center", paddingBottom:"0"}}>log in</a>
+                <img className=" w-7 h-7 mt-1 bg-cover bg-repeat self-center rounded-full" alt={"Profile_Pic"} src={Acc}></img>
+                <a href={"/sign_in"} style={{color:"white", fontSize:"2vh", justifySelf:"center", textAlign:"center", paddingBottom:"0"}}>log in</a>
             </span>
         </span>
     );

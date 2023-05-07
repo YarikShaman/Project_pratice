@@ -21,8 +21,8 @@ function Registr() {
                     </h2>
                 </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                    <form className="space-y-4" action="#" method="POST">
                         <div>
                             <label htmlFor="login" className="block text-sm font-medium leading-6 text-white">
                                 Login
@@ -101,9 +101,9 @@ function Registr() {
                             Sign in!
                         </a>
                     </p>
-                    <span className={"space-x-3"}>
-                        <a className={"flex-1 w-1/2 justify-center rounded-md bg-white px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign up with Google</a>
-                        <a className={"flex-1 w-1/2 justify-center rounded-md bg-white px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign up with Facebook</a>
+                    <span className={"flex flex-col"}>
+                        <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-3 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign up with Google</a>
+                        <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign up with Facebook</a>
                     </span>
                 </div>
             </div>
