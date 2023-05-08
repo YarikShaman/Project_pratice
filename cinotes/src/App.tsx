@@ -32,7 +32,6 @@ function App() {
 async function forAxios(){
     const resp=await axios.post("cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/singin", {
         email: "myarik01@gmail.com",
-        username:"",
         password: ""
     });
         // {headers:{authorization: "bearer jwt"}}

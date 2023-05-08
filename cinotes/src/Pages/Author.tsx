@@ -1,11 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../App.css';
 import {Link} from "react-router-dom";
 import logo from "../Img/logo.png";
+import axios from "axios";
 import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
+//import { GoogleOAuthProvider } from '@react-oauth/google';
+//import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from 'react-use-googlelogin';
+
+// onSuccess: tokenResponse => {
+//     axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
+//         {code: tokenResponse.access_token})
+// }
 
 function Author() {
+    // const { signIn } = useGoogleLogin({
+    //     clientId: "184297119751-q3slghtjb995d54itm4bl8e7lrna6h90.apps.googleusercontent.com",
+    // });
+
+    const [login, setLogin]=useState("") ;
+    const [password, setPassword]=useState("") ;
+
     return (
         <>
             <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
@@ -22,13 +38,16 @@ function Author() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6"  onSubmit={(e) => {
+                        e.preventDefault();
+                        Signin(login, password)
+                    }} action="#" method="POST">
                         <div>
                             <label htmlFor="login" className="block text-sm font-medium leading-6 text-white">
                                 Login
                             </label>
                             <div className="mt-2">
-                                <input
+                                <input onChange={(e) =>{setLogin(e.target.value)}}
                                     id="login"
                                     name="login"
                                     type="text"
@@ -51,7 +70,7 @@ function Author() {
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <input
+                                <input onChange={(e) =>{setPassword(e.target.value)}}
                                     id="password"
                                     name="password"
                                     type="password"
@@ -79,13 +98,37 @@ function Author() {
                         </a>
                     </p>
                     <span className={"flex flex-col "}>
-                        <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
+                        <a /*onClick={signIn}*/ className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
                         <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>
+
+                        {/*<button onClick={() => {googleLogin.caller()}} className="bg-white w-20 h-8">*/}
+                        {/*    */}
+                        {/*</button>*/}
+                        {/*<GoogleLogin*/}
+                        {/*     onSuccess={credentialResponse => {*/}
+                        {/*         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",*/}
+                        {/*             {code: credentialResponse.credential});*/}
+                        {/*     }}*/}
+                        {/*     onError={() => {*/}
+                        {/*         console.log('Login Failed');*/}
+                        {/*     }}*/}
+                        {/*  />;*/}
                     </span>
                 </div>
             </div>
         </>
     );
+}
+
+function Signin(login: string, password: string)
+{
+    console.log(login+"  "+password);
+    axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
+        email: login,
+        password: password
+    }).then(resp =>{console.log(resp)});
+
+
 }
 
 export default Author;
