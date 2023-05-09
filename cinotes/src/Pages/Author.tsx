@@ -140,8 +140,6 @@ function Signin(login: string, password: string)
         email: login,
         password: password
     }).then(resp =>{console.log(resp)});
-
-
 }
 
 export default Author;
