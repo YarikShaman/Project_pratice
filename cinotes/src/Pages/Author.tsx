@@ -5,25 +5,38 @@ import logo from "../Img/logo.png";
 import axios from "axios";
 import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
-//import { GoogleOAuthProvider } from '@react-oauth/google';
-//import { GoogleLogin } from '@react-oauth/google';
-import { useGoogleLogin } from 'react-use-googlelogin';
-
-// onSuccess: tokenResponse => {
-//     axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
-//         {code: tokenResponse.access_token})
-// }
+import { useGoogleLogin } from '@react-oauth/google';
 
 function Author() {
-    // const { signIn } = useGoogleLogin({
-    //     clientId: "184297119751-q3slghtjb995d54itm4bl8e7lrna6h90.apps.googleusercontent.com",
-    // });
+
+    const [navigate, setNavigate] = useState(false);
+    const signIn = useGoogleLogin({
+        onSuccess: (resp) => {
+            axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
+                {code: resp.access_token})
+                .then(res => {
+                    localStorage["jwt"] = res.data.jwt;
+                    setNavigate(true);
+                });
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    });
+
 
     const [login, setLogin]=useState("") ;
     const [password, setPassword]=useState("") ;
 
+    if (navigate) {
+        return (
+            <Navigate replace to="/home" />
+        )
+    }
+
     return (
         <>
+            {navigate}
             <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm text-white">
                     <Link to={"/"}>
@@ -98,10 +111,10 @@ function Author() {
                         </a>
                     </p>
                     <span className={"flex flex-col "}>
-                        <a /*onClick={signIn}*/ className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
+                        <a onClick={() => signIn()} className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
                         <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>
 
-                        {/*<button onClick={() => {googleLogin.caller()}} className="bg-white w-20 h-8">*/}
+                        {/*<button onClick={signIn()} className="bg-white w-20 h-8">*/}
                         {/*    */}
                         {/*</button>*/}
                         {/*<GoogleLogin*/}
