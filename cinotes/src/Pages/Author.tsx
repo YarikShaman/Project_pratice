@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../App.css';
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import logo from "../Img/logo.png";
 import axios from "axios";
 import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
