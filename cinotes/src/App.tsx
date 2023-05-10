@@ -9,6 +9,7 @@ import {Films} from "./Pages/Films";
 import {Actors} from "./Pages/Actors";
 import {Playlists} from "./Pages/PlayLists";
 import {Account} from "./Pages/Account";
+import {Prem} from "./Pages/Premium";
 import Registr from "./Pages/Registr";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/actors" element={<Actors/>}/>
             <Route path="/playlists" element={<Playlists/>}/>
             <Route path="/account" element={<Account/>}/>
+            <Route path="/prem" element={<Prem/>}/>
         </Routes>
     </div>
   );

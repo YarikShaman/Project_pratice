@@ -112,20 +112,12 @@ function Author() {
                     </p>
                     <span className={"flex flex-col "}>
                         <a onClick={() => signIn()} className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
-                        <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>
+                        <a onClick={() => FacebookLoginClient.login((res) => {
+                            console.log(res);
+                        }, {
+                            scope: 'public_profile',
+                        })} className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>
 
-                        {/*<button onClick={signIn()} className="bg-white w-20 h-8">*/}
-                        {/*    */}
-                        {/*</button>*/}
-                        {/*<GoogleLogin*/}
-                        {/*     onSuccess={credentialResponse => {*/}
-                        {/*         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",*/}
-                        {/*             {code: credentialResponse.credential});*/}
-                        {/*     }}*/}
-                        {/*     onError={() => {*/}
-                        {/*         console.log('Login Failed');*/}
-                        {/*     }}*/}
-                        {/*  />;*/}
                     </span>
                 </div>
             </div>
