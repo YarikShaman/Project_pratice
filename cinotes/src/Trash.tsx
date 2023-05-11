@@ -1,5 +1,8 @@
 export function Trash(){
-    return 0;
+
+    return <>
+
+        </>;
 }
 {/*<Swiper*/}
 {/*    spaceBetween={0}*/}

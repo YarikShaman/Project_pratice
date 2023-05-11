@@ -6,7 +6,8 @@ import axios from "axios";
 import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 import { useGoogleLogin } from '@react-oauth/google';
-
+//const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
+import FacebookLogin from '@greatsumini/react-facebook-login';
 function Author() {
 
     const [navigate, setNavigate] = useState(false);
@@ -23,7 +24,6 @@ function Author() {
             console.log(error);
         }
     });
-
 
     const [login, setLogin]=useState("") ;
     const [password, setPassword]=useState("") ;
@@ -112,11 +112,23 @@ function Author() {
                     </p>
                     <span className={"flex flex-col "}>
                         <a onClick={() => signIn()} className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Google</a>
-                        <a onClick={() => FacebookLoginClient.login((res) => {
-                            console.log(res);
-                        }, {
-                            scope: 'public_profile',
-                        })} className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>
+                        <FacebookLogin className="flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            appId="1088597931155576"
+                            onSuccess={(response) => {
+                                console.log(response.accessToken);
+                            }}
+                            onFail={(error) => {
+                                console.log('Login Failed!', error);
+                            }}
+                            onProfileSuccess={(response) => {
+                                console.log('Get Profile Success!', response);
+                            }}
+                        />
+                        {/*<a onClick={() => FacebookLoginClient.login((res) => {*/}
+                        {/*    console.log(res);*/}
+                        {/*}, {*/}
+                        {/*    scope: 'public_profile',*/}
+                        {/*})} className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign in with Facebook</a>*/}
 
                     </span>
                 </div>
