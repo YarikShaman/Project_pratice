@@ -9,7 +9,7 @@ import {GetLang, SetLang} from "../Utilities/Lang";
 export function HomeHeader() {
 
     return (
-        <div className="bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between" >
+        <div className="z-40 fixed bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between" >
             <a className="self-center pl-6 text-2xl font-bold text-white select-none italic ">
                 Cinotes
             </a>
