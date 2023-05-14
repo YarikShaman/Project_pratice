@@ -14,8 +14,6 @@ import Registr from "./Pages/Registr";
 
 function App() {
   return (
-
-    <div >
         <Routes>
             <Route path="/" element={<MainPage />}/>
             <Route path="/sign_in" element={<Author/>}/>
@@ -27,7 +25,6 @@ function App() {
             <Route path="/account" element={<Account/>}/>
             <Route path="/prem" element={<Prem/>}/>
         </Routes>
-    </div>
   );
 }
 
