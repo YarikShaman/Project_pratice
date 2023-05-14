@@ -19,3 +19,15 @@ export function Trash(){
 //style={{height:"10vh", background:"#2a2a2a", display:"flex"}}
 //style={{marginTop:"1vh", marginBottom:"1vh", }}
 //style={{color:"white", fontSize:"2vh", justifySelf:"center", textAlign:"center", paddingBottom:"0"}}
+
+
+
+
+// color=color+1;
+// if(color==5) color=1;
+// switch (color) {
+//     case 1: temp = "shadow-green-400"; break
+//     case 2: temp = "shadow-red-400"; break
+//     case 3: temp = "shadow-blue-400"; break
+//     case 4: temp = "shadow-yellow-400"; break
+// }
