@@ -12,6 +12,19 @@ function AA(){
     )
 }
 
+
+// async function AddFilms(){
+//     const resp = await axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/3/",
+//         {headers: {Authorization:"Bearer "+ localStorage["jwt"]}
+//         });
+//
+//     return (
+//         <>
+//             <FilmInFilms film={resp.data}/>
+//         </>
+//     )
+// }
+
 export function Films() {
 
     const [films, setFilms]= useState([]);

@@ -131,7 +131,9 @@ function Signin(login: string, password: string)
     axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
         email: login,
         password: password
-    }).then(resp =>{console.log(resp)});
+    }).then(resp =>{
+        localStorage["jwt"] = resp.data.jwt;
+    });
 }
 
 export default Author;
