@@ -33,7 +33,7 @@ function Author() {
     return (
         <>
             {navigate}
-            <div className=" flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
+            <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm text-white">
                     <Link to={"/"}>
                     <img
@@ -117,7 +117,7 @@ function Author() {
                                         setNavigate(true);
                                 })}}
                             onFail={(error) => {console.log('Login Failed!', error);}}
-                        />
+                        ><F_logo className={"mr-2 w-6 h-auto inline"}/>Sign in with Facebook</FacebookLogin>
                     </span>
                 </div>
             </div>

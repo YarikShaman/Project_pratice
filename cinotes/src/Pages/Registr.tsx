@@ -8,7 +8,7 @@ import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 function Registr() {
     return (
         <>
-            <div className="">
+            <div className="bg-gray-900 h-screen flex flex-1 flex-col justify-center">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm text-white">
                     <Link to={"/"}>
                         <img
