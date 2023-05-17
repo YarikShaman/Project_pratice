@@ -101,10 +101,10 @@ export function Films() {
                     <p className={"m-2"}>Date from <select className={"bg-slate-700 mx-2"} value={selectedFDate}
                                                            onChange={handleFDateChange}>
                         <option value="-">-</option>
-                        {dates}</select> to <select className={"bg-slate-700 mx-2"} value={selectedSDate}
+                        {dates}</select> <div className={"m-2 inline-block"}>to <select className={"bg-slate-700 mx-2"} value={selectedSDate}
                                                     onChange={handleSDateChange}>
                         <option value="-">-</option>
-                        {dates}</select></p>
+                        {dates}</select></div></p>
                     <p className={"m-2"}>Genre <select className={"bg-slate-700 mx-2"} value={selectedGenre}
                                                        onChange={(e) =>setSelectedGenre(e.target.value)}>
                         <option value="-">-</option>
