@@ -24,5 +24,6 @@
     border-radius: 4px;
 }
 #side {
-overflow-y:auto;
+    height: 92vh;
+    top: 8vh;
 }

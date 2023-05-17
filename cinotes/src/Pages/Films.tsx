@@ -84,12 +84,12 @@ export function Films() {
     }, []);
 
     return (
-        <div className="min-h-screen flex bg-neutral-700">
+        <div className="min-h-screen flex flex-row bg-neutral-700">
             <HomeHeader/>
 
             <div id={"side"}
-                 className="z-10 w-1/5 p-2 h-full fixed bg-gray-800 pt-20 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
-                <div className="md:w-full mt-5 flex flex-nowrap h-10">
+                 className="z-10 w-1/5 p-2 h-screen md:mt-0 mt-8 sticky bg-gray-800 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
+                <div className="md:w-full mt-2 flex flex-nowrap h-10">
                     <input
                         className="w-3/4 ring-slate-700 text-white block rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         type={"text"}/>
@@ -99,9 +99,9 @@ export function Films() {
                     </button>
                 </div>
                 <div className={"text-white"}>
-                    <p className={"text-center text-xl m-8"}>Filtration</p>
+                    <p className={"text-center text-xl m-3"}>Filtration</p>
                     <div className={"m-5 flex flex-row"}>
-                        <p className={"m-2 w-3/12"}>Date from </p>
+                        <p className={"m-2 w-4/12"}>Date from </p>
                         <select className={"bg-slate-700 custom-select"}
                                 value={selectedFDate}
                                 onChange={handleFDateChange}>
@@ -110,27 +110,27 @@ export function Films() {
 
                     </div>
                     <div className={"m-5 flex flex-row"}>
-                        <p className={"m-2 pl-14 w-3/12"}>to</p>
+                        <p className={"m-2 w-4/12"}>to</p>
                         <select className={"bg-slate-700 custom-select"}
                                 value={selectedSDate}
                                 onChange={handleSDateChange}>
                             <option value="-">-</option>
                             {dates}</select></div>
                     <div className={"m-5 flex flex-row"}>
-                        <p className={"m-2 w-3/12"}>Genre</p> <select className={"bg-slate-700 custom-select"}
+                        <p className={"m-2 w-4/12"}>Genre</p> <select className={"bg-slate-700 custom-select"}
                                                                       value={selectedGenre}
                                                                       onChange={(e) => setSelectedGenre(e.target.value)}>
                         <option value="-">-</option>
                         {genres}</select>
                     </div>
                     <div className={"m-5 flex flex-row"}>
-                        <p className={"m-2 w-3/12"}>Country</p>
+                        <p className={"m-2 w-4/12"}>Country</p>
                         <select className={"bg-slate-700 custom-select"} value={selectedCountry}
                                 onChange={(e) => setSelectedCountry(e.target.value)}>
                             <option value="-">-</option>
                             {countries}</select>
                     </div>
-                    <p className={"text-center text-xl m-8"}>Sorting</p>
+                    <p className={"text-center text-xl m-3"}>Sorting</p>
                     <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"date"}/><label
                     className={"m-2"}>By
                     Date</label><br/>
@@ -149,7 +149,7 @@ export function Films() {
                     className={"m-2"}>Descending</label><br/>
                     <hr/>
                     <button
-                        className={"w-1/2 mt-8 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
+                        className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
                     </button>
                     <button onClick={() => hideMenu()}
                             className={"md:hidden fixed right-0 bottom-0 rounded-full bg-gray-700 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
@@ -159,7 +159,7 @@ export function Films() {
             <button onClick={() => sideMenu()}
                     className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
             </button>
-            <div id={"films"} className="flex flex-row md:ml-96 pt-20 h-auto w-auto flex-wrap">
+            <div id={"films"} className="flex flex-row md:mt-16 mt-6 h-auto w-4/5 flex-wrap">
                 {
                     films.map(film => {
                         return <>
