@@ -6,12 +6,8 @@ import axios from "axios";
 import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 import { useGoogleLogin } from '@react-oauth/google';
-//const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
 import FacebookLogin from '@greatsumini/react-facebook-login';
-let jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODQ0MTUxOTksImlkIjozLCJwcy1yZWNvdmVyeSI6ZmFsc2UsInVzZXJUeXBlIjoiYmFzaWMifQ.BEtfwvhZh0gLTFLOQZuul6DuspOFZ8oQ88-wjWZwnhY";
 function Author() {
-    let jwt ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODQ0MTUxOTksImlkIjozLCJwcy1yZWNvdmVyeSI6ZmFsc2UsInVzZXJUeXBlIjoiYmFzaWMifQ.BEtfwvhZh0gLTFLOQZuul6DuspOFZ8oQ88-wjWZwnhY";
-
     const [navigate, setNavigate] = useState(false);
     const signIn = useGoogleLogin({
         onSuccess: (resp) => {

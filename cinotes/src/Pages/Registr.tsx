@@ -1,14 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../App.css';
 import logo from '../Img/logo.png';
 import {Link} from "react-router-dom";
-import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
-import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
+import axios from "axios";
+
 
 function Registr() {
+
+    const [username, setUsername]=useState("") ;
+    const [email, setEmail]=useState("") ;
+    const [pas1, setPas1]=useState("") ;
+    const [pas2, setPas2]=useState("") ;
+    const [code, setCode]=useState("") ;
+    function Reg(username:string, login:string, pas1:string, pas2:string){
+        //console.log(login+"  "+password);
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signup", {
+            email: login,
+            username: username,
+            password: pas1
+        }).then(resp =>{
+            localStorage["jwt_for_ver"] = resp.data.jwt;
+        });
+        // @ts-ignore
+        document.getElementById("main").style.filter="blur(8px)";
+        // @ts-ignore
+        document.getElementById("verif").style.visibility="visible";
+
+        const  config ={headers: {Authorization: "Bearer " + localStorage["jwt_for_ver"]}};
+        axios.get("cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", config)
+    }
+
+    function BackToReg(){
+        // @ts-ignore
+        document.getElementById("main").style.filter="blur(0px)";
+        // @ts-ignore
+        document.getElementById("verif").style.visibility="hidden";
+    }
+
+    function Verify(){
+        const  config ={headers: {Authorization: "Bearer " + localStorage["jwt_for_ver"]}};
+        axios.post("cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {"code":code}, config)
+    }
+
     return (
-        <>
-            <div className="bg-gray-900 h-screen flex flex-1 flex-col justify-center">
+        <div className="flex flex-col justify-center bg-gray-900">
+            <div id="main" className="bg-gray-900 min-h-screen h-full flex flex-1 flex-col justify-center">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm text-white">
                     <Link to={"/"}>
                         <img
@@ -22,17 +58,21 @@ function Registr() {
                 </div>
 
                 <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-4" action="#" method="POST">
+                    <form className="space-y-4" action="#" method="POST" onSubmit={(e) => {
+                        e.preventDefault();
+                        Reg(username, email, pas1, pas2)
+                    }}>
                         <div>
                             <label htmlFor="login" className="block text-sm font-medium leading-6 text-white">
-                                Login
+                                Username
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="login"
-                                    name="login"
+                                    onChange={(e) =>{setUsername(e.target.value)}}
+                                    id="username"
+                                    name="username"
                                     type="text"
-                                    autoComplete="login"
+                                    autoComplete="username"
                                     required
                                     className="bg-slate-800 ring-slate-700 text-white block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
@@ -43,7 +83,7 @@ function Registr() {
                                 Email
                             </label>
                             <div className="mt-2">
-                                <input
+                                <input onChange={(e) =>{setEmail(e.target.value)}}
                                     id="email"
                                     name="email"
                                     type="email"
@@ -59,7 +99,7 @@ function Registr() {
                                 Password
                              </label>
                             <div className="mt-2">
-                                <input
+                                <input onChange={(e) =>{setPas1(e.target.value)}}
                                     id="password"
                                     name="password"
                                     type="password"
@@ -74,7 +114,7 @@ function Registr() {
                                 Repeat the password
                             </label>
                             <div className="mt-2">
-                                <input
+                                <input onChange={(e) =>{setPas2(e.target.value)}}
                                     id="password-repeat"
                                     name="password-repeat"
                                     type="password"
@@ -101,13 +141,23 @@ function Registr() {
                             Sign in!
                         </a>
                     </p>
-                    <span className={"flex flex-col"}>
-                        <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-3 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo className={"mr-2 w-6 h-auto inline"} />Sign up with Google</a>
-                        <a className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><F_logo className={"mr-2 w-6 h-auto inline"} />Sign up with Facebook</a>
-                    </span>
                 </div>
             </div>
-        </>
+            <div id="verif" style={{visibility:"hidden"}} className=" flex  z-40 fixed h-full w-full min-h-screen justify-center " >
+                <div className="flex-col flex p-3 self-center bg-gray-400 shadow-inner  shadow-gray-500 rounded-xl h-1/2 w-1/2">
+
+                    <svg onClick={()=>{BackToReg()}} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" className="z-10 fixed rounded-lg hover:bg-gray-500 w-10 h-10">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+                    </svg>
+                    <h1 className="m-2 self-center text-3xl font-bold"> Verification</h1>
+                    <h1 className="mt-6 self-center text-xl font-bold w-2/3 text-center"> Confirm your e-mail. We send verification code to your e-mail. <br/>After verification registration will be finished.</h1>
+                    <input onChange={(e) =>{setCode(e.target.value)}}  id="ver_code" maxLength={20} className="p-2 mt-10 w-1/2 text-3xl h-auto self-center"></input>
+                    <button onClick={() =>{Verify()}}   className="mt-10 self-center hover:bg-neutral-600 h-10 w-28 bg-neutral-500 rounded">Confirm</button>
+                </div>
+            </div>
+        </div>
     );
 }
 
