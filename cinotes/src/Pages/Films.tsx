@@ -3,6 +3,7 @@ import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
+import '../SelectWithCustomScrollbar.css';
 
 function AA() {
     //FilmInFilms();
@@ -67,6 +68,7 @@ export function Films() {
     let dates = dateOptions.map((text, index) => {
         return <option key={index} value={index}>{text}</option>;
     });
+
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
@@ -98,34 +100,52 @@ export function Films() {
                 </div>
                 <div className={"text-white"}>
                     <p className={"text-center text-xl m-8"}>Filtration</p>
-                    <p className={"m-2"}>Date from <select className={"bg-slate-700 mx-2"} value={selectedFDate}
-                                                           onChange={handleFDateChange}>
+                    <div className={"m-5 flex flex-row"}>
+                        <p className={"m-2 w-3/12"}>Date from </p>
+                        <select className={"bg-slate-700 custom-select"}
+                                value={selectedFDate}
+                                onChange={handleFDateChange}>
+                            <option value="-">-</option>
+                            {dates}</select>
+
+                    </div>
+                    <div className={"m-5 flex flex-row"}>
+                        <p className={"m-2 pl-14 w-3/12"}>to</p>
+                        <select className={"bg-slate-700 custom-select"}
+                                value={selectedSDate}
+                                onChange={handleSDateChange}>
+                            <option value="-">-</option>
+                            {dates}</select></div>
+                    <div className={"m-5 flex flex-row"}>
+                        <p className={"m-2 w-3/12"}>Genre</p> <select className={"bg-slate-700 custom-select"}
+                                                                      value={selectedGenre}
+                                                                      onChange={(e) => setSelectedGenre(e.target.value)}>
                         <option value="-">-</option>
-                        {dates}</select> <div className={"m-2 inline-block"}>to <select className={"bg-slate-700 mx-2"} value={selectedSDate}
-                                                    onChange={handleSDateChange}>
-                        <option value="-">-</option>
-                        {dates}</select></div></p>
-                    <p className={"m-2"}>Genre <select className={"bg-slate-700 mx-2"} value={selectedGenre}
-                                                       onChange={(e) =>setSelectedGenre(e.target.value)}>
-                        <option value="-">-</option>
-                        {genres}</select></p>
-                    <p className={"m-2"}>Country <select className={"bg-slate-700 mx-2"} value={selectedCountry}
-                                                         onChange={(e) =>setSelectedCountry(e.target.value)}>
-                        <option value="-">-</option>
-                        {countries}</select></p>
+                        {genres}</select>
+                    </div>
+                    <div className={"m-5 flex flex-row"}>
+                        <p className={"m-2 w-3/12"}>Country</p>
+                        <select className={"bg-slate-700 custom-select"} value={selectedCountry}
+                                onChange={(e) => setSelectedCountry(e.target.value)}>
+                            <option value="-">-</option>
+                            {countries}</select>
+                    </div>
                     <p className={"text-center text-xl m-8"}>Sorting</p>
-                    <input className={"m-1"} name={"sortBy"} type={"radio"} value={"date"}/><label className={"m-2"}>By
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"date"}/><label
+                    className={"m-2"}>By
                     Date</label><br/>
-                    <input className={"m-1"} name={"sortBy"} type={"radio"} value={"imdbRate"}/><label
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"imdbRate"}/><label
                     className={"m-2"}>By IMDb rating</label><br/>
-                    <input className={"m-1"} name={"sortBy"} type={"radio"} value={"rate"}/><label className={"m-2"}>By
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"rate"}/><label
+                    className={"m-2"}>By
                     user rating</label><br/>
-                    <input className={"m-1"} name={"sortBy"} type={"radio"} value={"num"}/><label className={"m-2"}>By
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"num"}/><label
+                    className={"m-2"}>By
                     number of ratings</label><br/>
                     <hr/>
-                    <input className={"m-1"} name={"sort"} type={"radio"} value={"as"}/><label
+                    <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"as"}/><label
                     className={"m-2"}>Ascending</label><br/>
-                    <input className={"m-1"} name={"sort"} type={"radio"} value={"des"}/><label
+                    <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"des"}/><label
                     className={"m-2"}>Descending</label><br/>
                     <hr/>
                     <button
@@ -139,7 +159,7 @@ export function Films() {
             <button onClick={() => sideMenu()}
                     className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
             </button>
-            <div className="flex flex-row md:ml-96 pt-20 h-auto w-auto flex-wrap">
+            <div id={"films"} className="flex flex-row md:ml-96 pt-20 h-auto w-auto flex-wrap">
                 {
                     films.map(film => {
                         return <>
@@ -157,21 +177,26 @@ export function Films() {
                     })
                 }
             </div>
-
         </div>
     );
 
     function sideMenu() {
         let side = document.getElementById("side");
+        let films = document.getElementById("films");
         // @ts-ignore
         side.style.display = "block";
         // @ts-ignore
         side.style.width = "100%";
+        // @ts-ignore
+        films.style.display = "none";
     }
 
     function hideMenu() {
         let side = document.getElementById("side");
+        let films = document.getElementById("films");
         // @ts-ignore
         side.style.display = "none";
+        // @ts-ignore
+        films.style.display = "flex";
     }
 }
