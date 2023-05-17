@@ -48,28 +48,14 @@ export function Films() {
         <div className="min-h-screen flex bg-neutral-700">
             <HomeHeader/>
 
-            <div className="z-10 w-1/5 p-2 h-full fixed bg-gray-800 pt-20 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
+            <div id={"side"} className="z-10 w-1/5 p-2 h-full fixed bg-gray-800 pt-20 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
                 <div className="md:w-full mt-5 flex flex-nowrap h-10">
-                    <input className="flex-1 bg-gray-400 ring-slate-700 text-white block rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type={"text"}/>
-                    <button className="flex-5 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type={"button"}>Filtr</button>
-                    <button className="flex-5 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type={"submit"}>Search</button>
+                    <input className="w-3/4 ring-slate-700 text-white block rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type={"text"}/>
+                    <button className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type={"submit"}>Search</button>
                 </div>
                 <div className={"text-white"}>
                     <p className={"text-center text-xl m-8"}>Filtration</p>
-                    <p className={"m-2"}>Date
-                        <select  className={"bg-neutral-700 mx-5"}>
-                            <option>2023</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2016-2019</option>
-                            <option>2012-2015</option>
-                            <option>2009-2011</option>
-                            <option>2004-2008</option>
-                            <option>2000-2004</option>
-                            <option>199X</option>
-                            <option>{"<1990"}</option>
-                    </select></p>
+                    <p className={"m-2"}>Date <input className={"w-full"}  type="range" step="1" min="1940" max="2023" value="2000" id="myRange"/></p>
                     <p className={"m-2"}>Genre</p>
                     <p className={"m-2"}>Country</p>
                     <p className={"text-center text-xl m-8"}>Sorting</p>
@@ -80,9 +66,12 @@ export function Films() {
                     <hr/>
                     <input className={"m-1"} name={"sort"} type={"radio"} value={"as"}/><label className={"m-2"}>Ascending</label><br/>
                     <input className={"m-1"} name={"sort"} type={"radio"} value={"des"}/><label className={"m-2"}>Descending</label><br/>
+                    <hr/>
+                    <button className={"w-1/2 mt-8 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate</button>
+                    <button onClick={() => hideMenu()} className={"md:hidden fixed right-0 bottom-0 rounded-full bg-gray-700 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search</button>
                 </div>
             </div>
-
+            <button onClick={() => sideMenu()} className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search</button>
             <div className="flex flex-row md:ml-96 pt-20 h-auto w-auto flex-wrap">
                 {
                     films.map(film => {
@@ -104,4 +93,14 @@ export function Films() {
 
         </div>
     );
+    function sideMenu(){
+        let side = document.getElementById("side");
+        // @ts-ignore
+        side.style.display = "block"; side.style.width = "100%";
+    }
+    function hideMenu(){
+        let side = document.getElementById("side");
+        // @ts-ignore
+        side.style.display = "none";
+    }
 }
