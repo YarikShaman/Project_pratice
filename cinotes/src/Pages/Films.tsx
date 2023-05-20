@@ -85,7 +85,7 @@ export function Films() {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-row mt-20 bg-neutral-700">
+        <div className="min-h-screen flex flex-row bg-neutral-700">
             <HomeHeader/>
 
             <div id={"side"}
