@@ -128,34 +128,58 @@ function LangCh() {
         let ukr = document.getElementById("m2");
         // @ts-ignore
         if(eng.style.filter == "brightness(1.25)"){
+            document.cookie = "language=2; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
+            // @ts-ignore
+            let language = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('language='))
+                .split('=')[1];
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
             // @ts-ignore
             eng.style.filter = "brightness(0.5)";
-            SetLang(2);
+            SetLang(Number(language));
         } else {
+            document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
+            // @ts-ignore
+            const language = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('language='))
+                .split('=')[1];
             // @ts-ignore
             ukr.style.filter = "brightness(0.5)";
             // @ts-ignore
             eng.style.filter = "brightness(1.25)";
-            SetLang(1)
+            SetLang(Number(language));
         }
     } else{
     let eng = document.getElementById("1");
     let ukr = document.getElementById("2");
         // @ts-ignore
         if(eng.style.filter == "brightness(1.25)"){
+            document.cookie = "language=2; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
+            // @ts-ignore
+            const language = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('language='))
+                .split('=')[1];
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
             // @ts-ignore
             eng.style.filter = "brightness(0.5)";
-            SetLang(2);
+            SetLang(Number(language));
         } else {
+            document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
+            // @ts-ignore
+            const language = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('language='))
+                .split('=')[1];
             // @ts-ignore
             ukr.style.filter = "brightness(0.5)";
             // @ts-ignore
             eng.style.filter = "brightness(1.25)";
-            SetLang(1)
+            SetLang(Number(language))
         }}
     // @ts-ignore
 
