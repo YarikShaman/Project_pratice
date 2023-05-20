@@ -11,6 +11,7 @@ import {Playlists} from "./Pages/PlayLists";
 import {Account} from "./Pages/Account";
 import {Prem} from "./Pages/Premium";
 import Registr from "./Pages/Registr";
+import {Ver} from "./Pages/Verification";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/playlists" element={<Playlists/>}/>
             <Route path="/account" element={<Account/>}/>
             <Route path="/prem" element={<Prem/>}/>
+            <Route path="/ver" element={<Ver/>}/>
         </Routes>
   );
 }

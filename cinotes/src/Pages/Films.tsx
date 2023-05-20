@@ -164,15 +164,6 @@ export function Films() {
                     films.map(film => {
                         return <>
                             <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
-                            <FilmInFilms film={film}/>
                         </>
                     })
                 }

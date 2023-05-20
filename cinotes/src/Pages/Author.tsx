@@ -7,6 +7,7 @@ import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
+import {Base64} from "js-base64";
 function Author() {
     const [navigate, setNavigate] = useState(false);
     const signIn = useGoogleLogin({
@@ -25,6 +26,8 @@ function Author() {
 
     const [login, setLogin]=useState("") ;
     const [password, setPassword]=useState("") ;
+
+
 
     return (
         <>
@@ -129,7 +132,10 @@ function Signin(login: string, password: string)
         password: password
     }).then(resp =>{
         localStorage["jwt"] = resp.data.jwt;
+        const body =Base64.decode(resp.data.jwt.split(".")[1])
+        console.log(body)
     });
+
 }
 
 export default Author;

@@ -12,40 +12,40 @@ export function HomeHeader() {
 
     return (
         <>
-        <div id={"main"} style={{height:"8vh"}} className="z-40 fixed bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between">
+        <div id={"main"} style={{height:"12vh"}} className="z-40 fixed bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between">
             <a className="self-center pl-6 text-2xl font-bold text-white select-none italic ">
                 Cinotes
             </a>
-            <div className={"flex flex-row w-full items-center hidden md:flex justify-between"}>
-                <div className="flex w-1/2 ">
+            <div className={"flex flex-row w-full items-center h-full hidden md:flex justify-between"}>
+                <div className="flex w-1/2 h-full">
                     <Link className={"flex flex-grow"} to={"/"}>
                         <div
-                            className="hover:bg-sky-900 h-20 rounded-lg py-7 flex self-center flex-grow justify-center text-white  cursor-pointer">
-                            {GetLang().Home}
+                            className="hover:bg-sky-900 h-full rounded-lg py-7 flex self-center flex-grow justify-center text-white  cursor-pointer">
+                            <p className="self-center">{GetLang().Home}</p>
                         </div>
                     </Link>
                     <Link className={"flex flex-grow"} to={"/films"}>
                         <div
-                            className="hover:bg-sky-900 rounded-lg h-20 flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
-                            {GetLang().Films}
+                            className="hover:bg-sky-900 rounded-lg h-full flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
+                            <p className="self-center">{GetLang().Films}</p>
                         </div>
                     </Link>
                     <Link className={"flex flex-grow"} to={"/playlists"}>
                         <div
-                            className="hover:bg-sky-900 rounded-lg h-20 flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
-                            {GetLang().Playlists}
+                            className="hover:bg-sky-900 rounded-lg h-full flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
+                            <p className="self-center">{GetLang().Playlists}</p>
                         </div>
                     </Link>
                     <Link className={"flex flex-grow"} to={"/actors"}>
                         <div
-                            className="hover:bg-sky-900 rounded-lg h-20 flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
-                            {GetLang().Actors}
+                            className="hover:bg-sky-900 rounded-lg h-full  flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
+                            <p className="self-center">{GetLang().Actors}</p>
                         </div>
                     </Link>
                     <Link className={"flex flex-grow"} to={"/prem"}>
                         <div
-                            className="hover:bg-sky-900 rounded-lg h-20 flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
-                            {GetLang().Premium}
+                            className="hover:bg-sky-900 rounded-lg h-full  flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
+                            <p className="self-center">{GetLang().Premium}</p>
                         </div>
                     </Link>
                 </div>
