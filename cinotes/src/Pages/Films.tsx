@@ -33,6 +33,8 @@ export function Films() {
     const [selectedSDate, setSelectedSDate] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
+    const [films, setFilms] = useState([]);
+    const [next, setNext] = useState("adsf");
     const handleSDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = Number(e.target.value);
         if (e.target.value == '-' || selectedValue <= Number(selectedFDate) || selectedFDate == '-') {
@@ -50,8 +52,7 @@ export function Films() {
             setSelectedFDate(selectedFDate);
         }
     };
-    const [films, setFilms] = useState([]);
-    const [next, setNext] = useState("adsf");
+
     let genreOptions = ["Comedies", "Fighters", "Detectives", "Melodramas", "Thrillers", "Horrors", "Musicals", "Westerns", "Adventures", "Sports", "Fantasy", "Crime", "Dramas", "Short films", "Biography", "Military", "History", "Documentary", "Family", "Anime", "Children's", "Animation", "Fantasy", "Comics"];
     let countryOptions = ["Australia", "Austria", "Azerbaijan", "Albania", "Argentina", "Aruba", "Afghanistan", "Belgium", "Bulgaria", "Botswana", "Brazil", "Vietnam", "Vatican", "United Kingdom", "Venezuela", "Ghana", "Hong Kong", "Greece", "Georgia", "Denmark", "Egypt", "Israel", "India", "Indonesia", "Iran", "Iceland", "Spain", "Italy", "Kazakhstan", "Canada", "Kenya", "China", "Cyprus", "Colombia", "Latvia", "Lithuania", "Liechtenstein", "Luxembourg", "Macedonia", "Malta", "Morocco", "Mexico", "Monaco", "Nepal", "Netherlands", "Germany", "New Zealand", "Norway", "UAE", "Panama", "South Africa", "Peru", "South Korea", "Poland", "Portugal", "Puerto Rico", "Romania", "Saudi Arabia", "Senegal", "Serbia", "Singapore", "Slovakia", "Slovenia", "USA", "Thailand", "Taiwan", "Tunisia", "Turkey", "Hungary", "Uzbekistan", "Ukraine", "Uruguay", "Philippines", "Finland", "France", "Czech Republic", "Chile", "Switzerland", "Sweden", "Japan"];
     let dateOptions = [];
