@@ -35,7 +35,13 @@ export function Actors() {
                 </button>
             </div>
             <div id={"actors"} className="flex flex-row md:mt-16 mt-6 h-auto w-4/5 flex-wrap">
-
+                {
+                    actors.map(actor => {
+                        return <>
+                            <ActorInActors actor={actor}/>
+                        </>
+                    })
+                }
             </div>
         </div>
     );
