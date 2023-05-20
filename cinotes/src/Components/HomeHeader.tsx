@@ -92,11 +92,11 @@ export function HomeHeader() {
         </div>
     <div className="hidden fixed pt-14 pb-1 w-1/2 right-0 bg-neutral-800" id="menu">
         <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-            <a className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Home}</a>
-            <a className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Films}</a>
-            <a className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Playlists}</a>
-            <a className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Actors}</a>
-            <a className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Premium}</a>
+            <a href={"/"} className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Home}</a>
+            <a href={"/films"} className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Films}</a>
+            <a href={"/playlists"} className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Playlists}</a>
+            <a href={"/actors"} className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Actors}</a>
+            <a href={"/premium"} className={"text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"}>{GetLang().Premium}</a>
         </div>
         <Link to={"/sign_in"}>
             <div

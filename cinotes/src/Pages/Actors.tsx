@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
-import {FilmInFilms} from "../Components/FilmInFilms";
 import {ActorInActors} from "../Components/ActorInActors";
 import axios from "axios";
 
@@ -36,11 +35,18 @@ export function Actors() {
                         type={"submit"}>Search
                 </button>
             </div>
-            <div id={"actors"} className="flex flex-row h-auto  flex-wrap">
+            <div id={"actors"} className="flex flex-row h-auto justify-center flex-wrap">
                 {
                     actors.map(actor => {
                         return <>
                             <ActorInActors actor={actor}/>
+                            <ActorInActors actor={actor}/>
+                            <ActorInActors actor={actor}/><ActorInActors actor={actor}/>
+                            <ActorInActors actor={actor}/>
+                            <ActorInActors actor={actor}/>
+                            <ActorInActors actor={actor}/>
+                            <ActorInActors actor={actor}/>
+
                         </>
                     })
                 }
