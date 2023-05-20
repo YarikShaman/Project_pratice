@@ -1,12 +1,29 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import {ActorInActors} from "../Components/ActorInActors";
+import axios from "axios";
 
 export function Actors() {
+
+    const [actors, setActors] = useState([]);
+    const [next, setNext] = useState("adsf");
+    useEffect(() => {
+        let ignore = false;
+        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors", config)
+            .then(res => {
+                if (!ignore) {
+                    setActors(res.data.results);
+                }
+            });
+        return () => {
+            ignore = true;
+        }
+    }, []);
     return (
-        <div className="">
+        <div className="bg">
             <HomeHeader/>
             <div className="md:w-full mt-2 flex flex-nowrap h-10">
                 <input
