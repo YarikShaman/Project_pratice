@@ -1,17 +1,31 @@
 import React from 'react';
 import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
+import {FilmInFilms} from "../Components/FilmInFilms";
+import {ActorInActors} from "../Components/ActorInActors";
 
 export function Actors() {
     return (
-        <div className="App">
+        <div className="">
             <HomeHeader/>
-            <body className="App-body">
-            Actors
-            </body>
-            <footer className="App-footer">
-
-            </footer>
+            <div className="md:w-full mt-2 flex flex-nowrap h-10">
+                <input
+                        className="w-3/4 ring-slate-700 text-white block rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        type={"text"}/>
+                <button
+                        className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        type={"submit"}>Search
+                </button>
+            </div>
+            <div id={"actors"} className="flex flex-row md:mt-16 mt-6 h-auto w-4/5 flex-wrap">
+                {
+                    actors.map(actor => {
+                        return <>
+                            <ActorInActors actor={actor}/>
+                        </>
+                    })
+                }
+            </div>
         </div>
     );
 }
