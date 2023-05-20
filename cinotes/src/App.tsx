@@ -12,6 +12,7 @@ import {Account} from "./Pages/Account";
 import {Prem} from "./Pages/Premium";
 import Registr from "./Pages/Registr";
 import {Ver} from "./Pages/Verification";
+import {Film} from "./Pages/Film";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/account" element={<Account/>}/>
             <Route path="/prem" element={<Prem/>}/>
             <Route path="/ver" element={<Ver/>}/>
+            <Route path="/film" element={<Film/>}/>
         </Routes>
   );
 }
