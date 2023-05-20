@@ -28,6 +28,7 @@ function AA() {
 // }
 
 export function Films() {
+    const [filmName, setFilmName] = useState<any>([]);
     const [selectedFDate, setSelectedFDate] = useState("");
     const [selectedSDate, setSelectedSDate] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
@@ -84,14 +85,16 @@ export function Films() {
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-row bg-neutral-700">
+        <div className="min-h-screen flex flex-row mt-20 bg-neutral-700">
             <HomeHeader/>
 
             <div id={"side"}
                  className="z-10 w-1/5 p-2 h-screen md:mt-0 mt-8 sticky bg-gray-800 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
                 <div className="md:w-full mt-2 flex flex-nowrap h-10">
                     <input
-                        className="w-3/4 ring-slate-700 text-white block rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        value={filmName}
+                        onChange={(e)=>setFilmName(e.target.value)}
+                        className="w-3/4 ring-slate-700 text-black block rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         type={"text"}/>
                     <button
                         className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
