@@ -9,12 +9,12 @@ import {GetLang, SetLang} from "../Utilities/Lang";
 //let lang=GetLang();
 let mstate = false;
 export function HomeHeader() {
+    if(document.cookie==null){document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";}
     // @ts-ignore
     let language = document.cookie
         .split('; ')
         .find(row => row.startsWith('language='))
         .split('=')[1];
-    if(language==null){document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";}
     SetLang(Number(language));
     return (
         <>
