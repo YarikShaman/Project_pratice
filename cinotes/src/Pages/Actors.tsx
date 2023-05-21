@@ -35,7 +35,7 @@ export function Actors() {
                         type={"submit"}>Search
                 </button>
             </div>
-            <div id={"actors"} className="flex flex-row h-auto justify-center flex-wrap">
+            <div id={"actors"} className="flex w-5/6 flex-row h-auto justify-center flex-wrap">
                 {
                     actors.map(actor => {
                         return <>

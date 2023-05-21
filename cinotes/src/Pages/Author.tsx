@@ -14,7 +14,6 @@ function Author() {
     const [navigate, setNavigate] = useState(false);
 
     function Signin(login: string, password: string) {
-        console.log(Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]);
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
             email: login,
             password: password
@@ -24,15 +23,15 @@ function Author() {
             const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
             if (userType == "admin")
                 return (
-                    <Navigate replace to="/sign_in"/>
+                    <Navigate replace to="/"/>
                 )
             else if (userType == "premium")
                 return (
-                    <Navigate replace to="/sign_in"/>
+                    <Navigate replace to="/"/>
                 )
             else
                 return (
-                    <Navigate replace to="/sign_in"/>
+                    <Navigate replace to="/"/>
                 )
 
         }, err => {
@@ -62,15 +61,15 @@ function Author() {
                     setNavigate(true);
                     if (userType == "admin")
                         return (
-                            <Navigate replace to="/sign_in"/>
+                            <Navigate replace to="/"/>
                         )
                     else if (userType == "premium")
                         return (
-                            <Navigate replace to="/sign_in"/>
+                            <Navigate replace to="/"/>
                         )
                     else
                         return (
-                            <Navigate replace to="/sign_in"/>
+                            <Navigate replace to="/"/>
                         )
                 }, err => {
                     switch (err.response.status) {
@@ -189,15 +188,15 @@ function Author() {
                                             setNavigate(true);
                                             if (userType == "admin")
                                                 return (
-                                                    <Navigate replace to="/sign_in"/>
+                                                    <Navigate replace to="/"/>
                                                 )
                                             else if (userType == "premium")
                                                 return (
-                                                    <Navigate replace to="/sign_in"/>
+                                                    <Navigate replace to="/"/>
                                                 )
                                             else
                                                 return (
-                                                    <Navigate replace to="/sign_in"/>
+                                                    <Navigate replace to="/"/>
                                                 )
 
                                     }, err => {
