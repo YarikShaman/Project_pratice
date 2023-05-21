@@ -11,7 +11,7 @@ export function Actors() {
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors", config)
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/", config)
             .then(res => {
                 if (!ignore) {
                     setActors(res.data.results);
@@ -40,13 +40,6 @@ export function Actors() {
                     actors.map(actor => {
                         return <>
                             <ActorInActors actor={actor}/>
-                            <ActorInActors actor={actor}/>
-                            <ActorInActors actor={actor}/><ActorInActors actor={actor}/>
-                            <ActorInActors actor={actor}/>
-                            <ActorInActors actor={actor}/>
-                            <ActorInActors actor={actor}/>
-                            <ActorInActors actor={actor}/>
-
                         </>
                     })
                 }
