@@ -17,54 +17,78 @@ function Author() {
             axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
                 {code: resp.access_token})
                 .then(res => {
-                    switch (res.status) {
-                        case 200:
-                            const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
-                            setNavigate(true);
-                            if (userType=="admin")
-                                return (
-                                    <Navigate replace to="/sign_in" />
-                                )
-                            else if (userType=="premium")
-                                return (
-                                    <Navigate replace to="/sign_in" />
-                                )
-                            else
-                                return (
-                                    <Navigate replace to="/sign_in" />
-                                )
-                            break;
-                            // //@ts-ignore
-                            // console.log(document.getElementById("App").children.length)
-                            // //@ts-ignore
-                            // React.Children.toArray(document.getElementById("App").children).push(
-                            //     <>
-                            //         {Alert("error","Name","Text")}
-                            //     </>
-                            // )
-                            // //@ts-ignore
-                            // console.log(document.getElementById("App").children.length)
-                            break;
-                        case 404:
-                            //Пользователя нет в базе
-                            break;
-                        case 500:
-                            //Сервер не отвечает
-                        case 503:
-                            //Сервер гугла не отвечает
-                            break;
-                    }
-                });
+                    const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
+                    setNavigate(true);
+                    if (userType=="admin")
+                        return (
+                            <Navigate replace to="/sign_in" />
+                        )
+                    else if (userType=="premium")
+                        return (
+                            <Navigate replace to="/sign_in" />
+                        )
+                    else
+                        return (
+                            <Navigate replace to="/sign_in" />
+                        )
+                }).catch(reason => {
+                switch (reason.response.status) {
+                    case 404:
+                        //Пользователя нет в базе
+                        break;
+                    case 500:
+                    //Сервер не отвечает
+                }
+                })
         },
         onError: (error) => {
-            console.log(error);
-        }
+            console.log("гугл не берет");
+        },
     });
 
     const [login, setLogin]=useState("") ;
     const [password, setPassword]=useState("") ;
 
+    function Signin(login: string, password: string)
+    {
+        //console.log(Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]);
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
+            email: login,
+            password: password
+        }).then(res =>{
+            console.log(res.status)
+            switch (res.status) {
+                case 200: {
+                    localStorage["jwt"] = res.data.jwt;
+                    const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
+                    if (userType=="admin")
+                        return (
+                            <Navigate replace to="/sign_in" />
+                        )
+                    else if (userType=="premium")
+                        return (
+                            <Navigate replace to="/sign_in" />
+                        )
+                    else
+                        return (
+                            <Navigate replace to="/home" />
+                        )
+                    break;
+                }
+                case 404:
+                    //не зареган в базе
+                    break;
+                case 500:
+                    //Сервер не отвечает
+                    break;
+                case 403:
+                    //неверный пароль
+                    break;
+            }
 
+        });
+
+    }
 
     return (
         <div id="App">
@@ -149,34 +173,31 @@ function Author() {
                             onSuccess={(response) => {
                                 axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/facebook",
                                     {code: response.accessToken}).then(res => {
-                                    switch (res.status) {
-                                        case 200:
-                                            localStorage["jwt"] = res.data.jwt;
-                                            const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
-                                            setNavigate(true);
-                                            if (userType=="admin")
-                                                return (
-                                                    <Navigate replace to="/sign_in" />
-                                                )
-                                            else if (userType=="premium")
-                                                return (
-                                                    <Navigate replace to="/sign_in" />
-                                                )
-                                            else
-                                                return (
-                                                    <Navigate replace to="/sign_in" />
-                                                )
-                                            break;
+                                    localStorage["jwt"] = res.data.jwt;
+                                    const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
+                                    setNavigate(true);
+                                    if (userType=="admin")
+                                        return (
+                                            <Navigate replace to="/sign_in" />
+                                        )
+                                    else if (userType=="premium")
+                                        return (
+                                            <Navigate replace to="/sign_in" />
+                                        )
+                                    else
+                                        return (
+                                            <Navigate replace to="/sign_in" />
+                                        )
+                                }).catch(reason => {
+                                    switch (reason.response.status) {
                                         case 404:
                                             //Пользователя нет в базе
                                             break;
                                         case 500:
                                         //Сервер не отвечает
-                                        case 503:
-                                            //Сервер фейса не отвечает
-                                            break;
                                     }
-                                })}}
+                                })
+                            }}
                             onFail={(error) => {console.log('Login Failed!', error);}}
                         ><F_logo className={"mr-2 w-6 h-auto inline"}/>Sign in with Facebook</FacebookLogin>
                     </span>
@@ -184,46 +205,6 @@ function Author() {
             </div>
         </div>
     );
-}
-
-function Signin(login: string, password: string)
-{
-    console.log(Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]);
-    axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
-        email: login,
-        password: password
-    }).then(res =>{
-        switch (res.status) {
-            case 200: {
-                localStorage["jwt"] = res.data.jwt;
-                const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
-                if (userType=="admin")
-                    return (
-                        <Navigate replace to="/sign_in" />
-                    )
-                else if (userType=="premium")
-                    return (
-                        <Navigate replace to="/sign_in" />
-                    )
-                else
-                    return (
-                        <Navigate replace to="/sign_in" />
-                    )
-                break;
-            }
-            case 404:
-                //не зареган в базе
-                break;
-            case 500:
-                //Сервер не отвечает
-                break;
-            case 503:
-                //Сервер гугла не отвечает
-                break;
-        }
-
-    });
-
 }
 
 export default Author;
