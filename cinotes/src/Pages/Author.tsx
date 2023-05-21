@@ -38,16 +38,14 @@ function Author() {
         }, err => {
             console.log(err.response.status);
             switch (err.response.status) {
+                case 403:
+                    setError("Wrong password, try again");
+                    break;
                 case 404:
-                    //не зареган в базе
                     setError("No such user, please register an account or check the email");
                     break;
                 case 500:
-                    //Сервер не отвечает
                     setError("Server do not response, try later");
-                    break;
-                case 503:
-                    //Сервер гугла не отвечает
                     break;
             }
         });
@@ -77,15 +75,12 @@ function Author() {
                 }, err => {
                     switch (err.response.status) {
                         case 404:
-                            //Пользователя нет в базе
                             setError("No such user, please register an account");
                             break;
                         case 500:
-                            //Сервер не отвечает
                             setError("Server do not response, try later");
                             break;
                         case 503:
-                            //Сервер гугла не отвечает
                             setError("Google do not response, try later");
                             break;
                     }
@@ -208,15 +203,12 @@ function Author() {
                                     }, err => {
                                         switch (err.response.status) {
                                             case 404:
-                                                //Пользователя нет в базе
                                                 setError("No such user, please register an account");
                                                 break;
                                             case 500:
-                                                //Сервер не отвечает
                                                 setError("Server do not response, try later");
                                                 break;
                                             case 503:
-                                                //Сервер фейса не отвечает
                                                 setError("Facebook do not response, try later");
                                                 break;
                                         }
