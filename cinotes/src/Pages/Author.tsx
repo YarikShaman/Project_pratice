@@ -8,6 +8,8 @@ import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import {Base64} from "js-base64";
+import {Alert} from "../Components/Alert";
+import {HomeHeader} from "../Components/HomeHeader";
 function Author() {
     const [navigate, setNavigate] = useState(false);
     const signIn = useGoogleLogin({
@@ -15,8 +17,43 @@ function Author() {
             axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
                 {code: resp.access_token})
                 .then(res => {
-                    localStorage["jwt"] = res.data.jwt;
-                    setNavigate(true);
+                    switch (res.status) {
+                        case 200:
+                            const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
+                            setNavigate(true);
+                            if (userType=="admin")
+                                return (
+                                    <Navigate replace to="/sign_in" />
+                                )
+                            else if (userType=="premium")
+                                return (
+                                    <Navigate replace to="/sign_in" />
+                                )
+                            else
+                                return (
+                                    <Navigate replace to="/sign_in" />
+                                )
+                            break;
+                            // //@ts-ignore
+                            // console.log(document.getElementById("App").children.length)
+                            // //@ts-ignore
+                            // React.Children.toArray(document.getElementById("App").children).push(
+                            //     <>
+                            //         {Alert("error","Name","Text")}
+                            //     </>
+                            // )
+                            // //@ts-ignore
+                            // console.log(document.getElementById("App").children.length)
+                            break;
+                        case 404:
+                            //Пользователя нет в базе
+                            break;
+                        case 500:
+                            //Сервер не отвечает
+                        case 503:
+                            //Сервер гугла не отвечает
+                            break;
+                    }
                 });
         },
         onError: (error) => {
@@ -30,7 +67,7 @@ function Author() {
 
 
     return (
-        <>
+        <div id="App">
             {navigate}
             <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm text-white">
@@ -112,28 +149,79 @@ function Author() {
                             onSuccess={(response) => {
                                 axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/facebook",
                                     {code: response.accessToken}).then(res => {
-                                        localStorage["jwt"] = res.data.jwt;
-                                        setNavigate(true);
+                                    switch (res.status) {
+                                        case 200:
+                                            localStorage["jwt"] = res.data.jwt;
+                                            const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
+                                            setNavigate(true);
+                                            if (userType=="admin")
+                                                return (
+                                                    <Navigate replace to="/sign_in" />
+                                                )
+                                            else if (userType=="premium")
+                                                return (
+                                                    <Navigate replace to="/sign_in" />
+                                                )
+                                            else
+                                                return (
+                                                    <Navigate replace to="/sign_in" />
+                                                )
+                                            break;
+                                        case 404:
+                                            //Пользователя нет в базе
+                                            break;
+                                        case 500:
+                                        //Сервер не отвечает
+                                        case 503:
+                                            //Сервер фейса не отвечает
+                                            break;
+                                    }
                                 })}}
                             onFail={(error) => {console.log('Login Failed!', error);}}
                         ><F_logo className={"mr-2 w-6 h-auto inline"}/>Sign in with Facebook</FacebookLogin>
                     </span>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
 function Signin(login: string, password: string)
 {
-    console.log(login+"  "+password);
+    console.log(Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]);
     axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
         email: login,
         password: password
-    }).then(resp =>{
-        localStorage["jwt"] = resp.data.jwt;
-        const body =Base64.decode(resp.data.jwt.split(".")[1])
-        console.log(body)
+    }).then(res =>{
+        switch (res.status) {
+            case 200: {
+                localStorage["jwt"] = res.data.jwt;
+                const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
+                if (userType=="admin")
+                    return (
+                        <Navigate replace to="/sign_in" />
+                    )
+                else if (userType=="premium")
+                    return (
+                        <Navigate replace to="/sign_in" />
+                    )
+                else
+                    return (
+                        <Navigate replace to="/sign_in" />
+                    )
+                break;
+            }
+            case 404:
+                //не зареган в базе
+                break;
+            case 500:
+                //Сервер не отвечает
+                break;
+            case 503:
+                //Сервер гугла не отвечает
+                break;
+        }
+
     });
 
 }
