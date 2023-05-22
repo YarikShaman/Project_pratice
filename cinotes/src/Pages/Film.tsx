@@ -1,7 +1,10 @@
 import {HomeHeader} from "../Components/HomeHeader";
 import Not from "../Img/Not_Found.png"
 import axios from "axios";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {ActorInActors} from "../Components/ActorInActors";
+import {ActorInFilm} from "../Components/ActorInFilm";
+import {ScreenshotInFilm} from "../Components/ScreenshotInFilm";
 interface Film {
     pk: number;
     title: string;
@@ -81,13 +84,27 @@ export function Film(filmN:any) {
                     </div>
                 </div>
             </div>
-            <div className={"flex md:w-4/5 my-2 self-center bg-stone-600 flex-col"}>
+            <div className={"flex md:w-4/5 h-96 my-2 self-center bg-stone-600 flex-col"}>
                 <div className={"text-2xl"}>The cast</div>
-                актори компонент
+                <div className={"flex flex-row"}>
+                {
+                    film?.actors.map(actor => {
+                        return <>
+                            <ActorInFilm actor={actor}/>
+                        </>
+                    })
+                }</div>
             </div>
             <div className={"flex md:w-4/5 my-2 self-center bg-stone-600 flex-col"}>
                 <div className={"text-2xl"}>Screenshots</div>
-                скриншотьі компонент
+                <div className={"flex flex-row"}>
+                    {
+                        film?.screenshots.map(screenshot => {
+                            return <>
+                                <ScreenshotInFilm screenshot={screenshot}/>
+                            </>
+                        })
+                    }</div>
             </div>
             <div className={"flex md:w-4/5 my-2 self-center bg-stone-600 flex-col"}>
                 <div className={"border-b-white border-b-2"}>
