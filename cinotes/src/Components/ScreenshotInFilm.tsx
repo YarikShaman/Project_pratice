@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from "react";
 import "../App.css";
+import '../SelectWithCustomScrollbar.css';
 import {GetLang, SetLang} from "../Utilities/Lang";
 export function ScreenshotInFilm(screenshot:any){
     const [scale, setScale] = useState(1);
@@ -15,7 +16,7 @@ export function ScreenshotInFilm(screenshot:any){
 
     return(
         <>
-            <div id={screenshot.screenshot.file} style={{overflow:"auto"}}  className={"fixed bg-black hidden top-[10%] h-4/5 w-4/5 left-[10%] rounded-xl border-4 border-white"}>
+            <div id={screenshot.screenshot.file} style={{overflow:"auto", }}  className={"fixed bg-black divimg hidden top-[10%] h-4/5 w-4/5 left-[10%] rounded-xl border-4 border-white"}>
                 <button onClick={()=>{visChange(screenshot.screenshot.file)}} className={"w-10 h-10 fixed right-[11%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X</button>
                 <img src={screenshot.screenshot.file}  style={{transform: `scale(${scale})`,pointerEvents: 'none',position: "absolute",
                     top: "0", left: "0", transformOrigin:"top left"}} className={"object-contain h-full w-full"}/>
