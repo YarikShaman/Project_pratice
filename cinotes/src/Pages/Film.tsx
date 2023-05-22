@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import {ActorInActors} from "../Components/ActorInActors";
 import {ActorInFilm} from "../Components/ActorInFilm";
 import {ScreenshotInFilm} from "../Components/ScreenshotInFilm";
+import {useParams} from "react-router-dom";
 interface Film {
     pk: number;
     title: string;
@@ -32,12 +33,13 @@ interface Film {
         compressed_file: string;
     }[];
 }
-export function Film(filmN:any) {
+export function Film() {
+    const {id} = useParams()
     const [film, setFilm] = useState<Film | null>(null);
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/12/", config)
+        axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
             .then(res => {
                 if (!ignore) {
                     setFilm(res.data);
@@ -67,8 +69,8 @@ export function Film(filmN:any) {
                         </div>
                     </div>
                     <div className={" flex flex-row"}>
-                        <div className={"bg-black"}>
-                            <img className={"object-cover h-72"} src={film?.poster_file}/>
+                        <div className={"bg-stone-800 p-1 rounded-xl "}>
+                            <img style={{height:"400px"}} className={"object-cover rounded-xl"} src={film?.poster_file}/>
                         </div>
                         <div className={"ml-5 w-full bg-neutral-600"}>
                             <p>Genres: {film?.genres.map(genre => genre.title).join(', ')}</p>
