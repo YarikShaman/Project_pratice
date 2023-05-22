@@ -5,8 +5,11 @@ import Eng from "../Img/EngLang.png";
 import Ukr from "../Img/UkrLang.png";
 import {Link} from "react-router-dom";
 import {GetLang, SetLang} from "../Utilities/Lang";
+import {Base64} from "js-base64";
 
 //let lang=GetLang();
+let c=0
+let apanel=<></>
 let mstate = false;
 export function HomeHeader() {
     if(document.cookie==""){document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";}
@@ -16,6 +19,18 @@ export function HomeHeader() {
         .find(row => row.startsWith('language='))
         .split('=')[1];
     SetLang(Number(language));
+    if (Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]=="admin" && c==0)
+    {
+        c++
+        apanel=(
+            <Link className={"flex flex-grow"} to={"/a_panel"}>
+                <div
+                    className="hover:bg-sky-900 rounded-lg h-full  flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
+                    <p className="self-center">{GetLang().Premium}</p>
+                </div>
+            </Link>
+        )
+    }
     return (
         <>
         <div id={"main"} style={{height:"8vh"}} className="z-40 fixed bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between">
@@ -54,6 +69,7 @@ export function HomeHeader() {
                             <p className="self-center">{GetLang().Premium}</p>
                         </div>
                     </Link>
+                    {apanel}
                 </div>
                 <div className="flex flex-row space-x-5">
                     <div className="flex flex-col mt-3 overflow-hidden rounded-xl border-2 border-slate-700 hover:border-slate-600 h-10" onClick={()=>LangCh()}>
@@ -70,6 +86,7 @@ export function HomeHeader() {
                             <a className="text-sm self-center text-center">{GetLang().Log_in}</a>
                         </div>
                     </Link>
+
                 </div>
 
             </div>

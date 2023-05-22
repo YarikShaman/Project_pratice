@@ -13,6 +13,7 @@ import {Prem} from "./Pages/Premium";
 import Registr from "./Pages/Registr";
 import {Ver} from "./Pages/Verification";
 import {Film} from "./Pages/Film";
+import {APanel} from "./Pages/ForAdmin/AdminPanel";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/prem" element={<Prem/>}/>
             <Route path="/ver" element={<Ver/>}/>
             <Route path="/films/:id" element={<Film />}/>
+            <Route path="/a_panel" element={<APanel />}/>
         </Routes>
   );
 }
