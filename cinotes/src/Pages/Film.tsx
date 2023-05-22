@@ -68,9 +68,9 @@ export function Film() {
                             </button>
                         </div>
                     </div>
-                    <div className={" flex flex-row"}>
+                    <div className={"flex flex-row"}>
                         <div className={"bg-stone-800 p-1 rounded-xl "}>
-                            <img style={{height:"400px"}} className={"object-cover rounded-xl"} src={film?.poster_file}/>
+                            <img style={{height:"400px"}} className={"rounded-xl"} src={film?.poster_file}/>
                         </div>
                         <div className={"ml-5 w-full bg-neutral-600"}>
                             <p>Genres: {film?.genres.map(genre => genre.title).join(', ')}</p>
@@ -86,17 +86,6 @@ export function Film() {
                     </div>
                 </div>
             </div>
-            <div className={"flex md:w-4/5 h-96 my-2 self-center bg-stone-600 flex-col"}>
-                <div className={"text-2xl"}>The cast</div>
-                <div className={"flex flex-row"}>
-                {
-                    film?.actors.map(actor => {
-                        return <>
-                            <ActorInFilm actor={actor}/>
-                        </>
-                    })
-                }</div>
-            </div>
             <div className={"flex md:w-4/5 my-2 self-center bg-stone-600 flex-col"}>
                 <div className={"text-2xl"}>Screenshots</div>
                 <div className={"flex flex-row"}>
@@ -108,6 +97,18 @@ export function Film() {
                         })
                     }</div>
             </div>
+            <div className={"flex md:w-4/5 h-96 my-2 self-center bg-stone-600 flex-col"}>
+                <div className={"text-2xl"}>The cast</div>
+                <div className={"flex flex-row"}>
+                {
+                    film?.actors.map(actor => {
+                        return <>
+                            <ActorInFilm actor={actor}/>
+                        </>
+                    })
+                }</div>
+            </div>
+
             <div className={"flex md:w-4/5 my-2 self-center bg-stone-600 flex-col"}>
                 <div className={"border-b-white border-b-2"}>
                     <button className={"w-20 bg-slate-800"}>

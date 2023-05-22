@@ -12,7 +12,7 @@ import {Base64} from "js-base64";
 function Author() {
     const [error, setError] = useState(String);
     const [navigate, setNavigate] = useState(false);
-
+    const [photo, setPhoto] = useState(String);
     function Signin(login: string, password: string) {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
             email: login,
