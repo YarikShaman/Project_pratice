@@ -29,7 +29,7 @@ export function ScreenshotInFilm(screenshot:any){
                 </button>
             </div>
             <div className={"hover:bg-gray-900 p-1 flex shadow-gray-900 flex-col bg-neutral-800 rounded-xl border-2 border-stone-900 shadow-lg hover:shadow-white mx-5 my-5"}>
-                <img onClick={()=>{visChange(screenshot.screenshot.file)}} className=" h-44 w-72 rounded-xl object-cover border-2 border-gray-700 self-center" src={screenshot.screenshot.compressed_file}/>
+                <img onClick={()=>{visChange(screenshot.screenshot.compressed_file)}} className=" h-44 w-72 rounded-xl object-cover border-2 border-gray-700 self-center" src={screenshot.screenshot.compressed_file}/>
             </div>
         </>
     )
