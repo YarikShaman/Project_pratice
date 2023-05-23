@@ -70,7 +70,7 @@ export function Film() {
                     </div>
                     <div className={"flex flex-row"}>
                         <div className={"bg-stone-800 p-1 rounded-xl "}>
-                            <img style={{height:"400px"}} className={"rounded-xl"} src={film?.poster_file}/>
+                            <img className={"rounded-xl  w-[270px]"} src={film?.poster_file}/>
                         </div>
                         <div className={"ml-5 w-full bg-neutral-600"}>
                             <p>Genres: {film?.genres.map(genre => genre.title).join(', ')}</p>
