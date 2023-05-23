@@ -15,18 +15,6 @@ function AA() {
 }
 
 
-// async function AddFilms(){
-//     const resp = await axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/3/",
-//         {headers: {Authorization:"Bearer "+ localStorage["jwt"]}
-//         });
-//
-//     return (
-//         <>
-//             <FilmInFilms film={resp.data}/>
-//         </>
-//     )
-// }
-
 export function Films() {
     const [filmName, setFilmName] = useState<any>([]);
     const [selectedFDate, setSelectedFDate] = useState("");
@@ -74,9 +62,25 @@ export function Films() {
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films", config)
+        let release_date_after="none"   //if invalid date --> date:=1
+        let release_date_before="2023"  //if invalid date --> date:=1
+        let country=""                  //ищет вхождение, можно 0
+        let genre="Sci-Fi"                    //не писать говно, ищет совпадение, можно 0
+        let sort_type="release_date"    //
+        let p_size="20"                 //
+        let page=1                      //
+        let query ="/?release_date_after="+release_date_after+
+            "&release_date_before="+release_date_before+
+            "&country="+country+
+            "&genre="+genre+
+            "&order_by="+sort_type+
+            "&page_size="+p_size+
+            "&page="+page.toString()
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films"+query, config)
             .then(res => {
                 if (!ignore) {
+                    console.log("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films"+query)
+                    console.log(res.data.results)
                     setFilms(res.data.results);
                 }
             });
