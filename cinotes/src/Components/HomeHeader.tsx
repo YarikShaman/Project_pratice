@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "../App.css";
 import Acc from '../Img/Account.png';
 import Eng from "../Img/EngLang.png";
@@ -12,13 +12,17 @@ let c=0
 let apanel=<></>
 let mstate = false;
 export function HomeHeader() {
-    if(document.cookie==""){document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";}
+    if(!document.cookie.includes("language=")){document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";}
     // @ts-ignore
     let language = document.cookie
         .split('; ')
         .find(row => row.startsWith('language='))
         .split('=')[1];
     SetLang(Number(language));
+    useEffect(()=>{
+        console.log(language)
+        if(language=="2") LangCh();
+    },[]);
     if (Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]=="admin" && c==0)
     {
         c++
