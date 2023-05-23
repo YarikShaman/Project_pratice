@@ -7,6 +7,7 @@ import '../SelectWithCustomScrollbar.css';
 
 
 export function Films() {
+    const [isSearch, setIsSearch] = useState(false);
     const [genreOptions, setGenreOptions] = useState<{[key: string]: { pk: number; title: string }}>({} );
     const [countryOptions, setCountryOptions] = useState([]);
     const [filmName, setFilmName] = useState<any>([]);
@@ -17,7 +18,6 @@ export function Films() {
     const [selectedPage, setSelectedPage] = useState(1);
     const [films, setFilms] = useState([]);
     const [maxPages, setMaxPages] = useState(1);
-    const [changes, setChanges] = useState(true);
     const [sortBy, setSortBy] = useState('');
     const [sort, setSort] = useState('');
     const handleSDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -49,7 +49,6 @@ export function Films() {
     for (let i = from; i >= to; i--) {
         dateOptions.push(i);
     }
-
     useEffect(() => {
         let ignore = false;
         let order ="";
@@ -73,7 +72,7 @@ export function Films() {
         }
         const config = { headers: { Authorization: "Bearer " + localStorage["jwt"] } };
         let sort_type = "release_date";
-        let p_size = 20;
+        let p_size = 10;
         let genre = selectedGenre;
         if(selectedGenre=="-") genre="";
         let country = selectedCountry;
@@ -86,7 +85,10 @@ export function Films() {
             "&order_by=" + sort_type +
             "&page_size=" + p_size.toString() +
             "&page=" + page.toString() + order;
-        console.log(query)
+        if(isSearch==true) {
+            query="/search/?page_size=" + p_size.toString() +"&page="+ page.toString()+"&q=" + filmName;
+        }
+        console.log("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query)
         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
             .then(res => {
                 if (!ignore) {
@@ -110,7 +112,7 @@ export function Films() {
         return () => {
             ignore = true;
         };
-    }, [selectedPage, changes]);
+    }, [selectedPage, isSearch]);
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -142,7 +144,7 @@ export function Films() {
                         type={"text"}/>
                     <button
                         className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        type={"submit"}>Search
+                        type={"submit"} onClick={()=>setIsSearch(true)}>Search
                     </button>
                 </div>
                 <div className={"text-white"}>
@@ -192,7 +194,7 @@ export function Films() {
                     <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"des"} onChange={handleSortChange}/>
                     <label className={"m-2"}>Descending</label><br/>
                     <hr/>
-                    <button onClick={()=>setChanges(!changes)}
+                    <button onClick={()=>setIsSearch(false)}
                         className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
                     </button>
                     <button onClick={() => hideMenu()}

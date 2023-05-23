@@ -45,7 +45,7 @@ export function HomeHeader() {
             eng.style.filter = "brightness(0.5)";
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
-        };
+        }
     },[]);
 
 

@@ -5,24 +5,30 @@ import {ActorInActors} from "../Components/ActorInActors";
 import axios from "axios";
 
 export function Actors() {
+    const [isSearch, setIsSearch] = useState(false);
     const [actorName, setActorName] = useState<any>([]);
     const [actors, setActors] = useState([]);
     const [selectedPage, setSelectedPage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
     useEffect(() => {
         let ignore = false;
+        let p_size = 10;
+        let query = '?page=';
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page="+selectedPage, config)
+        if(isSearch==true) {
+            query="search?q=" + actorName +'&page=';
+        }
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/"+query+selectedPage, config)
             .then(res => {
                 if (!ignore) {
                     setActors(res.data.results);
-                    setMaxPages(Math.ceil(res.data.count / 10));
+                    setMaxPages(Math.ceil(res.data.count / p_size));
                 }
             });
         return () => {
             ignore = true;
         }
-    }, [selectedPage]);
+    }, [selectedPage,isSearch]);
     return (
         <div className="bg-neutral-700 min-h-screen grid grid-cols-1 content-start gap-1 justify-items-center">
             <HomeHeader/>
@@ -34,7 +40,7 @@ export function Actors() {
                         type={"text"}/>
                 <button
                         className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        type={"submit"}>Search
+                        type={"submit"} onClick={()=>setIsSearch(true)}>Search
                 </button>
             </div>
             <div id={"actors"} className="flex w-5/6 flex-row h-auto justify-center flex-wrap">
