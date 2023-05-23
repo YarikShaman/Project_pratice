@@ -5,27 +5,24 @@ import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import '../SelectWithCustomScrollbar.css';
 
-function AA() {
-    //FilmInFilms();
-    return (
-        <>
-            f
-        </>
-    )
-}
-
 
 export function Films() {
+    const [genreOptions, setGenreOptions] = useState<{[key: string]: { pk: number; title: string }}>({} );
+    const [countryOptions, setCountryOptions] = useState([]);
     const [filmName, setFilmName] = useState<any>([]);
     const [selectedFDate, setSelectedFDate] = useState("");
     const [selectedSDate, setSelectedSDate] = useState("");
     const [selectedGenre, setSelectedGenre] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
+    const [selectedPage, setSelectedPage] = useState(1);
     const [films, setFilms] = useState([]);
-    const [next, setNext] = useState("adsf");
+    const [maxPages, setMaxPages] = useState(1);
+    const [changes, setChanges] = useState(true);
+    const [sortBy, setSortBy] = useState('');
+    const [sort, setSort] = useState('');
     const handleSDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = Number(e.target.value);
-        if (e.target.value == '-' || selectedValue <= Number(selectedFDate) || selectedFDate == '-') {
+        if (e.target.value == '-' || selectedValue >= Number(selectedFDate) || selectedFDate == '-') {
             setSelectedSDate(e.target.value);
         } else {
             setSelectedSDate(selectedSDate);
@@ -34,63 +31,105 @@ export function Films() {
 
     const handleFDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = Number(e.target.value);
-        if (e.target.value == '-' || selectedValue >= Number(selectedSDate) || selectedSDate == '-') {
+        if (e.target.value == '-' || selectedValue <= Number(selectedSDate) || selectedSDate == '-') {
             setSelectedFDate(e.target.value);
         } else {
             setSelectedFDate(selectedFDate);
         }
     };
-
-    let genreOptions = ["Comedies", "Fighters", "Detectives", "Melodramas", "Thrillers", "Horrors", "Musicals", "Westerns", "Adventures", "Sports", "Fantasy", "Crime", "Dramas", "Short films", "Biography", "Military", "History", "Documentary", "Family", "Anime", "Children's", "Animation", "Fantasy", "Comics"];
-    let countryOptions = ["Australia", "Austria", "Azerbaijan", "Albania", "Argentina", "Aruba", "Afghanistan", "Belgium", "Bulgaria", "Botswana", "Brazil", "Vietnam", "Vatican", "United Kingdom", "Venezuela", "Ghana", "Hong Kong", "Greece", "Georgia", "Denmark", "Egypt", "Israel", "India", "Indonesia", "Iran", "Iceland", "Spain", "Italy", "Kazakhstan", "Canada", "Kenya", "China", "Cyprus", "Colombia", "Latvia", "Lithuania", "Liechtenstein", "Luxembourg", "Macedonia", "Malta", "Morocco", "Mexico", "Monaco", "Nepal", "Netherlands", "Germany", "New Zealand", "Norway", "UAE", "Panama", "South Africa", "Peru", "South Korea", "Poland", "Portugal", "Puerto Rico", "Romania", "Saudi Arabia", "Senegal", "Serbia", "Singapore", "Slovakia", "Slovenia", "USA", "Thailand", "Taiwan", "Tunisia", "Turkey", "Hungary", "Uzbekistan", "Ukraine", "Uruguay", "Philippines", "Finland", "France", "Czech Republic", "Chile", "Switzerland", "Sweden", "Japan"];
+    const handleSortByChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSortBy(e.target.value);
+    };
+    const handleSortChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSort(e.target.value);
+    };
     let dateOptions = [];
-    let to = 1950;
+    let to = 1936;
     let from = 2023;
     for (let i = from; i >= to; i--) {
         dateOptions.push(i);
     }
-    let genres = genreOptions.map((text, index) => {
-        return <option key={index} value={index}>{text}</option>;
-    });
-    let countries = countryOptions.map((text, index) => {
-        return <option key={index} value={index}>{text}</option>;
-    });
-    let dates = dateOptions.map((text, index) => {
-        return <option key={index} value={index}>{text}</option>;
-    });
 
     useEffect(() => {
         let ignore = false;
-        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        let release_date_after="none"   //if invalid date --> date:=1
-        let release_date_before="2023"  //if invalid date --> date:=1
-        let country=""                  //ищет вхождение, можно 0
-        let genre="Sci-Fi"                    //не писать говно, ищет совпадение, можно 0
-        let sort_type="release_date"    //
-        let p_size="20"                 //
-        let page=1                      //
-        let query ="/?release_date_after="+release_date_after+
-            "&release_date_before="+release_date_before+
-            "&country="+country+
-            "&genre="+genre+
-            "&order_by="+sort_type+
-            "&page_size="+p_size+
-            "&page="+page.toString()
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films"+query, config)
+        let order ="";
+        if(sort!="" && sortBy!=""){
+            order+='&order_by=';
+            if(sort=="des") order+="-";
+            switch (sortBy){
+                case "date":
+                    order+="release_date";
+                    break
+                case "imdbRate":
+                    order+="imdb_rating";
+                    break
+                case "rate":
+                    order+="rating";
+                    break
+                case "num":
+                    order+="";
+                    break
+            }
+        }
+        const config = { headers: { Authorization: "Bearer " + localStorage["jwt"] } };
+        let sort_type = "release_date";
+        let p_size = 20;
+        let genre = selectedGenre;
+        if(selectedGenre=="-") genre="";
+        let country = selectedCountry;
+        if(selectedCountry=="-") country="";
+        let page = selectedPage;
+        let query = "/?release_date_after=" + selectedFDate +
+            "&release_date_before=" + selectedSDate +
+            "&country=" + country +
+            "&genre=" + genre +
+            "&order_by=" + sort_type +
+            "&page_size=" + p_size.toString() +
+            "&page=" + page.toString() + order;
+        console.log(query)
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
             .then(res => {
                 if (!ignore) {
-                    console.log("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films"+query)
-                    console.log(res.data.results)
                     setFilms(res.data.results);
+                    setMaxPages(Math.ceil(res.data.count / p_size));
+                    scrollToTop();
+                }
+            });
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
+            .then(res => {
+                if (!ignore) {
+                    setGenreOptions(res.data.results);
+                }
+            });
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/", config)
+            .then(res => {
+                if (!ignore) {
+                    setCountryOptions(res.data.countries);
                 }
             });
         return () => {
             ignore = true;
-        }
-    }, []);
+        };
+    }, [selectedPage, changes]);
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
+    let genres = Object.entries(genreOptions).map(([key, genre]) => {
+        return <option key={genre.pk} value={genre.title}>{genre.title}</option>;
+    });
+    let countries = countryOptions.map(country => {
+        return <option key={country} value={country}>{country}</option>;
+    });
+    let dates = dateOptions.map((text, index) => {
+        return <option key={index} value={text}>{text}</option>;
+    });
 
     return (
-        <div className="min-h-screen flex flex-row bg-neutral-700">
+        <div className={"bg-neutral-700 min-h-screen pb-5 "}>
+        <div className="min-h-screen flex flex-row">
             <HomeHeader/>
 
             <div id={"side"}
@@ -139,24 +178,21 @@ export function Films() {
                             {countries}</select>
                     </div>
                     <p className={"text-center text-xl m-3"}>Sorting</p>
-                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"date"}/><label
-                    className={"m-2"}>By
-                    Date</label><br/>
-                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"imdbRate"}/><label
-                    className={"m-2"}>By IMDb rating</label><br/>
-                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"rate"}/><label
-                    className={"m-2"}>By
-                    user rating</label><br/>
-                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"num"}/><label
-                    className={"m-2"}>By
-                    number of ratings</label><br/>
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"date"} onChange={handleSortByChange}/>
+                    <label className={"m-2"}>By Date</label><br/>
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"imdbRate"} onChange={handleSortByChange}/>
+                    <label className={"m-2"}>By IMDb rating</label><br/>
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"rate"} onChange={handleSortByChange}/>
+                    <label className={"m-2"}>By user rating</label><br/>
+                    <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"num"} onChange={handleSortByChange}/>
+                    <label className={"m-2"}>By number of ratings</label><br/>
                     <hr/>
-                    <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"as"}/><label
-                    className={"m-2"}>Ascending</label><br/>
-                    <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"des"}/><label
-                    className={"m-2"}>Descending</label><br/>
+                    <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"as"} onChange={handleSortChange}/>
+                    <label className={"m-2"}>Ascending</label><br/>
+                    <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"des"} onChange={handleSortChange}/>
+                    <label className={"m-2"}>Descending</label><br/>
                     <hr/>
-                    <button
+                    <button onClick={()=>setChanges(!changes)}
                         className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
                     </button>
                     <button onClick={() => hideMenu()}
@@ -175,7 +211,16 @@ export function Films() {
                         </>
                     })
                 }
+
             </div>
+        </div>
+        <div className={"relative w-[200px] left-[53%] rounded-xl bg-slate-700 flex flex-row justify-center space-x-2 my-5 text-white"}>
+            <button onClick={()=>{if(selectedPage!=1)setSelectedPage(selectedPage-1)}} className={" text-4xl pb-2"}>{"<"}</button>
+            <input value={selectedPage} onChange={(e) => setSelectedPage(Number(e.target.value))} className={"w-12 text-center text-xl font-semibold bg-gray-600"} min={1} type={"number"}/>
+            <p className={" text-4xl "}>/</p>
+            <div className={"w-12 text-center pt-[10px] text-xl font-semibold bg-gray-600"}>{maxPages}</div>
+            <button onClick={()=>{if(selectedPage!=maxPages)setSelectedPage(selectedPage+1)}} className={" text-4xl pb-2"}>{">"}</button>
+        </div>
         </div>
     );
 

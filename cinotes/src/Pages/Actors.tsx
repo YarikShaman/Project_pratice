@@ -7,20 +7,22 @@ import axios from "axios";
 export function Actors() {
     const [actorName, setActorName] = useState<any>([]);
     const [actors, setActors] = useState([]);
-    const [next, setNext] = useState("adsf");
+    const [selectedPage, setSelectedPage] = useState(1);
+    const [maxPages, setMaxPages] = useState(1);
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/", config)
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page="+selectedPage, config)
             .then(res => {
                 if (!ignore) {
                     setActors(res.data.results);
+                    setMaxPages(Math.ceil(res.data.count / 10));
                 }
             });
         return () => {
             ignore = true;
         }
-    }, []);
+    }, [selectedPage]);
     return (
         <div className="bg-neutral-700 min-h-screen grid grid-cols-1 content-start gap-1 justify-items-center">
             <HomeHeader/>
@@ -43,6 +45,13 @@ export function Actors() {
                         </>
                     })
                 }
+            </div>
+            <div className={"w-[200px]  rounded-xl bg-slate-700 flex flex-row justify-center space-x-2 my-5 text-white"}>
+                <button onClick={()=>{if(selectedPage!=1)setSelectedPage(selectedPage-1)}} className={" text-4xl pb-2"}>{"<"}</button>
+                <input value={selectedPage} onChange={(e) => setSelectedPage(Number(e.target.value))} className={"w-12 text-center text-xl font-semibold bg-gray-600"} min={1} type={"number"}/>
+                <p className={" text-4xl "}>/</p>
+                <div className={"w-12 text-center pt-[10px] text-xl font-semibold bg-gray-600"}>{maxPages}</div>
+                <button onClick={()=>{if(selectedPage!=maxPages)setSelectedPage(selectedPage+1)}} className={" text-4xl pb-2"}>{">"}</button>
             </div>
         </div>
     );
