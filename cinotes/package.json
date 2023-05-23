@@ -16,6 +16,7 @@
     "axios": "^1.4.0",
     "js-base64": "^3.7.5",
     "react": "^18.2.0",
+    "react-backdrop-filter": "^2.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.1",
     "react-scripts": "5.0.1",
