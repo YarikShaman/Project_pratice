@@ -208,7 +208,7 @@ export function Films() {
             <button onClick={() => sideMenu()}
                     className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
             </button>
-            <div id={"films"} className="flex flex-row justify-center md:mt-16 mt-10 justify-self-center h-auto flex-wrap">
+            <div id={"films"} className="flex flex-row justify-center mt-[15%] md:mt-[4%] justify-self-center h-auto flex-wrap">
                 {
                     films.map(film => {
                         return <>
