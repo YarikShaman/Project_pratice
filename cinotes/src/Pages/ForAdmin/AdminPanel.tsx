@@ -84,7 +84,7 @@ export function APanel() {
     return (
         <div className="bg-neutral-700 grid grid-cols-2 content-start gap-4 justify-items-center min-h-screen">
             <HomeHeader/>
-            <div className={"grid grid-cols-2 col-start-1 content-start gap-4 text-white justify-items-center"}>
+            <div className={"grid grid-cols-2 col-start-1 content-start gap-4 mt-[20%] md:mt-[10%] text-white justify-items-center"}>
                 <div className="col-span-2 text-2xl">Film Addition</div>
                 <div className="flex flex-col space-y-2">
                     <input
