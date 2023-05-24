@@ -48,13 +48,15 @@ function MainPage() {
                     {
                         films.nFilms?.map((film, i) => {
                             //console.log(i);
-                            console.log("тут1")
+                            //console.log("тут1")
                             //console.log(film)
                             return <>
                                 <FilmInFilms film={film}/>
                             </>
                         })
                     }
+                </div>
+                <div className="flex flex-row">
                     {
                         films.iFilms?.map(film => {
                             // console.log("тут2")
@@ -64,6 +66,8 @@ function MainPage() {
                             </>
                         })
                     }
+                </div>
+                <div className="flex flex-row">
                     {
                         films.rFilms?.map(film => {
                             // console.log("тут3")
@@ -73,14 +77,15 @@ function MainPage() {
                             </>
                         })
                     }
-                    {/*{*/}
-                    {/*    Object.values(films)?.map(val => {*/}
-                    {/*        return val?.map(film => {console.log(2)*/}
-                    {/*            return <FilmInFilms film={film}/>*/}
-                    {/*        })*/}
-                    {/*    })*/}
-                    {/*}*/}
                 </div>
+                {/*{*/}
+                {/*    Object.values(films)?.map(val => {*/}
+                {/*        return val?.map(film => {console.log(2)*/}
+                {/*            return <FilmInFilms film={film}/>*/}
+                {/*        })*/}
+                {/*    })*/}
+                {/*}*/}
+
             </div>
         </div>
     );
