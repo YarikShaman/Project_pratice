@@ -10,7 +10,6 @@ import {Base64} from "js-base64";
 import {GetLang} from "../Utilities/Lang";
 import {Simulate} from "react-dom/test-utils";
 import blur = Simulate.blur;
-import KinoLenta from "..//Img/kinolenta.jpg"
 
 interface Film {
     pk: number;

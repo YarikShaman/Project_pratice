@@ -153,7 +153,7 @@ export function Films() {
                 <div className={"text-white"}>
                     <p className={"text-center text-xl m-3"}>Filtration</p>
                     <div className={"m-5 flex flex-row"}>
-                        <p className={"m-2 w-4/12"}>Date from </p>
+                        <p className={"m-2 w-5/12"}>Date from </p>
                         <select className={"bg-slate-700 custom-select"}
                                 value={selectedFDate}
                                 onChange={handleFDateChange}>

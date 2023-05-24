@@ -31,3 +31,6 @@ export function Trash(){
 //     case 3: temp = "shadow-blue-400"; break
 //     case 4: temp = "shadow-yellow-400"; break
 // }
+//linear-gradient(37deg, rgba(255,0,0,.05), rgba(255,0,0,0) 70.71%),\n" +
+//                     "      linear-gradient(307deg, rgba(0,255,0,.05), rgba(0,255,0,0) 70.71%),\n" +
+//                     "      linear-gradient(156deg, rgba(0,0,255,.05), rgba(0,0,255,0) 70.71%),\n
