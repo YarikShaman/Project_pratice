@@ -32,7 +32,7 @@ export function Actors() {
     return (
         <div className="bg-neutral-700 min-h-screen grid grid-cols-1 content-start gap-1 justify-items-center">
             <HomeHeader/>
-            <div className="md:w-1/3 flex my-2 flex-nowrap h-10">
+            <div className="md:w-1/3 flex my-2 flex-nowrap mt-[20%] md:mt-[6%] h-10">
                 <input
                         value={actorName}
                         onChange={(e)=>setActorName(e.target.value)}
