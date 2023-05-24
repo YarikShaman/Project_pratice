@@ -4,6 +4,7 @@ import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import logo from "../Img/logo.png"
+import {FilmInPlaylist} from "../Components/FilmInPlaylist"
 
 function MainPage() {
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
@@ -58,7 +59,7 @@ function MainPage() {
                                 //console.log("тут1")
                                 //console.log(film)
                                 return <>
-                                    <FilmInFilms film={film}/>
+                                    <FilmInPlaylist film={film}/>
                                 </>
                             })
                         }
