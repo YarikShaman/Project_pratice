@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import {HomeHeader} from "../../Components/HomeHeader";
+import axios from "axios";
+import DropdownWithSearch from "../../Components/DropdownWithSearch";
+import {toBase64} from "js-base64";
 
 /*{
     'title': 'Test',
@@ -29,64 +32,87 @@ export function APanel() {
     const [poster_image, setPoster_image] = useState("");
     const [rating, setRating] = useState("");
     const [imdb_id, setImdb_id] = useState("");
-    const [genrePk, setGenrePk] = useState("");
-    const [genreTitle, setGenreTitle] = useState("");
+    const [genre, setGenre] = useState("");
+    const [genreOptions, setGenreOptions] = useState<{ pk: string; title: string; }[]>([]);
     const [genres, setGenres] = useState<{ pk: string; title: string; }[]>([]);
-    const [actorPk, setActorPk] = useState("");
     const [actorName, setActorName] = useState("");
-    const [actorPhoto, setActorPhoto] = useState("");
-    const [actorUrl, setActorUrl] = useState("");
-    const [actors, setActors] = useState<{ pk: string; name: string; photo: string; url: string; }[]>([]);
+    const [actorsRaw, setActorsRaw] = useState<{ pk: string; name: string; photo_file: string; url: string; }[]>([]);
+    const [actorsOptions, setActorsOptions] = useState<string[]>([]);
+    const [actors, setActors] = useState<{ pk: string; name: string; photo_file: string; url: string; }[]>([]);
     const [country, setCountry] = useState("");
+    const [countryOptions, setCountryOptions] = useState([]);
     const [countries, setCountries] = useState<string[]>([]);
     const [release_date, setRelease_date] = useState("");
     const [director, setDirector] = useState("");
     const [description, setDescription] = useState("");
     const [age_restriction, setAge_restriction] = useState("");
     const [studio, setStudio] = useState("");
-    const [studios, setStudios] = useState<string[]>([]);
-    const [screenshot, setScreenshot] = useState("");
-    const [screenshots, setScreenshots] = useState<string[]>([]);
-    const handleAddGenre = () => {
-        const genre = {
-            pk: genrePk,
-            title: genreTitle
+    const [screenshot, setScreenshot] = useState<{base64string: string; name: string}>();
+    const [screenshots, setScreenshots] = useState<{base64string: string; name: string}[]>([]);
+    useEffect(() => {
+        let ignore = false;
+        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+        if (!ignore) {
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
+                .then(res => {
+                    setGenreOptions(res.data.results);
+                });
+
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/?page_size=100", config)
+                .then(res => {
+
+                    setCountryOptions(res.data.countries);
+
+                });
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
+                .then(res => {
+                    setActorsRaw(res.data.results);
+                    setActorsOptions((res.data.results).map((actor: { name: any; }) => actor.name))
+                });
+        }
+        return () => {
+            ignore = true;
         };
-        setGenres([...genres, genre]);
-        setGenrePk("");
-        setGenreTitle("");
-    }
-    const handleAddActor = () => {
-        const actor = {
-            pk: actorPk,
-            name: actorName,
-            photo: actorPhoto,
-            url: actorUrl
-        };
-        setActors([...actors, actor]);
-        setActorPk("");
-        setActorName("");
-        setActorPhoto("");
-        setActorUrl("");
-    };
+    }, [])
     const handleAddCountry = () => {
         setCountries([...countries, country]);
         setCountry('');
     };
-    const handleAddStudio = () => {
-        setStudios([...studios, studio]);
-        setStudio('');
-    };
-    const handleAddScreenshot = () => {
+    const handleAddPoster = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.files)
+        if(e.target.files!=null && e.target.files.length!=0)
+        {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setPoster_image(base64String);
+            }}}
+    const handleAddScreenshot = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.files)
+        if(e.target.files!=null && e.target.files.length!=0)
+        {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                // @ts-ignore
+                setScreenshot({base64string:base64String, name:e.target.files[0].name});
+            }}}
+    const handleAddScreenshots = () => {
+        if (screenshot) {
         setScreenshots([...screenshots, screenshot]);
-        setScreenshot('');
+        }
+        setScreenshot(undefined);
     };
     return (
-        <div className="bg-neutral-700 grid grid-cols-2 content-start gap-4 justify-items-center min-h-screen">
+        <div className="bg-neutral-700 grid grid-cols-2 content-center gap-4 justify-items-center min-h-screen">
             <HomeHeader/>
-            <div className={"grid grid-cols-2 col-start-1 content-start gap-4 mt-[20%] md:mt-[10%] text-white justify-items-center"}>
+            <div
+                className={"grid grid-cols-2 col-start-1 content-start gap-4 mt-[20%] md:mt-[10%] text-white justify-items-center"}>
                 <div className="col-span-2 text-2xl">Film Addition</div>
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col w-full space-y-2">
+                    <p className={"m-2"}>Title</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -94,13 +120,14 @@ export function APanel() {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Title"
                     />
+                    <p className={"m-2"}>Poster Image</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={poster_image}
-                        onChange={(e) => setPoster_image(e.target.value)}
+                        type="file"
+                        onChange={(e) => handleAddPoster(e)}
                         placeholder="Poster image"
                     />
+                    <p className={"m-2"}>Rating</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -108,6 +135,7 @@ export function APanel() {
                         onChange={(e) => setRating(e.target.value)}
                         placeholder="Rating"
                     />
+                    <p className={"m-2"}>IMDb id</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -115,23 +143,15 @@ export function APanel() {
                         onChange={(e) => setImdb_id(e.target.value)}
                         placeholder="IMDb id"
                     />
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={genrePk}
-                        onChange={(e) => setGenrePk(e.target.value)}
-                        placeholder="Genre PK"
-                    />
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={genreTitle}
-                        onChange={(e) => setGenreTitle(e.target.value)}
-                        placeholder="Genre Title"
-                    />
+                        <p className={"m-2"}>Genre</p>
+                        <DropdownWithSearch options={genreOptions.map((genre)=>genre.title)} onSelect={setGenre}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={handleAddGenre}
+                        onClick={() => {const foundGenre = genreOptions.find((genreo) => genreo.title === genre);
+                            if (foundGenre) {
+                                setGenres([...genres, foundGenre])
+                            }
+                        }}
                     >
                         Add genre
                     </button>
@@ -145,38 +165,17 @@ export function APanel() {
                         ))}
                     </ul>
                 </div>
-                <div className="flex flex-col space-y-2">
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={actorPk}
-                        onChange={(e) => setActorPk(e.target.value)}
-                        placeholder="Actor PK"
-                    />
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={actorName}
-                        onChange={(e) => setActorName(e.target.value)}
-                        placeholder="Actor Name"
-                    />
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={actorPhoto}
-                        onChange={(e) => setActorPhoto(e.target.value)}
-                        placeholder="Actor Photo"
-                    />
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={actorUrl}
-                        onChange={(e) => setActorUrl(e.target.value)}
-                        placeholder="Actor URL"
-                    />
+                <div className="flex flex-col w-full space-y-2">
+                        <p className={"m-2"}>Actor</p>
+                        <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={handleAddActor}
+                        onClick={() => {
+                            const foundActor = actorsRaw.find((actor) => actor.name === actorName);
+                            if (foundActor) {
+                                setActors([...actors, foundActor]);
+                            }
+                        }}
                     >
                         Add Actor
                     </button>
@@ -185,31 +184,27 @@ export function APanel() {
                     <ul>
                         {actors.map((actor, index) => (
                             <li key={index}>
-                                PK: {actor.pk}, Name: {actor.name}, Photo: {actor.photo}, URL: {actor.url}
+                                PK: {actor.pk}, Name: {actor.name}, Photo: {actor.photo_file}, URL: {actor.url}
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className="flex flex-col space-y-2">
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        placeholder="Country"
-                    />
-                    <h1>Countries Array:</h1>
-                    <ul>
-                        {countries?.map((value, index) => (
-                            <li key={index}>{value}</li>
-                        ))}
-                    </ul>
+                <div className="flex flex-col w-full space-y-2">
+                    <p className={"m-2"}>Country</p>
+                    <DropdownWithSearch options={countryOptions} onSelect={setCountry}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
                         onClick={handleAddCountry}
                     >
                         Add Country
                     </button>
+                    <h1>Countries Array:</h1>
+                    <ul>
+                        {countries?.map((value, index) => (
+                            <li key={index}>{value}</li>
+                        ))}
+                    </ul>
+                    <p className={"m-2"}>Release date</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -217,6 +212,7 @@ export function APanel() {
                         onChange={(e) => setRelease_date(e.target.value)}
                         placeholder="Release date"
                     />
+                    <p className={"m-2"}>Director</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -224,6 +220,9 @@ export function APanel() {
                         onChange={(e) => setDirector(e.target.value)}
                         placeholder="Director"
                     />
+                </div>
+                <div className="flex flex-col w-full space-y-2">
+                    <p className={"m-2"}>Description</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -231,9 +230,7 @@ export function APanel() {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Description"
                     />
-                </div>
-                <div className="flex flex-col space-y-2">
-
+                    <p className={"m-2"}>Age restriction</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -241,6 +238,7 @@ export function APanel() {
                         onChange={(e) => setAge_restriction(e.target.value)}
                         placeholder="Age restriction"
                     />
+                    <p className={"m-2"}>Studio</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -248,39 +246,27 @@ export function APanel() {
                         onChange={(e) => setStudio(e.target.value)}
                         placeholder="Studio"
                     />
-                    <h1>Studios Array:</h1>
-                    <ul>
-                        {studios?.map((value, index) => (
-                            <li key={index}>{value}</li>
-                        ))}
-                    </ul>
-                    <button
-                        className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={handleAddStudio}
-                    >
-                        Add Studio
-                    </button>
+                    <p className={"m-2"}>Screenshot</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={screenshot}
-                        onChange={(e) => setScreenshot(e.target.value)}
-                        placeholder="Screenshots"
+                        type={"file"}
+                        accept={"image/* "}
+                        onChange={(e)=>{handleAddScreenshot(e)}}
                     />
                     <h1>Screenshots Array:</h1>
                     <ul>
                         {screenshots?.map((value, index) => (
-                            <li key={index}>{value}</li>
+                            <li key={index}>{value.name}</li>
                         ))}
                     </ul>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={handleAddScreenshot}
+                        onClick={handleAddScreenshots}
                     >
                         Add Screenshot
                     </button>
                 </div>
+                <button className={"bg-black"}>Add film</button>
             </div>
         </div>
-    )
-}
+    )}
