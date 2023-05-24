@@ -30,7 +30,7 @@ export function Actors() {
         }
     }, [selectedPage,isSearch]);
     return (
-        <div className="bg-neutral-700 min-h-screen grid grid-cols-1 content-start gap-1 justify-items-center">
+        <div style={{background:"repeating-linear-gradient(45deg, rgba(30, 32, 74, 1), rgba(30, 32, 74, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}} className="bg-neutral-700 min-h-screen grid grid-cols-1 content-start gap-1 justify-items-center">
             <HomeHeader/>
             <div className="md:w-1/3 flex my-2 flex-nowrap mt-[20%] md:mt-[6%] h-10">
                 <input
