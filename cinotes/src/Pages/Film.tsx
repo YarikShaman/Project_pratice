@@ -76,7 +76,7 @@ export function Film() {
     }, []);
 
     return (
-        <div className={"min-h-screen h-auto  flex flex-col pb-10 text-white bg-neutral-800"}>
+        <div style={{background:"repeating-linear-gradient(45deg, rgba(10, 92, 44, 1), rgba(10, 92, 44, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}} className={"min-h-screen h-auto  flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
             <div style={{borderWidth:2, borderImageSlice:1 , borderColor :"" }} className=" pb-[100px] md:w-4/5 self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
                 <div className={"flex w-full  my-2 self-center flex-row"}>

@@ -31,14 +31,14 @@ function MainPage() {
     }, []);
     return (
 
-        <div style={{background:"repeating-linear-gradient(45deg, rgba(10, 92, 44, 1), rgba(10, 92, 44, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}} className="min-h-screen flex justify-center">
+        <div style={{background:"repeating-linear-gradient(45deg, rgba(54, 32, 54, 1), rgba(54, 32, 54, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}} className="min-h-screen flex justify-center">
             <HomeHeader/>
-            <div style={{background:"rgb(54 54 54)", backdropFilter: "blur(0px)"}}
+            <div style={{background:"rgb(64 68 64)", backdropFilter: "blur(0px)"}}
                 className="w-[80%]  rounded-2xl flex-col border-2 border-white mt-[6%] self-center flex justify-center ">
                 <div className="flex flex-col mt-[100px] justify-center ">
                     <img src={logo} className=" w-fit self-center h-[200px] float-right"/>
                     <a className="self-center text-white text-[40px] font-mono text-center font-semibold flex flex-col">
-                        <br/>Не знаєш щоб подивитися? Тобі до нас!<br/>
+                        <br/>Не знаєш чого-б подивитися? Тобі до нас!<br/>
                         У Cinotes одна з найбільших баз<br/>
                         фільмів усіх часів та країн.<br/>
                         Тут можна обрати фільм собі до душі<br/>
@@ -61,9 +61,12 @@ function MainPage() {
                         })
                     }
                     </div>
+                    {/*<FilmInFilms film={films.nFilms[0]}/>*/}
                     <a style={{fontFamily:"fantasy"}} className="self-center object-center text-white text-[40px] mr-[10%] text-center  italic">Хіти серед<br/>новинок!</a>
+                    {/*<FilmInFilms film={films.nFilms[1]}/>*/}
                 </div>
-                <div style={{background:"radial-gradient(ellipse closest-side, rgba(0,0,0,0.3) 90%, transparent)", backdropFilter: "blur(0px)"}} className="flex flex-row w-[88%] self-end mt-[100px] ml-[6%] mr-[6%] flex-wrap justify-around">
+                <div style={{background:"radial-gradient(ellipse closest-side, rgba(20,20,30,0.5) 60%, transparent)", backdropFilter: "blur(20px)"}} className="flex flex-row w-[88%] self-end mt-[100px] ml-[6%] mr-[6%] flex-wrap justify-around">
+                    {/*<FilmInFilms film={films.iFilms[0]}/>*/}
                     <a style={{fontFamily:"fantasy"}} className="self-center text-white text-[40px]  text-center w-grow  italic" >Найпопулярніші<br/><br/>фільми за<br/><br/>версією IMDB</a>
                     {
                         films.iFilms?.map(film => {
@@ -74,6 +77,7 @@ function MainPage() {
                             </>
                         })
                     }
+                    {/*<FilmInFilms film={films.iFilms[1]}/>*/}
 
                 </div>
                 <div className="flex md:flex-row w-[88%] mt-[100px] ml-[6%] mr-[6%] flex-wrap justify-around flex-row-reverse">
