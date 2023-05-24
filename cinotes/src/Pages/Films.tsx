@@ -4,10 +4,13 @@ import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import '../SelectWithCustomScrollbar.css';
+import {Simulate} from "react-dom/test-utils";
+import change = Simulate.change;
 
 
 export function Films() {
     const [isSearch, setIsSearch] = useState(false);
+    const [change, setChange] = useState(false);
     const [genreOptions, setGenreOptions] = useState<{[key: string]: { pk: number; title: string }}>({} );
     const [countryOptions, setCountryOptions] = useState([]);
     const [filmName, setFilmName] = useState<any>([]);
@@ -112,7 +115,7 @@ export function Films() {
         return () => {
             ignore = true;
         };
-    }, [selectedPage, isSearch]);
+    }, [selectedPage,change, isSearch]);
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -194,7 +197,7 @@ export function Films() {
                     <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"des"} onChange={handleSortChange}/>
                     <label className={"m-2"}>Descending</label><br/>
                     <hr/>
-                    <button onClick={()=>setIsSearch(false)}
+                    <button onClick={()=>setChange(!change)}
                         className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
                     </button>
                     <button onClick={() => hideMenu()}

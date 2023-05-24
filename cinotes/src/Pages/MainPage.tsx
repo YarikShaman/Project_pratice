@@ -33,7 +33,7 @@ function MainPage() {
         <div className="min-h-screen bg-neutral-800 flex justify-center">
             <HomeHeader/>
             <div
-                className="w-[80%] bg-neutral-700 rounded-2xl flex-col border-2 border-white my-[40px] self-center py-[40px] flex justify-center ">
+                className="w-[80%] bg-neutral-700 rounded-2xl flex-col border-2 border-white mt-[4%] self-center flex justify-center ">
 
                 <a className="self-center text-white text-[40px] font-mono font-semibold">
                     Не знаєте щоб подивитися?<br/>

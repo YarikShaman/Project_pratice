@@ -31,7 +31,6 @@ export function HomeHeader() {
     let language = document.cookie.split('; ').find(row => row.startsWith('language=')).split('=')[1];
     SetLang(Number(language));
     useEffect(()=>{
-        console.log(language)
         if(language=="2") {
             let engm = document.getElementById("m1");
             let ukrm = document.getElementById("m2");
@@ -63,10 +62,10 @@ export function HomeHeader() {
     }
     return (
         <>
-        <div id={"main"} style={{height:"8vh"}} className="z-40 fixed border-b-2 border-b-neutral-900 bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between">
-            <a className="self-center pl-6 text-2xl font-bold text-white select-none italic ">
+        <div id={"main"} className="z-40 h-[8%] fixed border-b-2 border-b-neutral-900 bg-neutral-800 flex flex-row space-x-5 w-full items-center justify-between">
+            <p className="self-center pl-6 text-2xl font-bold text-white select-none italic ">
                 Cinotes
-            </a>
+            </p>
             <div className={"flex flex-row w-full items-center h-full hidden md:flex justify-between"}>
                 <div className="flex w-1/2 h-full">
                     <Link className={"flex flex-grow"} to={"/"}>
@@ -113,7 +112,7 @@ export function HomeHeader() {
                             className="hover:bg-neutral-900 bg-stone-900 my-1 flex flex-col w-20 border-2 border-gray-800 rounded-xl mr-2 text-white hover:text-sky-500 hover:border-sky-900 cursor-pointer select-none">
                             <img className=" w-7 h-7 mt-1 bg-cover bg-repeat self-center " alt={"Profile_Pic"}
                                  src={Acc}></img>
-                            <a className="text-sm self-center text-center">{GetLang().Log_in}</a>
+                            <p className="text-sm self-center text-center">{GetLang().Log_in}</p>
                         </div>
                     </Link>
 
@@ -150,7 +149,7 @@ export function HomeHeader() {
                 className="hover:bg-neutral-900 bg-stone-900  flex flex-row   border-2 border-gray-800 rounded-xl m-3 py-1 text-white hover:text-sky-500 hover:border-sky-900 cursor-pointer select-none">
                 <img className=" w-7 h-7 m-2 bg-cover bg-repeat self-center " alt={"Profile_Pic"}
                      src={Acc}></img>
-                <a className="text-sm self-center text-center">{GetLang().Log_in}</a>
+                <p className="text-sm self-center text-center">{GetLang().Log_in}</p>
             </div>
         </Link>
 
