@@ -74,7 +74,7 @@ export function Films() {
             }
         }
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        let sort_type = "release_date";
+        let sort_type = "-release_date";
         let p_size = 10;
         let genre = selectedGenre;
         if (selectedGenre == "-") genre = "";
@@ -133,7 +133,9 @@ export function Films() {
     });
 
     return (
-        <div style={{background:"repeating-linear-gradient(45deg, rgba(10, 92, 44, 1), rgba(10, 92, 44, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}} className={"bg-neutral-700 min-h-screen pb-5 "}>
+        <div
+            style={{background: "repeating-linear-gradient(45deg, rgba(10, 92, 44, 1), rgba(10, 92, 44, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
+            className={"bg-neutral-700 min-h-screen pb-5 "}>
             <div className="min-h-screen flex flex-row">
                 <HomeHeader/>
 

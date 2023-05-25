@@ -14,7 +14,8 @@ function Author() {
     const [error, setError] = useState(String);
     const [navigate, setNavigate] = useState(false);
     const [photo, setPhoto] = useState(String);
-    const nav=useNavigate()
+    const nav = useNavigate()
+
     function Signin(login: string, password: string) {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
             email: login,
@@ -22,8 +23,8 @@ function Author() {
         }).then(res => {
             setError("");
             localStorage["jwt"] = res.data.jwt;
-            const userType = DecodeB64(res.data.jwt);
-            console.log(DecodeB64(res.data.jwt))
+            if (DecodeB64(res.data.jwt).isVerified == "false")
+                nav("/ver")
             nav("/")
         }, err => {
             console.log(err.response.status);
@@ -42,13 +43,34 @@ function Author() {
 
     }
 
+    function Recovery(){
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/send", {
+            email: login
+        }).then(res => {
+            setError("");
+            localStorage["email"]=login
+            nav("/password_rec")
+        }, err => {
+            console.log(err.response.status);
+            switch (err.response.status) {
+                case 404:
+                    setError("No such email, set correct email to recover password");
+                    break;
+                case 500:
+                    setError("Server do not response, try later");
+                    break;
+            }
+        });
+    }
+
     const signIn = useGoogleLogin({
         onSuccess: (resp) => {
             axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
                 {code: resp.access_token})
                 .then(res => {
                     setError("")
-                    console.log(DecodeB64(res.data.jwt))
+                    if (DecodeB64(res.data.jwt).isVerified=="false")
+                        nav("/ver")
                     nav("/")
                 }, err => {
                     switch (err.response.status) {
@@ -115,7 +137,7 @@ function Author() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                                    <a onClick={()=>{Recovery()}} className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer">
                                         Forgot password?
                                     </a>
                                 </div>
@@ -161,22 +183,25 @@ function Author() {
                             onSuccess={(response) => {
                                 axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/facebook",
                                     {code: response.accessToken}).then(res => {
-                                            setError("");
-                                            localStorage["jwt"] = res.data.jwt;
-                                            nav("/")
-                                    }, err => {
-                                        switch (err.response.status) {
-                                            case 404:
-                                                setError("No such user, please register an account");
-                                                break;
-                                            case 500:
-                                                setError("Server do not response, try later");
-                                                break;
-                                            case 503:
-                                                setError("Facebook do not response, try later");
-                                                break;
-                                        }
-                                    })}}
+                                    setError("");
+                                    localStorage["jwt"] = res.data.jwt;
+                                    if (DecodeB64(res.data.jwt).isVerified == "false")
+                                        nav("/ver")
+                                    nav("/")
+                                }, err => {
+                                    switch (err.response.status) {
+                                        case 404:
+                                            setError("No such user, please register an account");
+                                            break;
+                                        case 500:
+                                            setError("Server do not response, try later");
+                                            break;
+                                        case 503:
+                                            setError("Facebook do not response, try later");
+                                            break;
+                                    }
+                                })
+                            }}
                         ><F_logo className={"mr-2 w-6 h-auto inline"}/>Sign in with Facebook</FacebookLogin>
                     </span>
                 </div>

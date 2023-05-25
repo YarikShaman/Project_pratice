@@ -5,6 +5,6 @@ export function DecodeB64(jwt:string){
         id: Base64.decode(jwt.split(".")[1]).split('"')[4].slice(1, -1),
         isVerified: Base64.decode(jwt.split(".")[1]).split('"')[6].slice(1, -1),
         ps_recovery: Base64.decode(jwt.split(".")[1]).split('"')[8].slice(1, -1),
-        userType: Base64.decode(jwt.split(".")[1]).split('"')[12]
+        userType: Base64.decode(jwt.split(".")[1]).split('"')[11]
     }
 }

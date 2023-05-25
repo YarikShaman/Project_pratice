@@ -6,10 +6,10 @@ import {ActorInActors} from "../Components/ActorInActors";
 import {ActorInFilm} from "../Components/ActorInFilm";
 import {ScreenshotInFilm} from "../Components/ScreenshotInFilm";
 import {Link, useParams} from "react-router-dom";
-import {Base64} from "js-base64";
 import {GetLang} from "../Utilities/Lang";
 import {Simulate} from "react-dom/test-utils";
 import blur = Simulate.blur;
+import {DecodeB64} from "../Utilities/DecodeB64";
 
 interface Film {
     pk: number;
@@ -45,7 +45,7 @@ let c = 0
 export function Film() {
     const {id} = useParams()
     const [film, setFilm] = useState<Film | null>(null);
-    if (Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9] == "admin" && c == 0) {
+    if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         tools = (
             <>
