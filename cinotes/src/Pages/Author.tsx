@@ -7,12 +7,14 @@ import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 import {useGoogleLogin} from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
-import {Base64} from "js-base64";
+import {DecodeB64} from "../Utilities/DecodeB64";
+import {useNavigate} from "react-router-dom";
 
 function Author() {
     const [error, setError] = useState(String);
     const [navigate, setNavigate] = useState(false);
     const [photo, setPhoto] = useState(String);
+    const nav=useNavigate()
     function Signin(login: string, password: string) {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
             email: login,
@@ -20,20 +22,9 @@ function Author() {
         }).then(res => {
             setError("");
             localStorage["jwt"] = res.data.jwt;
-            const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
-            if (userType == "admin")
-                return (
-                    <Navigate replace to="/"/>
-                )
-            else if (userType == "premium")
-                return (
-                    <Navigate replace to="/"/>
-                )
-            else
-                return (
-                    <Navigate replace to="/"/>
-                )
-
+            const userType = DecodeB64(res.data.jwt);
+            console.log(DecodeB64(res.data.jwt))
+            nav("/")
         }, err => {
             console.log(err.response.status);
             switch (err.response.status) {
@@ -56,21 +47,9 @@ function Author() {
             axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
                 {code: resp.access_token})
                 .then(res => {
-                    setError("");
-                    const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
-                    setNavigate(true);
-                    if (userType == "admin")
-                        return (
-                            <Navigate replace to="/"/>
-                        )
-                    else if (userType == "premium")
-                        return (
-                            <Navigate replace to="/"/>
-                        )
-                    else
-                        return (
-                            <Navigate replace to="/"/>
-                        )
+                    setError("")
+                    console.log(DecodeB64(res.data.jwt))
+                    nav("/")
                 }, err => {
                     switch (err.response.status) {
                         case 404:
@@ -184,21 +163,7 @@ function Author() {
                                     {code: response.accessToken}).then(res => {
                                             setError("");
                                             localStorage["jwt"] = res.data.jwt;
-                                            const userType = Base64.decode(res.data.jwt.split(".")[1]).split('"')[9];
-                                            setNavigate(true);
-                                            if (userType == "admin")
-                                                return (
-                                                    <Navigate replace to="/"/>
-                                                )
-                                            else if (userType == "premium")
-                                                return (
-                                                    <Navigate replace to="/"/>
-                                                )
-                                            else
-                                                return (
-                                                    <Navigate replace to="/"/>
-                                                )
-
+                                            nav("/")
                                     }, err => {
                                         switch (err.response.status) {
                                             case 404:

@@ -5,7 +5,7 @@ import Eng from "../Img/EngLang.png";
 import Ukr from "../Img/UkrLang.png";
 import {Link} from "react-router-dom";
 import {GetLang, SetLang} from "../Utilities/Lang";
-import {Base64} from "js-base64";
+import {DecodeB64} from "../Utilities/DecodeB64";
 
 //let lang=GetLang();
 let c=0
@@ -48,7 +48,7 @@ export function HomeHeader() {
     },[]);
 
 
-    if (Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9]=="admin" && c==0)
+    if (DecodeB64(localStorage["jwt"]).userType=="admin" && c==0)
     {
         c++
         apanel=(

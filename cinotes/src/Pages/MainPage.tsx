@@ -33,7 +33,7 @@ function MainPage() {
     return (
 
         <div
-            style={{background: "repeating-linear-gradient(45deg, rgba(54, 32, 54, 1), rgba(54, 32, 54, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
+            style={{background: "repeating-linear-gradient(45deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
             className="min-h-screen flex justify-center">
             <HomeHeader/>
             <div style={{background: "rgb(64 68 64)", backdropFilter: "blur(0px)"}}
