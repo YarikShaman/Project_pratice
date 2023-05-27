@@ -50,7 +50,19 @@ export function Playlists() {
             <HomeHeader/>
             <div id={"side"}
                  className="z-10 w-1/5 p-2 h-screen md:mt-0 mt-8 sticky bg-gray-800 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
-
+                {
+                    playlists?.map((playlist) => {
+                        return <>
+                            <button key={playlist.pk} onClick={(e) => {
+                                setCurrentPlaylist(playlists.find(obj => obj.pk === playlist.pk));
+                                console.log(currentPlaylist)
+                            }}
+                                    className={"m-1 bg-black px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
+                                {playlist?.title}
+                            </button>
+                        </>
+                    })
+                }
             </div>
             <button onClick={() => sideMenu()}
                     className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
@@ -59,9 +71,11 @@ export function Playlists() {
                 </button>
             </button>
             <div id={"films"}
-                 className="flex flex-row w-full justify-center mt-[15%] md:mt-[4%]  h-auto min-h-[400px] bg-blue-500 flex-wrap">
+                 className="flex flex-row w-full justify-center mt-[15%] md:mt-[4%]  h-auto min-h-[400px] flex-wrap">
                 {
-
+                    currentPlaylist?.films.map((film) => {
+                        return <FilmInPlaylist film={film} pk={film.url.split('/')[-1]}/>
+                    })
                 }
                 lalalalal
             </div>
@@ -95,6 +109,7 @@ export function Playlists() {
             {/*</div>*/}
         </div>
     );
+
     function sideMenu() {
         let side = document.getElementById("side");
         let films = document.getElementById("films");

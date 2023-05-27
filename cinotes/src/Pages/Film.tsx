@@ -49,10 +49,14 @@ export function Film() {
         c++
         tools = (
             <>
-                <button onClick={()=>{}} className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
+                <button onClick={() => {
+                }}
+                        className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
                     Delete
                 </button>
-                <button onClick={()=>{}} className={"w-1/3 bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
+                <button onClick={() => {
+                }}
+                        className={"w-1/3 bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
                     Edit
                 </button>
             </>
@@ -76,18 +80,23 @@ export function Film() {
     }, []);
 
     return (
-        <div style={{background:"repeating-linear-gradient(45deg, rgba(255, 130, 0, 1), rgba(255, 130, 0, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}} className={"min-h-screen h-auto  flex flex-col pb-10 text-white bg-neutral-800"}>
+        <div
+            style={{background: "repeating-linear-gradient(45deg, rgba(255, 130, 0, 1), rgba(255, 130, 0, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
+            className={"min-h-screen h-auto  flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
-            <div style={{borderWidth:2, borderImageSlice:1 , borderColor :"" }} className=" pb-[100px] md:w-4/5 self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
+            <div style={{borderWidth: 2, borderImageSlice: 1, borderColor: ""}}
+                 className=" pb-[100px] md:w-4/5 self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
                 <div className={"flex w-full  my-2 self-center flex-row"}>
                     <div className={"flex w-full flex-col"}>
                         <div className={"flex flex-row mt-8 ml-5"}>
-                            <div style={{fontFamily:"sans-serif" , fontWeight:"bold"}} className={"text-[40px] mx-5 w-full "}>
+                            <div style={{fontFamily: "sans-serif", fontWeight: "bold"}}
+                                 className={"text-[40px] mx-5 w-full "}>
                                 {film?.title}
                             </div>
                             <div className={"w-96 flex h-2/3 self-center justify-end"}>
                                 {tools}
-                                <button className={"w-1/2  bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
+                                <button
+                                    className={"w-1/2  bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
                                     Add to playlist
                                 </button>
                             </div>
@@ -97,7 +106,8 @@ export function Film() {
                                 <img className={"rounded-xl  w-[500px]"} src={film?.poster_file}/>
                             </div>
                             <div className={"mx-5 p-3 w-full text-[24px]"}>
-                                <p className="pt-0"><b>Genres:</b> {film?.genres.map(genre => genre.title).join(', ')}</p>
+                                <p className="pt-0"><b>Genres:</b> {film?.genres.map(genre => genre.title).join(', ')}
+                                </p>
                                 <p className="pt-3"><b>Release date:</b> {film?.release_date}</p>
                                 <p className="pt-3"><b>Country:</b> {film?.country}</p>
                                 <p className="pt-3"><b>User rating:</b> {film?.rating}</p>
@@ -136,10 +146,12 @@ export function Film() {
 
                 <div className={"flex w-11/12 mt-[40px] h-[400px]  self-center bg-stone-600 flex-col"}>
                     <div className={"border-b-white border-b-2"}>
-                        <button id="reviews" style={{backgroundColor: "rgb(31 41 55)"}} className={" text-[20px] px-5 py-2 "}>
+                        <button id="reviews" style={{backgroundColor: "rgb(31 41 55)"}}
+                                className={" text-[20px] px-5 py-2 "}>
                             Reviews
                         </button>
-                        <button id="my_notes" style={{backgroundColor: "rgb(31 41 55)"}} className={"text-[20px] px-5 py-2 "}>
+                        <button id="my_notes" style={{backgroundColor: "rgb(31 41 55)"}}
+                                className={"text-[20px] px-5 py-2 "}>
                             My notes
                         </button>
                     </div>
