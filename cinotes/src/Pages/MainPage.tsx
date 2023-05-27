@@ -59,7 +59,7 @@ function MainPage() {
                                 //console.log("тут1")
                                 //console.log(film)
                                 return <>
-                                    <FilmInPlaylist film={film}/>
+                                    <FilmInFilms film={film}/>
                                 </>
                             })
                         }

@@ -14,10 +14,11 @@ interface Film {
 
 export function Playlists() {
     const [currentPlaylist, setCurrentPlaylist] = useState<{ title: string, films: Film[], pk: number }>();
-    const [playlists, setPlaylists] = useState<{ title: string, films: Film[], pk: number }[]>([]);
+    // const [playlists, setPlaylists] = useState<{ title: string, films: Film[], pk: number }[]>([]);
     const [playlistResponse, setPlaylistResponse] = useState<{ title: string, url: string }[]>([]);
+    const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
-        let ignore = false;
+        //let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         console.log(DecodeB64(localStorage["jwt"]))
         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/", config)
@@ -40,7 +41,7 @@ export function Playlists() {
             console.log(err.response);
         });
         return () => {
-            ignore = true;
+            //ignore = true;
         }
     }, []);
     return (
@@ -74,39 +75,13 @@ export function Playlists() {
                  className="flex flex-row w-full justify-center mt-[15%] md:mt-[4%]  h-auto min-h-[400px] flex-wrap">
                 {
                     currentPlaylist?.films.map((film) => {
-                        return <FilmInPlaylist film={film} pk={film.url.split('/')[-1]}/>
+                        //console.log(Number(film.url.split('/')[4]))
+
+                        return <FilmInPlaylist film={film} />
                     })
                 }
                 lalalalal
             </div>
-            {/*<div*/}
-            {/*    className="self-center border-2 border-white w-5/6 flex flex-col min-h-screen justify-start h-full mt-[6%] bg-neutral-700 rounded-3xl ">*/}
-            {/*    <p className={"text-white self-center w-fit p-4 text-3xl bg-black"}>Playlists</p>*/}
-            {/*    <div className={"flex flex-row w-[94%] self-center min-h-[80vh] bg-white"}>*/}
-            {/*        <div className={"flex flex-col bg-red-400 h-full w-1/4"}>*/}
-            {/*            {*/}
-            {/*                playlists?.map((playlist) => {*/}
-            {/*                    return <>*/}
-            {/*                        <button key={playlist.pk} onClick={(e) => {*/}
-            {/*                            setCurrentPlaylist(playlists.find(obj => obj.pk === playlist.pk));*/}
-            {/*                            console.log(currentPlaylist)*/}
-            {/*                        }}*/}
-            {/*                                className={"m-2 bg-black text-white"}>*/}
-            {/*                            {playlist?.title}*/}
-            {/*                        </button>*/}
-            {/*                    </>*/}
-            {/*                })*/}
-            {/*            }*/}
-            {/*        </div>*/}
-            {/*        <div className={"flex flex-row flex-wrap bg-blue-500 h-full w-3/4"}>*/}
-            {/*            {*/}
-            {/*                currentPlaylist?.films.map((film) => {*/}
-            {/*                    return <FilmInPlaylist film={film} pk={currentPlaylist?.pk}/>*/}
-            {/*                })*/}
-            {/*            }*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </div>
     );
 

@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {Base64} from "js-base64";
+import {DecodeB64} from "../Utilities/DecodeB64";
 import axios from "axios";
 import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInActor} from "../Components/FIlmInActors";
@@ -25,7 +25,7 @@ let alive;
 export function Actor(){
     const {id} = useParams()
     const [actor, setActor] = useState<Actor | null>(null);
-    if (Base64.decode(localStorage["jwt"].split(".")[1]).split('"')[9] == "admin" && c == 0) {
+    if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         tools = (
             <>
@@ -43,7 +43,7 @@ export function Actor(){
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}`, config)
+        axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/`, config)
             .then(res => {
                 if (!ignore) {
                     setActor(res.data);
