@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
 import axios from "axios";
-import {FilmInPlaylist} from "../Components/FilmInPlaylist";
+import FilmInPlaylist from "../Components/FilmInPlaylist";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {FilmInFilms} from "../Components/FilmInFilms";
 
@@ -14,11 +14,9 @@ interface Film {
 
 export function Playlists() {
     const [currentPlaylist, setCurrentPlaylist] = useState<{ title: string, films: Film[], pk: number }>();
-    // const [playlists, setPlaylists] = useState<{ title: string, films: Film[], pk: number }[]>([]);
     const [playlistResponse, setPlaylistResponse] = useState<{ title: string, url: string }[]>([]);
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
-        //let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         console.log(DecodeB64(localStorage["jwt"]))
         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/", config)
@@ -40,9 +38,6 @@ export function Playlists() {
             }).catch((err) => {
             console.log(err.response);
         });
-        return () => {
-            //ignore = true;
-        }
     }, []);
     return (
         <div
@@ -75,9 +70,7 @@ export function Playlists() {
                  className="flex flex-row w-full justify-center mt-[15%] md:mt-[4%]  h-auto min-h-[400px] flex-wrap">
                 {
                     currentPlaylist?.films.map((film) => {
-                        //console.log(Number(film.url.split('/')[4]))
-
-                        return <FilmInPlaylist film={film} />
+                        return <FilmInPlaylist combo={{film, currentPlaylist}} key={film.url.split("/")[4]}/>
                     })
                 }
                 lalalalal
