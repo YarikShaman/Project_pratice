@@ -10,7 +10,23 @@ import {GetLang} from "../Utilities/Lang";
 import {Simulate} from "react-dom/test-utils";
 import blur = Simulate.blur;
 import {DecodeB64} from "../Utilities/DecodeB64";
-
+import {ReviewsInFilms} from "../Components/ReviewsInFilms";
+interface Comment {
+    Id: number;
+    FilmId: number;
+    Text: string;
+    UserId: number;
+    CreatedAt: {
+        seconds: number;
+        nanos: number;
+    };
+    UpdatedAt: {
+        seconds: number;
+        nanos: number;
+    };
+    AvatarLink: string;
+    Username: string;
+}
 interface Film {
     pk: number;
     title: string;
@@ -44,6 +60,7 @@ let c = 0
 
 export function Film() {
     const {id} = useParams()
+    const [comments, setComments] = useState<Comment[]>();
     const [film, setFilm] = useState<Film | null>(null);
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
@@ -65,11 +82,19 @@ export function Film() {
     useEffect(() => {
         let ignore = false;
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=2&page=1&amount=3&resp_amount=0",config)
+            .then(res => {
+                if (!ignore) {
+                    setComments(res.data.comments);
+                    console.log(res.data.comments);
+                }
+            }, err => {
+                console.log(err.response);
+            })
         axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
             .then(res => {
                 if (!ignore) {
                     setFilm(res.data);
-                    console.log(res.data);
                 }
             }, err => {
                 console.log(err.response);
@@ -155,7 +180,9 @@ export function Film() {
                             My notes
                         </button>
                     </div>
-                    Каментьі компонент
+                    <div>
+                        {comments?.map(comment=> {return<><ReviewsInFilms comment={comment}/></>})}
+                    </div>
                 </div>
             </div>
         </div>

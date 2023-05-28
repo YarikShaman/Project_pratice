@@ -3,9 +3,7 @@ import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
-import '../SelectWithCustomScrollbar.css';
-import {Simulate} from "react-dom/test-utils";
-import change = Simulate.change;
+import '../CustomStyles.css';
 
 
 export function Films() {
@@ -23,6 +21,74 @@ export function Films() {
     const [maxPages, setMaxPages] = useState(1);
     const [sortBy, setSortBy] = useState('');
     const [sort, setSort] = useState('');
+    function setCookie(name: string, value: string, hours: number) {
+        const date = new Date();
+        date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name: string) {
+        const cookieName = name + "=";
+        if(document.cookie==null) return "";
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i];
+            while (cookie.charAt(0) === " ") {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(cookieName) === 0) {
+                return cookie.substring(cookieName.length, cookie.length);
+            }
+        }
+        return "";
+    }
+    function saveFilmNameToCookie(){
+        const filmName = document.getElementById("filmName") as HTMLInputElement;
+        if (filmName) setCookie("filmName", filmName.value, 30);
+    }
+    function saveSettingsToCookie() {
+        const selectedFDate = document.getElementById("selectedFDate") as HTMLSelectElement;
+        const selectedSDate = document.getElementById("selectedSDate") as HTMLSelectElement;
+        const selectedGenre = document.getElementById("selectedGenre") as HTMLSelectElement;
+        const selectedCountry = document.getElementById("selectedCountry") as HTMLSelectElement;
+        const sortBy = document.querySelector('input[name="sortBy"]:checked')as HTMLInputElement;
+        const sort = document.querySelector('input[name="sort"]:checked')as HTMLInputElement;
+        if(selectedFDate) setCookie("selectedFDate", selectedFDate.value, 30);
+        if(selectedSDate) setCookie("selectedSDate", selectedSDate.value, 30);
+        if(selectedGenre) setCookie("selectedGenre", selectedGenre.value, 30);
+        if(selectedCountry) setCookie("selectedCountry", selectedCountry.value, 30);
+        if (sortBy) setCookie("sortBy", sortBy.value, 30)
+        if (sort) setCookie("sort", sort.value, 30);
+    }
+    function loadSettingsFromCookie() {
+        const filmName = document.getElementById("filmName") as HTMLInputElement;
+        const selectedFDate = document.getElementById("selectedFDate") as HTMLSelectElement;
+        const selectedSDate = document.getElementById("selectedSDate") as HTMLSelectElement;
+        const selectedGenre = document.getElementById("selectedGenre") as HTMLSelectElement;
+        const selectedCountry = document.getElementById("selectedCountry") as HTMLSelectElement;
+        const sortBy = document.querySelectorAll('input[name="sortBy"]') as NodeListOf<HTMLInputElement>;
+        const sort = document.querySelectorAll('input[name="sort"]') as NodeListOf<HTMLInputElement>;
+        if(getCookie("filmName")!='')filmName.value = getCookie("filmName");
+        if(getCookie("selectedFDate")!='')selectedFDate.value = getCookie("selectedFDate");
+        if(getCookie("selectedSDate")!='')selectedSDate.value = getCookie("selectedSDate");
+        if(getCookie("selectedGenre")!='')selectedGenre.value = getCookie("selectedGenre");
+        if(getCookie("selectedCountry")!='')selectedCountry.value = getCookie("selectedCountry");
+
+        if(getCookie("sortBy")!=null) for (let i = 0; i < sortBy.length; i++) {
+            if (sortBy[i].value === getCookie("sortBy")) {
+                sortBy[i].checked = true;
+            }
+        }
+
+        if(getCookie("sort")!=null) for (let i = 0; i < sort.length; i++) {
+            if (sort[i].value === getCookie("sort")) {
+                sort[i].checked = true;
+            }
+        }
+    }
+    const filtrateButton = document.getElementById("filtrateButton");
+    filtrateButton?.addEventListener("click", saveSettingsToCookie);
     const handleSDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = Number(e.target.value);
         if (e.target.value == '-' || selectedValue >= Number(selectedFDate) || selectedFDate == '-') {
@@ -53,6 +119,7 @@ export function Films() {
         dateOptions.push(i);
     }
     useEffect(() => {
+        loadSettingsFromCookie();
         let ignore = false;
         let order = "";
         if (sort != "" && sortBy != "") {
@@ -91,7 +158,6 @@ export function Films() {
         if (isSearch == true) {
             query = "/search/?page_size=" + p_size.toString() + "&page=" + page.toString() + "&q=" + filmName;
         }
-        console.log("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query)
         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
             .then(res => {
                 if (!ignore) {
@@ -144,12 +210,13 @@ export function Films() {
                     <div className="md:w-full mt-2 flex flex-nowrap h-10">
                         <input
                             value={filmName}
+                            id={"filmName"}
                             onChange={(e) => setFilmName(e.target.value)}
                             className="w-3/4 ring-slate-700 text-black block rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             type={"text"}/>
                         <button
                             className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            type={"submit"} onClick={() => setIsSearch(true)}>Search
+                            type={"submit"} onClick={() => {setIsSearch(true);saveFilmNameToCookie()}}>Search
                         </button>
                     </div>
                     <div className={"text-white"}>
@@ -157,6 +224,7 @@ export function Films() {
                         <div className={"m-5 flex flex-row"}>
                             <p className={"m-2 w-5/12"}>Date from </p>
                             <select className={"bg-slate-700 custom-select"}
+                                    id={"selectedFDate"}
                                     value={selectedFDate}
                                     onChange={handleFDateChange}>
                                 <option value="-">-</option>
@@ -167,6 +235,7 @@ export function Films() {
                             <p className={"m-2 w-4/12"}>to</p>
                             <select className={"bg-slate-700 custom-select"}
                                     value={selectedSDate}
+                                    id={"selectedSDate"}
                                     onChange={handleSDateChange}>
                                 <option value="-">-</option>
                                 {dates}</select></div>
@@ -180,12 +249,13 @@ export function Films() {
                         <div className={"m-5 flex flex-row"}>
                             <p className={"m-2 w-4/12"}>Country</p>
                             <select className={"bg-slate-700 custom-select"} value={selectedCountry}
+                                    id={"selectedCountry"}
                                     onChange={(e) => setSelectedCountry(e.target.value)}>
                                 <option value="-">-</option>
                                 {countries}</select>
                         </div>
                         <p className={"text-center text-xl m-3"}>Sorting</p>
-                        <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"date"}
+                        <input className={"m-2 ml-8"} name={"sortBy"} id={"selectedCountry"} type={"radio"} value={"date"}
                                onChange={handleSortByChange}/>
                         <label className={"m-2"}>By Date</label><br/>
                         <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"imdbRate"}
@@ -206,6 +276,7 @@ export function Films() {
                         <label className={"m-2"}>Descending</label><br/>
                         <hr/>
                         <button onClick={() => setChange(!change)}
+                                id={"filtrateButton"}
                                 className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
                         </button>
                         <button onClick={() => hideMenu()}

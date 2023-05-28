@@ -34,20 +34,17 @@ export function HomeHeader() {
             mstate = false;
         }
     }
-    if (!document.cookie.includes("language=")) {
-        document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
+    if (localStorage.getItem("language")!=undefined) {
+        localStorage.setItem("language","2")
     }
-    // @ts-ignore
-    let language = document.cookie.split('; ').find(row => row.startsWith('language=')).split('=')[1];
-    SetLang(Number(language));
+    SetLang(Number(localStorage.getItem("language")));
     useEffect(() => {
         if (localStorage["jwt"]!=undefined)
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                 .then(res=>{
-                    console.log(res.data)
                     setSourse(res.data.ImageLink)
                 })
-        if (language == "2") {
+        if (localStorage.getItem("language") == "2") {
             let engm = document.getElementById("m1");
             let ukrm = document.getElementById("m2");
             let eng = document.getElementById("1");
@@ -63,7 +60,6 @@ export function HomeHeader() {
         }
     }, []);
     //console.log(DecodeB64(localStorage["jwt"]))
-    console.log(localStorage["jwtt"])
     //setLabel(DecodeB64(localStorage["jwt"]).userName)
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
@@ -185,69 +181,47 @@ export function HomeHeader() {
 }
 
 function LangCh() {
-    if (!document.cookie.includes("language=")) {
-        document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
+    if (!localStorage.getItem("language")) {
+        localStorage.setItem("language","1")
     }
     // @ts-ignore
-    let language = document.cookie.split('; ').find(row => row.startsWith('language=')).split('=')[1];
+    let language = localStorage.getItem("language");
     if (mstate) {
         let eng = document.getElementById("m1");
         let ukr = document.getElementById("m2");
         // @ts-ignore
         if (language == 1) {
-            document.cookie = "language=2; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
-            // @ts-ignore
-            let language2 = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('language='))
-                .split('=')[1];
+            localStorage.setItem("language","2")
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
             // @ts-ignore
             eng.style.filter = "brightness(0.5)";
-            SetLang(Number(language2));
+            SetLang(Number(localStorage.getItem("language")));
         } else {
-            document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
-            // @ts-ignore
-            const language2 = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('language='))
-                .split('=')[1];
+            localStorage.setItem("language","1")
             // @ts-ignore
             ukr.style.filter = "brightness(0.5)";
             // @ts-ignore
             eng.style.filter = "brightness(1.25)";
-            SetLang(Number(language2));
         }
     } else {
         let eng = document.getElementById("1");
         let ukr = document.getElementById("2");
         // @ts-ignore
         if (language == 1) {
-            document.cookie = "language=2; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
-            // @ts-ignore
-            const language2 = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('language='))
-                .split('=')[1];
+            localStorage.setItem("language","2")
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
             // @ts-ignore
             eng.style.filter = "brightness(0.5)";
-            SetLang(Number(language2));
         } else {
-            document.cookie = "language=1; expires=Thu, 17 May 2024 00:00:00 UTC; path=/";
-            // @ts-ignore
-            const language2 = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('language='))
-                .split('=')[1];
+            localStorage.setItem("language","1")
             // @ts-ignore
             ukr.style.filter = "brightness(0.5)";
             // @ts-ignore
             eng.style.filter = "brightness(1.25)";
-            SetLang(Number(language2))
         }
+        SetLang(Number(localStorage.getItem("language")));
         window.location.reload();
     }
 }

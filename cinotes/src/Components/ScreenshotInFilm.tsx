@@ -1,6 +1,6 @@
 import React, {useCallback, useRef, useState} from "react";
 import "../App.css";
-import '../SelectWithCustomScrollbar.css';
+import '../CustomStyles.css';
 import {GetLang, SetLang} from "../Utilities/Lang";
 import KinoLenta from "../Img/rama.png"
 export function ScreenshotInFilm(screenshot:any){
