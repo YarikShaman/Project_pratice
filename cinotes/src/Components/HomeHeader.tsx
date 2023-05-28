@@ -43,13 +43,20 @@ export function HomeHeader() {
         if (localStorage["jwt"] != undefined)
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                 .then(res => {
-                    console.log(DecodeB64(localStorage["jwt"]))
-                    setLink("/account")
-                    setSourse(res.data.ImageLink)
+                    if (DecodeB64(localStorage["jwt"]).isVerified==true){
+                        setLink("/account")
+                        setSourse(res.data.ImageLink)
+                    }
+                    else{
+                        setLink("/sign_in")
+                        setSourse(Acc)
+                    }
                     setLabel(DecodeB64(localStorage["jwt"]).username)
                 })
-        else
+        else {
             setLink("/sign_in")
+            setSourse(Acc)
+        }
         if (localStorage.getItem("language") == "2") {
             let engm = document.getElementById("m1");
             let ukrm = document.getElementById("m2");

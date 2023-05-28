@@ -4,6 +4,8 @@ import {HomeHeader} from "../../Components/HomeHeader";
 import axios from "axios";
 import DropdownWithSearch from "../../Components/DropdownWithSearch";
 import {toBase64} from "js-base64";
+import {useNavigate} from "react-router-dom";
+import {DecodeB64} from "../../Utilities/DecodeB64";
 
 /*{
     'title': 'Test',
@@ -28,6 +30,9 @@ import {toBase64} from "js-base64";
 ]
 }*/
 export function APanel() {
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     const [title, setTitle] = useState("");
     const [poster_image, setPoster_image] = useState("");
     const [rating, setRating] = useState("");

@@ -6,6 +6,7 @@ import FilmInPlaylist from "../Components/FilmInPlaylist";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import config from "tailwindcss/defaultConfig";
+import {useNavigate} from "react-router-dom";
 
 interface Film {
     title: string;
@@ -14,6 +15,9 @@ interface Film {
 }
 
 export function Playlists() {
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     const [currentPlaylist, setCurrentPlaylist] = useState<{ title: string, films: Film[], pk: number }>();
     const [playlistResponse, setPlaylistResponse] = useState<{ title: string, url: string }[]>([]);
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};

@@ -4,9 +4,14 @@ import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import '../CustomStyles.css';
+import {useNavigate} from "react-router-dom";
+import {DecodeB64} from "../Utilities/DecodeB64";
 
 
 export function Films() {
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     const [isSearch, setIsSearch] = useState(false);
     const [change, setChange] = useState(false);
     const [genreOptions, setGenreOptions] = useState<{ [key: string]: { pk: number; title: string } }>({});

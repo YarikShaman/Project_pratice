@@ -5,10 +5,12 @@ import {DecodeB64} from "../Utilities/DecodeB64";
 import {useState} from "react";
 import acc from "../Img/Account.png"
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 export function Account() {
-
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     const [data, setData]=useState<{ImageLink:string, FavFilm:number, FavGenre:number, FavActor:number, UserId:number}>()
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(()=>{

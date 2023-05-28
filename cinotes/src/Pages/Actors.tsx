@@ -3,8 +3,13 @@ import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
 import {ActorInActors} from "../Components/ActorInActors";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {DecodeB64} from "../Utilities/DecodeB64";
 
 export function Actors() {
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     const [isSearch, setIsSearch] = useState(false);
     const [actorName, setActorName] = useState<any>([]);
     const [actors, setActors] = useState([]);

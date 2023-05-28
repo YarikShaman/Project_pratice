@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import axios from "axios";
@@ -23,6 +23,9 @@ let tools = (<></>)
 let c = 0
 let alive;
 export function Actor(){
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     const {id} = useParams()
     const [actor, setActor] = useState<Actor | null>(null);
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
