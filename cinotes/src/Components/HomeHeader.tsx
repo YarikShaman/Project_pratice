@@ -17,7 +17,7 @@ let mstate = false;
 export function HomeHeader() {
     const [source, setSourse] = useState(Acc)
     const [link, setLink] = useState("/sign_in")
-    const [label, setLabel]=useState(GetLang().Sign_in)
+    const [label, setLabel] = useState(GetLang().Sign_in)
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const OpenMenu = () => {
         if (!mstate) {
@@ -34,16 +34,22 @@ export function HomeHeader() {
             mstate = false;
         }
     }
-    if (localStorage.getItem("language")!=undefined) {
-        localStorage.setItem("language","2")
+    if (localStorage.getItem("language") != undefined) {
+        localStorage.setItem("language", "2")
     }
+
     SetLang(Number(localStorage.getItem("language")));
     useEffect(() => {
-        if (localStorage["jwt"]!=undefined)
+        if (localStorage["jwt"] != undefined)
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
-                .then(res=>{
+                .then(res => {
+                    console.log(DecodeB64(localStorage["jwt"]))
+                    setLink("/account")
                     setSourse(res.data.ImageLink)
+                    setLabel(DecodeB64(localStorage["jwt"]).username)
                 })
+        else
+            setLink("/sign_in")
         if (localStorage.getItem("language") == "2") {
             let engm = document.getElementById("m1");
             let ukrm = document.getElementById("m2");
@@ -59,8 +65,6 @@ export function HomeHeader() {
             ukr.style.filter = "brightness(1.25)";
         }
     }, []);
-    //console.log(DecodeB64(localStorage["jwt"]))
-    //setLabel(DecodeB64(localStorage["jwt"]).userName)
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         apanel = (
@@ -122,11 +126,12 @@ export function HomeHeader() {
                             <img
                                 id="2" className="h-5 w-8 brightness-50" alt={"Set another lang?"} src={Ukr}/>
                         </div>
-                        <Link to={"/sign_in"}>
+                        <Link to={link}>
                             <div
                                 className="hover:bg-neutral-900 bg-stone-900 my-1 flex flex-col w-20 border-2 border-gray-800 rounded-xl mr-2 text-white hover:text-sky-500 hover:border-sky-900 cursor-pointer select-none">
-                                <img className=" w-7 h-7 mt-1 bg-cover bg-repeat self-center " alt={"Profile_Pic"}
-                                     src={Acc}></img>
+                                <img className=" w-7 h-7 mt-1 bg-cover bg-repeat rounded-full self-center "
+                                     alt={"Profile_Pic"}
+                                     src={source}></img>
                                 <p className="text-sm self-center text-center">{label}</p>
                             </div>
                         </Link>
@@ -182,7 +187,7 @@ export function HomeHeader() {
 
 function LangCh() {
     if (!localStorage.getItem("language")) {
-        localStorage.setItem("language","1")
+        localStorage.setItem("language", "1")
     }
     // @ts-ignore
     let language = localStorage.getItem("language");
@@ -191,14 +196,14 @@ function LangCh() {
         let ukr = document.getElementById("m2");
         // @ts-ignore
         if (language == 1) {
-            localStorage.setItem("language","2")
+            localStorage.setItem("language", "2")
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
             // @ts-ignore
             eng.style.filter = "brightness(0.5)";
             SetLang(Number(localStorage.getItem("language")));
         } else {
-            localStorage.setItem("language","1")
+            localStorage.setItem("language", "1")
             // @ts-ignore
             ukr.style.filter = "brightness(0.5)";
             // @ts-ignore
@@ -209,13 +214,13 @@ function LangCh() {
         let ukr = document.getElementById("2");
         // @ts-ignore
         if (language == 1) {
-            localStorage.setItem("language","2")
+            localStorage.setItem("language", "2")
             // @ts-ignore
             ukr.style.filter = "brightness(1.25)";
             // @ts-ignore
             eng.style.filter = "brightness(0.5)";
         } else {
-            localStorage.setItem("language","1")
+            localStorage.setItem("language", "1")
             // @ts-ignore
             ukr.style.filter = "brightness(0.5)";
             // @ts-ignore

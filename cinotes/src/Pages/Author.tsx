@@ -24,8 +24,8 @@ function Author() {
             setError("");
             localStorage["jwt"] = res.data.jwt;
             if (DecodeB64(res.data.jwt).isVerified == "false")
-                nav("/ver")
-            nav("/")
+                nav("../ver")
+            nav("../")
         }, err => {
             console.log(err.response.status);
             switch (err.response.status) {

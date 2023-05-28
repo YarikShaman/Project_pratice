@@ -6,10 +6,9 @@ import {useNavigate} from "react-router-dom";
 export function Ver() {
     const [code, setCode] = useState(1);
     const nav=useNavigate()
-    const [error , setError]=useState("sdfghjk")
+    const [error , setError]=useState("")
     function Verify() {
-        const config = {headers: {Authorization: "Bearer " + localStorage["jwt_for_ver"]}};
-        //console.log(code+"     code")
+        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
             .then(res => {
                 alert("Successfully verified")

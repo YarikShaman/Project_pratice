@@ -33,7 +33,7 @@ function Registr() {
                     username: username,
                     password: pas1
                 }).then(resp => {
-                    localStorage["jwt_for_ver"] = resp.data.jwt;
+                    localStorage["jwt"] = resp.data.jwt;
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + resp.data.jwt}})
                         .then(resp=>{
                             alert("Account is successfully created")
