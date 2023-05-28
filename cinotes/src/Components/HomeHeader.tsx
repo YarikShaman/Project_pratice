@@ -63,19 +63,18 @@ export function HomeHeader() {
         }
     }, []);
     //console.log(DecodeB64(localStorage["jwt"]))
-    if (localStorage["jwt"].exists) {
-        setLabel(DecodeB64(localStorage["jwt"]).userName)
-        if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
-            c++
-            apanel = (
-                <Link className={"flex flex-grow"} to={"/a_panel"}>
-                    <div
-                        className="hover:bg-sky-900 rounded-lg h-full  flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
-                        <p className="self-center">{GetLang().Premium}</p>
-                    </div>
-                </Link>
-            )
-        }
+    console.log(localStorage["jwtt"])
+    //setLabel(DecodeB64(localStorage["jwt"]).userName)
+    if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
+        c++
+        apanel = (
+            <Link className={"flex flex-grow"} to={"/a_panel"}>
+                <div
+                    className="hover:bg-sky-900 rounded-lg h-full  flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
+                    <p className="self-center">{GetLang().Premium}</p>
+                </div>
+            </Link>
+        )
     }
     return (
         <>
