@@ -5,6 +5,7 @@ import axios from "axios";
 import FilmInPlaylist from "../Components/FilmInPlaylist";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {FilmInFilms} from "../Components/FilmInFilms";
+import config from "tailwindcss/defaultConfig";
 
 interface Film {
     title: string;
@@ -18,23 +19,9 @@ export function Playlists() {
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        console.log(DecodeB64(localStorage["jwt"]))
         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/", config)
             .then(async (res) => {
-                if (!ignore) {
-                    setPlaylistResponse(res.data);
-                    for (let i = 0; i < res.data.results.length; i++) {
-                        let id = res.data.results[i].url.split('/')[res.data.results[i].url.split('/').length - 2];
-
-                        try {
-                            const playlistRes = await axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/${id}`, config);
-                            setPlaylists((prevPlaylists) => [...prevPlaylists, playlistRes.data]);
-                            setCurrentPlaylist(playlists[0]);
-                        } catch (error) {
-                            console.log(error);
-                        }
-                    }
-                }
+                setPlaylistResponse(res.data.results);
             }).catch((err) => {
             console.log(err.response);
         });
@@ -47,11 +34,14 @@ export function Playlists() {
             <div id={"side"}
                  className="z-10 w-1/5 p-2 h-screen md:mt-0 mt-8 sticky bg-gray-800 rounded-lg drop-shadow-xl md:block hidden shadow-black shadow-md">
                 {
-                    playlists?.map((playlist) => {
+                    playlistResponse?.map((playlist) => {
                         return <>
-                            <button key={playlist.pk} onClick={(e) => {
-                                setCurrentPlaylist(playlists.find(obj => obj.pk === playlist.pk));
-                                console.log(currentPlaylist)
+                            <button key={playlist.url.split('/')[4]} onClick={(e) => {
+                                axios.get(playlist.url, config)
+                                    .then(res => setCurrentPlaylist(res.data))
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
                             }}
                                     className={"m-1 bg-black px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
                                 {playlist?.title}
@@ -73,7 +63,6 @@ export function Playlists() {
                         return <FilmInPlaylist combo={{film, currentPlaylist}} key={film.url.split("/")[4]}/>
                     })
                 }
-                lalalalal
             </div>
         </div>
     );
