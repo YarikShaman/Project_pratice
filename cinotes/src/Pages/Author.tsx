@@ -13,7 +13,6 @@ import {useNavigate} from "react-router-dom";
 function Author() {
     const [error, setError] = useState(String);
     const [navigate, setNavigate] = useState(false);
-    const [photo, setPhoto] = useState(String);
     const nav = useNavigate()
 
     function Signin(login: string, password: string) {
@@ -24,7 +23,24 @@ function Author() {
             setError("");
             localStorage["jwt"] = res.data.jwt;
             if (DecodeB64(res.data.jwt).isVerified == "false")
-                nav("../ver")
+                axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + res.data.jwt}})
+                    .then(resp => {
+                        alert("Account is successfully created")
+                        nav("ver")
+                    })
+                    .catch(err => {
+                        switch (err.response.status) {
+                            case 400:
+                                setError("bad data (validation error)");
+                                break;
+                            case 417:
+                                setError("This email is no more available");
+                                break;
+                            case 500:
+                                alert("Account is successfully created, but email-verification server do not response, try to verify later");
+                                break;
+                        }
+                    })
             nav("../")
         }, err => {
             console.log(err.response.status);
@@ -43,12 +59,12 @@ function Author() {
 
     }
 
-    function Recovery(){
+    function Recovery() {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/send", {
             email: login
         }).then(res => {
             setError("");
-            localStorage["email"]=login
+            localStorage["email"] = login
             nav("/password_rec")
         }, err => {
             console.log(err.response.status);
@@ -69,7 +85,7 @@ function Author() {
                 {code: resp.access_token})
                 .then(res => {
                     setError("")
-                    if (DecodeB64(res.data.jwt).isVerified=="false")
+                    if (DecodeB64(res.data.jwt).isVerified == "false")
                         nav("/ver")
                     nav("/")
                 }, err => {
@@ -102,7 +118,8 @@ function Author() {
                             className="mx-auto h-20 w-auto"
                             src={logo}
                             alt="Cinotes"
-                        /></Link>
+                        />
+                    </Link>
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
                         Sign in to your account
                     </h2>
@@ -137,7 +154,9 @@ function Author() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <a onClick={()=>{Recovery()}} className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer">
+                                    <a onClick={() => {
+                                        Recovery()
+                                    }} className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer">
                                         Forgot password?
                                     </a>
                                 </div>

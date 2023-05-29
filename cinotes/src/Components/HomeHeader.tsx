@@ -3,7 +3,7 @@ import "../App.css";
 import Acc from '../Img/Account.png';
 import Eng from "../Img/EngLang.png";
 import Ukr from "../Img/UkrLang.png";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import axios from "axios";
@@ -19,6 +19,7 @@ export function HomeHeader() {
     const [link, setLink] = useState("/sign_in")
     const [label, setLabel] = useState(GetLang().Sign_in)
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+    const nav=useNavigate()
     const OpenMenu = () => {
         if (!mstate) {
             // @ts-ignore
@@ -43,11 +44,10 @@ export function HomeHeader() {
         if (localStorage["jwt"] != undefined)
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                 .then(res => {
-                    if (DecodeB64(localStorage["jwt"]).isVerified==true){
+                    if (DecodeB64(localStorage["jwt"]).isVerified == true) {
                         setLink("/account")
                         setSourse(res.data.ImageLink)
-                    }
-                    else{
+                    } else {
                         setLink("/sign_in")
                         setSourse(Acc)
                     }
@@ -125,6 +125,24 @@ export function HomeHeader() {
                         {apanel}
                     </div>
                     <div className="flex flex-row space-x-5">
+                        <a href="/ver" onClick={()=>{
+                            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
+                                .then(resp=>{
+                                    nav("ver")
+                                })
+                                .catch(err=>{
+                                    switch (err.response.status) {
+                                        case 417:
+                                            alert("Email of this account is unavailable");
+                                            break;
+                                        case 500:
+                                            alert("Server do not response, try to verify later");
+                                            break;
+                                    }
+                                })
+                        }} className="font-semibold self-center leading-6 text-indigo-600 hover:text-indigo-500">
+                            Verify this account
+                        </a>
                         <div
                             className="flex flex-col mt-3 overflow-hidden rounded-xl border-2 border-slate-700 hover:border-slate-600 h-10"
                             onClick={() => LangCh()}>

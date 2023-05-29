@@ -41,9 +41,6 @@ function Registr() {
                         })
                         .catch(err=>{
                             switch (err.response.status) {
-                                case 400:
-                                    setError1("bad data (validation error)");
-                                    break;
                                 case 417:
                                     setErrorEmail("This email is not available");
                                     break;
