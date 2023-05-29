@@ -72,7 +72,7 @@ export function HomeHeader() {
             ukr.style.filter = "brightness(1.25)";
         }
     }, []);
-    if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
+    if (localStorage["jwt"] && DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         apanel = (
             <Link className={"flex flex-grow"} to={"/a_panel"}>

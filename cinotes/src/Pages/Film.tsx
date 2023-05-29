@@ -64,8 +64,10 @@ export function Film() {
     const {id} = useParams()
     const [isReview, setIsReview] = useState(true);
     const [comments, setComments] = useState<Comment[]>();
+    const [comment,setComment] = useState("");
     const [film, setFilm] = useState<Film | null>(null);
     const nav=useNavigate()
+    const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
     if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
         nav("../sign_in")
@@ -89,24 +91,45 @@ export function Film() {
             </>
         )
     }
+    function Add_Review(){
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add",{
+            filmId: Number(id),
+            text: comment,
+            commentType: "public"
+        },config)
+    }
+    function Add_Note(){
+
+    }
     useEffect(() => {
         let ignore = false;
         console.log(isReview)
-        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+        let buttonR = document.getElementById("review_add");
+        let buttonN = document.getElementById("note_add");
+        if(!isReview && buttonN &&buttonR){
+            buttonN.style.display = "block";
+            buttonR.style.display= "none";
+        } else if(buttonN &&buttonR){
+            buttonN.style.display= "none";
+            buttonR.style.display= "block";
+        }
+
         if (isReview) {
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=2&page=1&amount=3&resp_amount=0", config)
+            axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=3&resp_amount=0`, config)
                 .then(res => {
                     if (!ignore) {
+                        console.log(res.data)
                         setComments(res.data.comments);
                     }
                 }, err => {
                     console.log(err.response);
                 })
         } else {
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=2&page=1&amount=1", config)
+            axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=1`, config)
                 .then(res => {
                     if (!ignore) {
                         console.log(DecodeB64(localStorage["jwt"]).username)
+                        setComments(undefined);
                         setComments(res.data.comments.map((comment:Comment) => ({
                             ...comment,
                             Username: comment.Username || DecodeB64(localStorage["jwt"]).username,
@@ -205,17 +228,14 @@ export function Film() {
                                 className={"text-[20px] px-5 py-2 "}>
                             My notes
                         </button>
-                        <button className={"text-[20px] px-5 py-2 bg-black float-right"}>
-                            Add comment
-                        </button>
                     </div>
-                    <div className={"m-4 mx-20 flex flex-row"}>
-                        <textarea maxLength={500} className={"w-full h-40 ring-slate-700 text-black block text-xl rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6"}/>
-                        <div>
-                            <button className={"m-4 bg-black h-[40px] w-[120px]"}>
+                    <div className={"m-4 flex flex-row"}>
+                        <textarea value={comment} onChange={(e)=>setComment(e.target.value)} maxLength={500} className={"w-full h-40 ring-slate-700 text-black block text-xl rounded-md border-0 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-indigo-600 "}/>
+                        <div className={"w-[20%]"}>
+                            <button id={"review_add"} onClick={Add_Review} className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
                                 Add public review
                             </button>
-                            <button className={"m-4 bg-black h-[40px] w-[120px]"}>
+                            <button id={"note_add"} onClick={Add_Note} className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
                                 Add private note
                             </button>
                         </div>

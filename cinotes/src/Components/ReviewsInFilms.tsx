@@ -20,7 +20,7 @@ export function ReviewsInFilms(comment:any, pk: any) {
             }
     })
     return (
-        <div className={"flex m-4 bg-gray-600 rounded-2xl flex-col"}>
+        <div className={"flex m-4 bg-gray-600 rounded-2xl pb-2 flex-col"}>
             <div className={" flex flex-row"}>
                 <div className={"rounded-2xl bg-black border-slate-950 w-[65px] border-4 m-[10px]"}>
                     <img className={"object-cover rounded-2xl h-[50px] w-[50px]"} src={comment.comment.AvatarLink}/>
