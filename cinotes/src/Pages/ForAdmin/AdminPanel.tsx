@@ -6,7 +6,15 @@ import DropdownWithSearch from "../../Components/DropdownWithSearch";
 import {toBase64} from "js-base64";
 import {useNavigate} from "react-router-dom";
 import {DecodeB64} from "../../Utilities/DecodeB64";
-
+interface Actor {
+    pk: number;
+    name: string;
+    birth_date: string;
+    death_date: string | null;
+    description: string;
+    photo_file: string;
+    films: number[];
+}
 /*{
     'title': 'Test',
     'poster_image': base64_string,
@@ -33,6 +41,14 @@ export function APanel() {
     const nav=useNavigate()
     if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
         nav("../sign_in")
+    const [filmsOptions, setFilmOptions] = useState<{ pk: string; title: string; }[]>([]);
+    const [film, setFilm] = useState("");
+    const [films, setFilms] = useState<{ pk: string; title: string; }[]>([]);
+    const [actor, setActor] = useState("");
+    const [birth, setBirth] = useState("");
+    const [death, setDeath] = useState("");
+    const [actorDescription, setActorDescription] = useState("");
+    const [actorPhoto,setActorPhoto] = useState("");
     const [title, setTitle] = useState("");
     const [poster_image, setPoster_image] = useState("");
     const [rating, setRating] = useState("");
@@ -54,20 +70,21 @@ export function APanel() {
     const [studio, setStudio] = useState("");
     const [screenshot, setScreenshot] = useState<{base64string: string; name: string}>();
     const [screenshots, setScreenshots] = useState<{base64string: string; name: string}[]>([]);
+    const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
         let ignore = false;
-        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         if (!ignore) {
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
+                .then(res => {
+                    setFilmOptions(res.data.results);
+                });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
                 .then(res => {
                     setGenreOptions(res.data.results);
                 });
-
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/?page_size=100", config)
                 .then(res => {
-
                     setCountryOptions(res.data.countries);
-
                 });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
                 .then(res => {
@@ -84,7 +101,6 @@ export function APanel() {
         setCountry('');
     };
     const handleAddPoster = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.files)
         if(e.target.files!=null && e.target.files.length!=0)
         {
             const reader = new FileReader();
@@ -93,8 +109,16 @@ export function APanel() {
                 const base64String = reader.result as string;
                 setPoster_image(base64String);
             }}}
+    const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files!=null && e.target.files.length!=0)
+        {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setActorPhoto(base64String);
+            }}}
     const handleAddScreenshot = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.files)
         if(e.target.files!=null && e.target.files.length!=0)
         {
             const reader = new FileReader();
@@ -110,6 +134,30 @@ export function APanel() {
         }
         setScreenshot(undefined);
     };
+    function Add_Film(){
+        const arr: { image: string; }[] = [];
+        screenshots.map(({ base64string }) => {
+            const d = {
+                image: base64string,
+            }
+            arr.push(d);
+        });
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/", {
+            title: title,
+            genres: genres.map(({ pk }) => ( Number(pk) )),
+            actors: actors.map(({ pk }) => ( Number(pk) )),
+            poster_image: poster_image,
+            rating: rating,
+            imdb_id: imdb_id,
+            content_rating: age_restriction,
+            description: description,
+            release_date: release_date,
+            director: director,
+            studio: studio,
+            country: countries.toString(),
+            screenshots: arr,
+        }, config)
+    }
     return (
         <div className="bg-neutral-700 grid grid-cols-2 content-center gap-4 justify-items-center min-h-screen">
             <HomeHeader/>
@@ -128,7 +176,8 @@ export function APanel() {
                     <p className={"m-2"}>Poster Image</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="file"
+                        type={"file"}
+                        accept={"image/* "}
                         onChange={(e) => handleAddPoster(e)}
                         placeholder="Poster image"
                     />
@@ -212,7 +261,7 @@ export function APanel() {
                     <p className={"m-2"}>Release date</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
+                        type="date"
                         value={release_date}
                         onChange={(e) => setRelease_date(e.target.value)}
                         placeholder="Release date"
@@ -271,7 +320,49 @@ export function APanel() {
                         Add Screenshot
                     </button>
                 </div>
-                <button className={"bg-black"}>Add film</button>
+                <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">Add film</button>
+            </div>
+            <div className={"text-white mt-[10%]"}><div className={"text-2xl"}>Actor addiction</div>
+                <p >Name</p>
+                <input className="bg-slate-700 px-4 py-2 rounded-md"
+                       value={actor}
+                       onChange={(e) => setActor(e.target.value)}
+                       type="text"/>
+                <p>Birth date</p>
+                <input className="bg-slate-700 px-4 py-2 rounded-md"
+                       onChange={(e) => setBirth(e.target.value)}
+                       value={birth}
+                       type="date"/>
+                <p>Death date</p>
+                <input className="bg-slate-700 px-4 py-2 rounded-md"
+                       onChange={(e) => setDeath(e.target.value)}
+                       value={death}
+                       type="date"/>
+                <p>Description</p>
+                <input className="bg-slate-700 px-4 py-2 rounded-md"
+                       onChange={(e) => setActorDescription(e.target.value)}
+                       value={actorDescription}
+                       type="text"/>
+                <p>Photo</p>
+                <input className="bg-slate-700 px-4 py-2 rounded-md"
+                       value={actorPhoto}
+                       onChange={(e) => handleAddPhoto(e)}
+                       type={"file"}
+                       accept={"image/* "}/>
+                <p>Films</p>
+                <DropdownWithSearch options={filmsOptions.map((film)=>film.title)} onSelect={setFilm}/>
+                <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={()=>{const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
+                    if (foundFilm) {
+                    setFilms([...films, foundFilm])
+                }
+                }}>Add Film</button>
+                <h1>Films Array:</h1>
+                <ul>
+                    {films?.map((value, index) => (
+                        <li key={index}>{value.title}</li>
+                    ))}
+                </ul>
+                <button className="bg-gray-600 px-4 py-2 rounded-md">Add actor</button>
             </div>
         </div>
     )}

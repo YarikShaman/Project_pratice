@@ -72,7 +72,6 @@ export function HomeHeader() {
             ukr.style.filter = "brightness(1.25)";
         }
     }, []);
-    console.log(localStorage["jwt"])
     if (localStorage["jwt"]!=undefined && DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         apanel = (

@@ -92,14 +92,18 @@ export function Film() {
         )
     }
     function Add_Review(){
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add",{
+            axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add",{
             filmId: Number(id),
             text: comment,
             commentType: "public"
         },config)
     }
     function Add_Note(){
-
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add",{
+            filmId: Number(id),
+            text: comment,
+            commentType: "private"
+        },config)
     }
     useEffect(() => {
         let ignore = false;

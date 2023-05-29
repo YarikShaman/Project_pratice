@@ -5,9 +5,9 @@ import "../CustomStyles.css"
 export function ReviewsInFilms(comment:any, pk: any) {
     const [liked, setLiked] = useState(false);
     const [clicked, setClicked] = useState(false);
-    const date = new Date(comment.comment.CreatedAt.seconds * 1000 + comment.comment.CreatedAt.nanos);
+    const date = new Date(comment.comment.CreatedAt.seconds * 1000 + comment.comment.CreatedAt.nanos/Math.pow(10,6));
     const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Місяці в JavaScript нумеруються з 0, тому додаємо 1
+    const month = date.getMonth() + 1;
     const day = date.getDate();
     const hours = date.getHours();
     const minutes = date.getMinutes();
