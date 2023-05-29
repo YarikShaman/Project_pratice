@@ -41,7 +41,7 @@ export function HomeHeader() {
 
     SetLang(Number(localStorage.getItem("language")));
     useEffect(() => {
-        if (localStorage["jwt"] != undefined)
+        if (localStorage["jwt"])
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                 .then(res => {
                     if (DecodeB64(localStorage["jwt"]).isVerified == true) {
@@ -72,7 +72,8 @@ export function HomeHeader() {
             ukr.style.filter = "brightness(1.25)";
         }
     }, []);
-    if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
+    console.log(localStorage["jwt"])
+    if (localStorage["jwt"]!=undefined && DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         apanel = (
             <Link className={"flex flex-grow"} to={"/a_panel"}>
