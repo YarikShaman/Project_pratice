@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import '../App.css';
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import logo from "../Img/logo.png";
 
 export function Ver() {
     const [code, setCode] = useState(1);
-    const nav=useNavigate()
-    const [error , setError]=useState("")
+    const nav = useNavigate()
+    const [error, setError] = useState("")
+
     function Verify() {
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
@@ -14,7 +16,7 @@ export function Ver() {
                 alert("Successfully verified")
                 nav("../account")
             })
-            .catch(err=>{
+            .catch(err => {
                 switch (err.response.status) {
                     case 403:
                         setError("Wrong code");
@@ -32,12 +34,13 @@ export function Ver() {
             id="verif" className="h-full w-full min-h-screen flex justify-center ">
             <div
                 className="flex-col flex p-3 self-center bg-[rgb(50,50,50)] self-center border-2 border-white text-white rounded-xl h-1/2 w-1/2">
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                     stroke="currentColor" className="z-10 fixed rounded-lg hover:bg-gray-500 w-10 h-10">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
-                </svg>
+                <Link to={"/"}>
+                    <img
+                        className="mx-auto h-20 w-auto"
+                        src={logo}
+                        alt="Cinotes"
+                    />
+                </Link>
                 <h1 className="m-2 self-center text-3xl font-bold"> Verification</h1>
                 <h1 className="mt-6 self-center text-xl font-bold w-2/3 text-center"> Confirm your e-mail. We send
                     verification code to your e-mail. <br/>After verification registration will be finished.</h1>
@@ -48,10 +51,33 @@ export function Ver() {
                        className="p-2 mt-10 w-1/2 text-3xl text-black h-auto self-center">
                 </input>
                 <div className={"text-red-700 self-center"}>{error}</div>
-                <button onClick={() => {
-                    Verify()
-                }} className="mt-10 self-center hover:bg-neutral-600 h-10 w-28 bg-neutral-500 rounded">Confirm
-                </button>
+                <div className="flex flex-row self-center mt-10 justify-around block w-full mb-6">
+                    <button onClick={() => {
+                        Verify()
+                    }} className=" self-center hover:bg-neutral-600 h-10 w-28 bg-neutral-500 rounded">
+                        Confirm
+                    </button>
+                    <button onClick={() => {
+                        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
+                            .then(resp => {
+                                alert("Account is successfully created")
+                                nav("ver")
+                            })
+                            .catch(err => {
+                                switch (err.response.status) {
+                                    case 417:
+                                        alert("This email is not available");
+                                        break;
+                                    case 500:
+                                        alert("Server do not response, try to verify later");
+                                        break;
+                                }
+                            })
+                    }} className="self-center hover:bg-neutral-600 h-10 w-28 bg-neutral-500 rounded">
+                        Resend code
+                    </button>
+                </div>
+
             </div>
         </div>
     );
