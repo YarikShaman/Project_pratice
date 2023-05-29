@@ -66,10 +66,14 @@ export function Film() {
     const [comments, setComments] = useState<Comment[]>();
     const [film, setFilm] = useState<Film | null>(null);
     const nav=useNavigate()
+    let maxLength = 500;
     if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
         nav("../sign_in")
+    if (DecodeB64(localStorage["jwt"]).userType == "premium") {
+        maxLength=2000;}
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
+        maxLength=2000;
         tools = (
             <>
                 <button onClick={() => {
@@ -102,11 +106,11 @@ export function Film() {
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=2&page=1&amount=1", config)
                 .then(res => {
                     if (!ignore) {
-                        console.log(DecodeB64(localStorage["jwt"].username))
+                        console.log(DecodeB64(localStorage["jwt"]).username)
                         setComments(res.data.comments.map((comment:Comment) => ({
                             ...comment,
-                            Username: comment.Username || DecodeB64(localStorage["jwt"].username),
-                            AvatarLink: comment.AvatarLink || "Default AvatarLink"
+                            Username: comment.Username || DecodeB64(localStorage["jwt"]).username,
+                            AvatarLink: comment.AvatarLink || (document.getElementById("ProfileImg") as HTMLImageElement).src
                         })));
                     }
                 }, err => {
@@ -129,12 +133,12 @@ export function Film() {
     return (
         <div
             style={{background: "repeating-linear-gradient(45deg, rgba(255, 130, 0, 1), rgba(255, 130, 0, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
-            className={"min-h-screen h-auto  flex flex-col pb-10 text-white bg-neutral-800"}>
+            className={"min-h-screen h-auto flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
             <div style={{borderWidth: 2, borderImageSlice: 1, borderColor: ""}}
-                 className=" pb-[100px] md:w-4/5 self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
+                 className=" pb-[100px] md:w-4/5 w-[100%] self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
                 <div className={"flex w-full  my-2 self-center flex-row"}>
-                    <div className={"flex w-full flex-col"}>
+                    <div className={"flex w-[100%] flex-col"}>
                         <div className={"flex flex-row mt-8 ml-5"}>
                             <div style={{fontFamily: "sans-serif", fontWeight: "bold"}}
                                  className={"text-[40px] mx-5 w-full "}>
@@ -192,7 +196,7 @@ export function Film() {
                 </div>
 
                 <div className={"flex w-11/12 mt-[40px] h-auto self-center bg-stone-600 flex-col"}>
-                    <div className={"border-b-white border-b-2"}>
+                    <div className={"border-b-white border-b-2 w-full"}>
                         <button id="reviews" onClick={()=>setIsReview(true)} style={{backgroundColor: "rgb(31 41 55)"}}
                                 className={" text-[20px] px-5 py-2 "}>
                             Reviews
@@ -201,6 +205,20 @@ export function Film() {
                                 className={"text-[20px] px-5 py-2 "}>
                             My notes
                         </button>
+                        <button className={"text-[20px] px-5 py-2 bg-black float-right"}>
+                            Add comment
+                        </button>
+                    </div>
+                    <div className={"m-4 mx-20 flex flex-row"}>
+                        <textarea maxLength={500} className={"w-full h-40 ring-slate-700 text-black block text-xl rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:leading-6"}/>
+                        <div>
+                            <button className={"m-4 bg-black h-[40px] w-[120px]"}>
+                                Add public review
+                            </button>
+                            <button className={"m-4 bg-black h-[40px] w-[120px]"}>
+                                Add private note
+                            </button>
+                        </div>
                     </div>
                     <div>
                         {comments?.map(comment => {

@@ -2,10 +2,16 @@ import React, {useEffect, useState} from "react";
 import "../App.css";
 import "../CustomStyles.css"
 
-export function ReviewsInFilms(comment: any, pk: any) {
-    console.log(comment.comment)
+export function ReviewsInFilms(comment:any, pk: any) {
     const [liked, setLiked] = useState(false);
     const [clicked, setClicked] = useState(false);
+    const date = new Date(comment.comment.CreatedAt.seconds * 1000 + comment.comment.CreatedAt.nanos);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Місяці в JavaScript нумеруються з 0, тому додаємо 1
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
     useEffect(() => {
         let likeBtn = document.getElementById("like" + pk);
         if (likeBtn)
@@ -16,11 +22,16 @@ export function ReviewsInFilms(comment: any, pk: any) {
     return (
         <div className={"flex m-4 bg-gray-600 rounded-2xl flex-col"}>
             <div className={" flex flex-row"}>
-                <div className={"rounded-2xl border-slate-950 border-4 m-2"}>
-                    <img className={"object-cover h-12 w-12"} src={comment.comment.AvatarLink}/>
+                <div className={"rounded-2xl bg-black border-slate-950 w-[65px] border-4 m-[10px]"}>
+                    <img className={"object-cover rounded-2xl h-[50px] w-[50px]"} src={comment.comment.AvatarLink}/>
                 </div>
-                <div className={"text-xl self-center ml-5"}>
+                <div className={"text-xl self-center w-full ml-5"}>
                     {comment.comment.Username}
+                </div>
+                <div className={"mt-5 w-20 text-sm"}>
+                    {`${hours}:${minutes}:${seconds}`}
+                    <br/>
+                    {`${day}-${month}-${year}`}
                 </div>
             </div>
             <div className={"flex flex-row"}>
