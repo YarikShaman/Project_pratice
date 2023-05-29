@@ -13,7 +13,7 @@ export function Ver() {
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
             .then(res => {
-                alert("Successfully verified")
+                alert("Successfully verified. Sign in with the verified email")
                 nav("../account")
             })
             .catch(err => {
