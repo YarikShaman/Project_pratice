@@ -11,6 +11,7 @@ import {Simulate} from "react-dom/test-utils";
 import blur = Simulate.blur;
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {ReviewsInFilms} from "../Components/ReviewsInFilms";
+import {CheckJWT} from "../Utilities/CheckJWT";
 
 interface Comment {
     Id: number;
@@ -64,18 +65,19 @@ export function Film() {
     const {id} = useParams()
     const [isReview, setIsReview] = useState(true);
     const [comments, setComments] = useState<Comment[]>();
-    const [comment,setComment] = useState("");
+    const [comment, setComment] = useState("");
     const [film, setFilm] = useState<Film | null>(null);
-    const nav=useNavigate()
+    const nav = useNavigate()
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
-    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
-        nav("../sign_in")
+    if (CheckJWT() > 0)
+        nav("/sign_in")
     if (DecodeB64(localStorage["jwt"]).userType == "premium") {
-        maxLength=2000;}
+        maxLength = 2000;
+    }
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
-        maxLength=2000;
+        maxLength = 2000;
         tools = (
             <>
                 <button onClick={() => {
@@ -91,69 +93,70 @@ export function Film() {
             </>
         )
     }
-    function Add_Review(){
-            axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add",{
-            filmId: Number(id),
-            text: comment,
-            commentType: "public"
-        },config)
-    }
-    function Add_Note(){
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add",{
-            filmId: Number(id),
-            text: comment,
-            commentType: "private"
-        },config)
-    }
-    useEffect(() => {
-        let ignore = false;
-        console.log(isReview)
-        let buttonR = document.getElementById("review_add");
-        let buttonN = document.getElementById("note_add");
-        if(!isReview && buttonN &&buttonR){
-            buttonN.style.display = "block";
-            buttonR.style.display= "none";
-        } else if(buttonN &&buttonR){
-            buttonN.style.display= "none";
-            buttonR.style.display= "block";
-        }
 
-        if (isReview) {
-            axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=3&resp_amount=0`, config)
-                .then(res => {
-                    if (!ignore) {
-                        console.log(res.data)
+    function Add_Review() {
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
+            axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add", {
+                filmId: Number(id),
+                text: comment,
+                commentType: "public"
+            }, config)
+        }
+    }
+
+    function Add_Note() {
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
+            axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add", {
+                filmId: Number(id),
+                text: comment,
+                commentType: "private"
+            }, config)
+        }
+    }
+
+    useEffect(() => {
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
+            let buttonR = document.getElementById("review_add");
+            let buttonN = document.getElementById("note_add");
+            if (!isReview && buttonN && buttonR) {
+                buttonN.style.display = "block";
+                buttonR.style.display = "none";
+            } else if (buttonN && buttonR) {
+                buttonN.style.display = "none";
+                buttonR.style.display = "block";
+            }
+            if (isReview) {
+                axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=3&resp_amount=0`, config)
+                    .then(res => {
                         setComments(res.data.comments);
-                    }
-                }, err => {
-                    console.log(err.response);
-                })
-        } else {
-            axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=1`, config)
-                .then(res => {
-                    if (!ignore) {
-                        console.log(DecodeB64(localStorage["jwt"]).username)
+                    }, err => {
+                        console.log(err.response);
+                    })
+            } else {
+                axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=1`, config)
+                    .then(res => {
                         setComments(undefined);
-                        setComments(res.data.comments.map((comment:Comment) => ({
+                        setComments(res.data.comments.map((comment: Comment) => ({
                             ...comment,
                             Username: comment.Username || DecodeB64(localStorage["jwt"]).username,
                             AvatarLink: comment.AvatarLink || (document.getElementById("ProfileImg") as HTMLImageElement).src
                         })));
-                    }
+                    }, err => {
+                        console.log(err.response);
+                    })
+            }
+            axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
+                .then(res => {
+                    setFilm(res.data);
                 }, err => {
                     console.log(err.response);
-                })
-        }
-        axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
-            .then(res => {
-                if (!ignore) {
-                    setFilm(res.data);
-                }
-            }, err => {
-                console.log(err.response);
-            });
-        return () => {
-            ignore = true;
+                });
         }
     }, [isReview]);
 
@@ -224,22 +227,27 @@ export function Film() {
 
                 <div className={"flex w-11/12 mt-[40px] h-auto self-center bg-stone-600 flex-col"}>
                     <div className={"border-b-white border-b-2 w-full"}>
-                        <button id="reviews" onClick={()=>setIsReview(true)} style={{backgroundColor: "rgb(31 41 55)"}}
+                        <button id="reviews" onClick={() => setIsReview(true)}
+                                style={{backgroundColor: "rgb(31 41 55)"}}
                                 className={" text-[20px] px-5 py-2 "}>
                             Reviews
                         </button>
-                        <button id="my_notes" onClick={()=>setIsReview(false)} style={{backgroundColor: "rgb(62 82 110)"}}
+                        <button id="my_notes" onClick={() => setIsReview(false)}
+                                style={{backgroundColor: "rgb(62 82 110)"}}
                                 className={"text-[20px] px-5 py-2 "}>
                             My notes
                         </button>
                     </div>
                     <div className={"m-4 flex flex-row"}>
-                        <textarea value={comment} onChange={(e)=>setComment(e.target.value)} maxLength={500} className={"w-full h-40 ring-slate-700 text-black block text-xl rounded-md border-0 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-indigo-600 "}/>
+                        <textarea value={comment} onChange={(e) => setComment(e.target.value)} maxLength={500}
+                                  className={"w-full h-40 ring-slate-700 text-black block text-xl rounded-md border-0 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-indigo-600 "}/>
                         <div className={"w-[20%]"}>
-                            <button id={"review_add"} onClick={Add_Review} className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
+                            <button id={"review_add"} onClick={Add_Review}
+                                    className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
                                 Add public review
                             </button>
-                            <button id={"note_add"} onClick={Add_Note} className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
+                            <button id={"note_add"} onClick={Add_Note}
+                                    className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
                                 Add private note
                             </button>
                         </div>

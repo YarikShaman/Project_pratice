@@ -7,6 +7,7 @@ import {DecodeB64} from "../Utilities/DecodeB64";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import config from "tailwindcss/defaultConfig";
 import {useNavigate} from "react-router-dom";
+import {CheckJWT} from "../Utilities/CheckJWT";
 
 interface Film {
     title: string;
@@ -16,19 +17,21 @@ interface Film {
 
 export function Playlists() {
     const nav=useNavigate()
-    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
-        nav("../sign_in")
     const [currentPlaylist, setCurrentPlaylist] = useState<{ title: string, films: Film[], pk: number }>();
     const [playlistResponse, setPlaylistResponse] = useState<{ title: string, url: string }[]>([]);
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
-        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/", config)
-            .then(async (res) => {
-                setPlaylistResponse(res.data.results);
-            }).catch((err) => {
-            console.log(err.response);
-        });
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
+            const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/", config)
+                .then(async (res) => {
+                    setPlaylistResponse(res.data.results);
+                }).catch((err) => {
+                console.log(err.response);
+            });
+        }
     }, []);
     return (
         <div
@@ -41,11 +44,15 @@ export function Playlists() {
                     playlistResponse?.map((playlist) => {
                         return <>
                             <button key={playlist.url.split('/')[4]} onClick={(e) => {
-                                axios.get(playlist.url, config)
-                                    .then(res => setCurrentPlaylist(res.data))
-                                    .catch(err => {
-                                        console.log(err)
-                                    })
+                                if (CheckJWT() > 0)
+                                    nav("/sign_in")
+                                else {
+                                    axios.get(playlist.url, config)
+                                        .then(res => setCurrentPlaylist(res.data))
+                                        .catch(err => {
+                                            console.log(err)
+                                        })
+                                }
                             }}
                                     className={"m-1 bg-black px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
                                 {playlist?.title}

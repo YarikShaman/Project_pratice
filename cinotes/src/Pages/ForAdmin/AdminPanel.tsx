@@ -6,6 +6,8 @@ import DropdownWithSearch from "../../Components/DropdownWithSearch";
 import {toBase64} from "js-base64";
 import {useNavigate} from "react-router-dom";
 import {DecodeB64} from "../../Utilities/DecodeB64";
+import {CheckJWT} from "../../Utilities/CheckJWT";
+
 interface Actor {
     pk: number;
     name: string;
@@ -15,6 +17,7 @@ interface Actor {
     photo_file: string;
     films: number[];
 }
+
 /*{
     'title': 'Test',
     'poster_image': base64_string,
@@ -38,9 +41,7 @@ interface Actor {
 ]
 }*/
 export function APanel() {
-    const nav=useNavigate()
-    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
-        nav("../sign_in")
+    const nav = useNavigate()
     const [filmsOptions, setFilmOptions] = useState<{ pk: string; title: string; }[]>([]);
     const [film, setFilm] = useState("");
     const [films, setFilms] = useState<{ pk: string; title: string; }[]>([]);
@@ -48,7 +49,7 @@ export function APanel() {
     const [birth, setBirth] = useState("");
     const [death, setDeath] = useState("");
     const [actorDescription, setActorDescription] = useState("");
-    const [actorPhoto,setActorPhoto] = useState("");
+    const [actorPhoto, setActorPhoto] = useState("");
     const [title, setTitle] = useState("");
     const [poster_image, setPoster_image] = useState("");
     const [rating, setRating] = useState("");
@@ -68,12 +69,14 @@ export function APanel() {
     const [description, setDescription] = useState("");
     const [age_restriction, setAge_restriction] = useState("");
     const [studio, setStudio] = useState("");
-    const [screenshot, setScreenshot] = useState<{base64string: string; name: string}>();
-    const [screenshots, setScreenshots] = useState<{base64string: string; name: string}[]>([]);
+    const [screenshot, setScreenshot] = useState<{ base64string: string; name: string }>();
+    const [screenshots, setScreenshots] = useState<{ base64string: string; name: string }[]>([]);
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
-        let ignore = false;
-        if (!ignore) {
+        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
                 .then(res => {
                     setFilmOptions(res.data.results);
@@ -92,51 +95,52 @@ export function APanel() {
                     setActorsOptions((res.data.results).map((actor: { name: any; }) => actor.name))
                 });
         }
-        return () => {
-            ignore = true;
-        };
     }, [])
     const handleAddCountry = () => {
         setCountries([...countries, country]);
         setCountry('');
     };
     const handleAddPoster = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files!=null && e.target.files.length!=0)
-        {
+        if (e.target.files != null && e.target.files.length != 0) {
             const reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             reader.onloadend = () => {
                 const base64String = reader.result as string;
                 setPoster_image(base64String);
-            }}}
+            }
+        }
+    }
     const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files!=null && e.target.files.length!=0)
-        {
+        if (e.target.files != null && e.target.files.length != 0) {
             const reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             reader.onloadend = () => {
                 const base64String = reader.result as string;
                 setActorPhoto(base64String);
-            }}}
+            }
+        }
+    }
     const handleAddScreenshot = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files!=null && e.target.files.length!=0)
-        {
+        if (e.target.files != null && e.target.files.length != 0) {
             const reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             reader.onloadend = () => {
                 const base64String = reader.result as string;
                 // @ts-ignore
-                setScreenshot({base64string:base64String, name:e.target.files[0].name});
-            }}}
+                setScreenshot({base64string: base64String, name: e.target.files[0].name});
+            }
+        }
+    }
     const handleAddScreenshots = () => {
         if (screenshot) {
-        setScreenshots([...screenshots, screenshot]);
+            setScreenshots([...screenshots, screenshot]);
         }
         setScreenshot(undefined);
     };
-    function Add_Film(){
+
+    function Add_Film() {
         const arr: { image: string; }[] = [];
-        screenshots.map(({ base64string }) => {
+        screenshots.map(({base64string}) => {
             const d = {
                 image: base64string,
             }
@@ -144,8 +148,8 @@ export function APanel() {
         });
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/", {
             title: title,
-            genres: genres.map(({ pk }) => ( Number(pk) )),
-            actors: actors.map(({ pk }) => ( Number(pk) )),
+            genres: genres.map(({pk}) => (Number(pk))),
+            actors: actors.map(({pk}) => (Number(pk))),
             poster_image: poster_image,
             rating: rating,
             imdb_id: imdb_id,
@@ -158,6 +162,7 @@ export function APanel() {
             screenshots: arr,
         }, config)
     }
+
     return (
         <div className="bg-neutral-700 grid grid-cols-2 content-center gap-4 justify-items-center min-h-screen">
             <HomeHeader/>
@@ -197,11 +202,12 @@ export function APanel() {
                         onChange={(e) => setImdb_id(e.target.value)}
                         placeholder="IMDb id"
                     />
-                        <p className={"m-2"}>Genre</p>
-                        <DropdownWithSearch options={genreOptions.map((genre)=>genre.title)} onSelect={setGenre}/>
+                    <p className={"m-2"}>Genre</p>
+                    <DropdownWithSearch options={genreOptions.map((genre) => genre.title)} onSelect={setGenre}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={() => {const foundGenre = genreOptions.find((genreo) => genreo.title === genre);
+                        onClick={() => {
+                            const foundGenre = genreOptions.find((genreo) => genreo.title === genre);
                             if (foundGenre) {
                                 setGenres([...genres, foundGenre])
                             }
@@ -220,8 +226,8 @@ export function APanel() {
                     </ul>
                 </div>
                 <div className="flex flex-col w-full space-y-2">
-                        <p className={"m-2"}>Actor</p>
-                        <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
+                    <p className={"m-2"}>Actor</p>
+                    <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
                         onClick={() => {
@@ -305,7 +311,9 @@ export function APanel() {
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type={"file"}
                         accept={"image/* "}
-                        onChange={(e)=>{handleAddScreenshot(e)}}
+                        onChange={(e) => {
+                            handleAddScreenshot(e)
+                        }}
                     />
                     <h1>Screenshots Array:</h1>
                     <ul>
@@ -322,8 +330,9 @@ export function APanel() {
                 </div>
                 <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">Add film</button>
             </div>
-            <div className={"text-white mt-[10%]"}><div className={"text-2xl"}>Actor addiction</div>
-                <p >Name</p>
+            <div className={"text-white mt-[10%]"}>
+                <div className={"text-2xl"}>Actor addiction</div>
+                <p>Name</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
                        value={actor}
                        onChange={(e) => setActor(e.target.value)}
@@ -350,12 +359,14 @@ export function APanel() {
                        type={"file"}
                        accept={"image/* "}/>
                 <p>Films</p>
-                <DropdownWithSearch options={filmsOptions.map((film)=>film.title)} onSelect={setFilm}/>
-                <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={()=>{const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
+                <DropdownWithSearch options={filmsOptions.map((film) => film.title)} onSelect={setFilm}/>
+                <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {
+                    const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
                     if (foundFilm) {
-                    setFilms([...films, foundFilm])
-                }
-                }}>Add Film</button>
+                        setFilms([...films, foundFilm])
+                    }
+                }}>Add Film
+                </button>
                 <h1>Films Array:</h1>
                 <ul>
                     {films?.map((value, index) => (
@@ -365,4 +376,5 @@ export function APanel() {
                 <button className="bg-gray-600 px-4 py-2 rounded-md">Add actor</button>
             </div>
         </div>
-    )}
+    )
+}

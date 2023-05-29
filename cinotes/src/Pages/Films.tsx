@@ -4,14 +4,15 @@ import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import '../CustomStyles.css';
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import {DecodeB64} from "../Utilities/DecodeB64";
+import {CheckJWT} from "../Utilities/CheckJWT";
 
 
 export function Films() {
     const nav=useNavigate()
-    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
-        nav("../sign_in")
+    if (CheckJWT() > 0)
+        nav("/sign_in")
     const [isSearch, setIsSearch] = useState(false);
     const [change, setChange] = useState(false);
     const [genreOptions, setGenreOptions] = useState<{ [key: string]: { pk: number; title: string } }>({});
@@ -124,68 +125,72 @@ export function Films() {
         dateOptions.push(i);
     }
     useEffect(() => {
-        loadSettingsFromCookie();
-        let ignore = false;
-        let order = "";
-        if (sort != "" && sortBy != "") {
-            order += '&order_by=';
-            if (sort == "des") order += "-";
-            switch (sortBy) {
-                case "date":
-                    order += "release_date";
-                    break
-                case "imdbRate":
-                    order += "imdb_rating";
-                    break
-                case "rate":
-                    order += "rating";
-                    break
-                case "num":
-                    order += "";
-                    break
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
+            loadSettingsFromCookie();
+            let ignore = false;
+            let order = "";
+            if (sort != "" && sortBy != "") {
+                order += '&order_by=';
+                if (sort == "des") order += "-";
+                switch (sortBy) {
+                    case "date":
+                        order += "release_date";
+                        break
+                    case "imdbRate":
+                        order += "imdb_rating";
+                        break
+                    case "rate":
+                        order += "rating";
+                        break
+                    case "num":
+                        order += "";
+                        break
+                }
             }
+            const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+            let sort_type = "-release_date";
+            let p_size = 10;
+            let genre = selectedGenre;
+            if (selectedGenre == "-") genre = "";
+            let country = selectedCountry;
+            if (selectedCountry == "-") country = "";
+            let page = selectedPage;
+            let query = "/?release_date_after=" + selectedFDate +
+                "&release_date_before=" + selectedSDate +
+                "&country=" + country +
+                "&genre=" + genre +
+                "&order_by=" + sort_type +
+                "&page_size=" + p_size.toString() +
+                "&page=" + page.toString() + order;
+            if (isSearch == true) {
+                query = "/search/?page_size=" + p_size.toString() + "&page=" + page.toString() + "&q=" + filmName;
+            }
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
+                .then(res => {
+                    if (!ignore) {
+                        setFilms(res.data.results);
+                        setMaxPages(Math.ceil(res.data.count / p_size));
+                        scrollToTop();
+                    }
+                });
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
+                .then(res => {
+                    if (!ignore) {
+                        setGenreOptions(res.data.results);
+                    }
+                });
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/", config)
+                .then(res => {
+                    if (!ignore) {
+                        setCountryOptions(res.data.countries);
+                    }
+                });
+            return () => {
+                ignore = true;
+            };
         }
-        const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        let sort_type = "-release_date";
-        let p_size = 10;
-        let genre = selectedGenre;
-        if (selectedGenre == "-") genre = "";
-        let country = selectedCountry;
-        if (selectedCountry == "-") country = "";
-        let page = selectedPage;
-        let query = "/?release_date_after=" + selectedFDate +
-            "&release_date_before=" + selectedSDate +
-            "&country=" + country +
-            "&genre=" + genre +
-            "&order_by=" + sort_type +
-            "&page_size=" + p_size.toString() +
-            "&page=" + page.toString() + order;
-        if (isSearch == true) {
-            query = "/search/?page_size=" + p_size.toString() + "&page=" + page.toString() + "&q=" + filmName;
-        }
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
-            .then(res => {
-                if (!ignore) {
-                    setFilms(res.data.results);
-                    setMaxPages(Math.ceil(res.data.count / p_size));
-                    scrollToTop();
-                }
-            });
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
-            .then(res => {
-                if (!ignore) {
-                    setGenreOptions(res.data.results);
-                }
-            });
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/", config)
-            .then(res => {
-                if (!ignore) {
-                    setCountryOptions(res.data.countries);
-                }
-            });
-        return () => {
-            ignore = true;
-        };
     }, [selectedPage, change, isSearch]);
     const scrollToTop = () => {
         window.scrollTo({
