@@ -14,19 +14,19 @@ export function ReviewsInFilms(comment: any, pk: any) {
             }
     })
     return (
-        <div className={"flex flex-col"}>
+        <div className={"flex m-4 bg-gray-600 rounded-2xl flex-col"}>
             <div className={" flex flex-row"}>
-                <div className={""}>
-                    <img className={"object-cover h-20 w-20"} src={comment.comment.AvatarLink}/>
+                <div className={"rounded-2xl border-slate-950 border-4 m-2"}>
+                    <img className={"object-cover h-12 w-12"} src={comment.comment.AvatarLink}/>
                 </div>
-                <div>
+                <div className={"text-xl self-center ml-5"}>
                     {comment.comment.Username}
                 </div>
             </div>
-            <div>
-                {comment.comment.Text}
-            </div>
-            <div>
+            <div className={"flex flex-row"}>
+                <div className={"w-full px-5"}>
+                    {comment.comment.Text}
+                </div>
                 <div>
                     {comment.comment.likes}
                 </div>
@@ -35,7 +35,7 @@ export function ReviewsInFilms(comment: any, pk: any) {
                     setClicked(true);
                 }}
                      onAnimationEnd={() => setClicked(false)}
-                     className={`like-button-wrapper ${liked ? "liked" : ""} text-white flex flex-row pl-[25px] right-0 relative`}>
+                     className={`like-button-wrapper ${liked ? "liked" : ""} text-white flex flex-row pl-[15px] m-4 bottom-0`}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                          stroke="white" className="w-6 h-6 z-20">
                         <path strokeLinecap="round" strokeLinejoin="round"

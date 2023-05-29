@@ -5,12 +5,13 @@ import React, {useEffect, useState} from "react";
 import {ActorInActors} from "../Components/ActorInActors";
 import {ActorInFilm} from "../Components/ActorInFilm";
 import {ScreenshotInFilm} from "../Components/ScreenshotInFilm";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {GetLang} from "../Utilities/Lang";
 import {Simulate} from "react-dom/test-utils";
 import blur = Simulate.blur;
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {ReviewsInFilms} from "../Components/ReviewsInFilms";
+
 interface Comment {
     Id: number;
     FilmId: number;
@@ -27,6 +28,7 @@ interface Comment {
     AvatarLink: string;
     Username: string;
 }
+
 interface Film {
     pk: number;
     title: string;
@@ -55,13 +57,17 @@ interface Film {
     }[];
 }
 
-let tools = (<></>)
-let c = 0
+let tools = (<></>);
+let c = 0;
 
 export function Film() {
     const {id} = useParams()
+    const [isReview, setIsReview] = useState(true);
     const [comments, setComments] = useState<Comment[]>();
     const [film, setFilm] = useState<Film | null>(null);
+    const nav=useNavigate()
+    if (localStorage["jwt"]==undefined && DecodeB64(localStorage["jwt"].isVerified)==true)
+        nav("../sign_in")
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         tools = (
@@ -81,16 +87,32 @@ export function Film() {
     }
     useEffect(() => {
         let ignore = false;
+        console.log(isReview)
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=2&page=1&amount=3&resp_amount=0",config)
-            .then(res => {
-                if (!ignore) {
-                    setComments(res.data.comments);
-                    console.log(res.data.comments);
-                }
-            }, err => {
-                console.log(err.response);
-            })
+        if (isReview) {
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=2&page=1&amount=3&resp_amount=0", config)
+                .then(res => {
+                    if (!ignore) {
+                        setComments(res.data.comments);
+                    }
+                }, err => {
+                    console.log(err.response);
+                })
+        } else {
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=2&page=1&amount=1", config)
+                .then(res => {
+                    if (!ignore) {
+                        console.log(DecodeB64(localStorage["jwt"].username))
+                        setComments(res.data.comments.map((comment:Comment) => ({
+                            ...comment,
+                            Username: comment.Username || DecodeB64(localStorage["jwt"].username),
+                            AvatarLink: comment.AvatarLink || "Default AvatarLink"
+                        })));
+                    }
+                }, err => {
+                    console.log(err.response);
+                })
+        }
         axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
             .then(res => {
                 if (!ignore) {
@@ -102,7 +124,7 @@ export function Film() {
         return () => {
             ignore = true;
         }
-    }, []);
+    }, [isReview]);
 
     return (
         <div
@@ -169,19 +191,23 @@ export function Film() {
                         }</div>
                 </div>
 
-                <div className={"flex w-11/12 mt-[40px] h-[400px]  self-center bg-stone-600 flex-col"}>
+                <div className={"flex w-11/12 mt-[40px] h-auto self-center bg-stone-600 flex-col"}>
                     <div className={"border-b-white border-b-2"}>
-                        <button id="reviews" style={{backgroundColor: "rgb(31 41 55)"}}
+                        <button id="reviews" onClick={()=>setIsReview(true)} style={{backgroundColor: "rgb(31 41 55)"}}
                                 className={" text-[20px] px-5 py-2 "}>
                             Reviews
                         </button>
-                        <button id="my_notes" style={{backgroundColor: "rgb(31 41 55)"}}
+                        <button id="my_notes" onClick={()=>setIsReview(false)} style={{backgroundColor: "rgb(62 82 110)"}}
                                 className={"text-[20px] px-5 py-2 "}>
                             My notes
                         </button>
                     </div>
                     <div>
-                        {comments?.map(comment=> {return<><ReviewsInFilms comment={comment}/></>})}
+                        {comments?.map(comment => {
+                            return <>
+                                <ReviewsInFilms comment={comment}/>
+                            </>
+                        })}
                     </div>
                 </div>
             </div>
