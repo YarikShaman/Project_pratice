@@ -15,7 +15,7 @@ export function Ver() {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
             .then(res => {
                 alert(GetLang().Successfully_verified)
-                nav("../account")
+                nav("../sign_in")
             })
             .catch(err => {
                 switch (err.response.status) {
@@ -61,7 +61,7 @@ export function Ver() {
                         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
                             .then(resp => {
                                 alert(GetLang().Account_created)
-                                nav("ver")
+                                nav("/ver")
                             })
                             .catch(err => {
                                 switch (err.response.status) {

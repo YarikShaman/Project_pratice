@@ -38,31 +38,33 @@ export function HomeHeader() {
     }
 
     useEffect(() => {
-         {
+        {
             if (localStorage.getItem("language") == undefined) {
                 localStorage.setItem("language", "2")
             }
             SetLang(Number(localStorage.getItem("language")));
             if (CheckJWT() == 0) {
-                 {
+                {
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                         .then(res => {
                             setLink("/account")
-                            setSourse(res.data.ImageLink)
+                            if (res.data.ImageLink?.length > 0)
+                                setSourse(res.data.ImageLink)
                             setLabel(DecodeB64(localStorage["jwt"]).username)
                         })
                 }
-            }
-            else if (CheckJWT() != 1)
-            {
+            } else if (CheckJWT() != 1) {
+                if (CheckJWT()==2)
+                    //@ts-ignore
+                    document.getElementById("verifier").style.display="none"
                 setLabel(DecodeB64(localStorage["jwt"]).username)
                 setLink("/sign_in")
                 setSourse(Acc)
-            }
-            else {
+            } else {
                 setLink("/sign_in")
                 setSourse(Acc)
             }
+
             if (localStorage.getItem("language") == "2") {
                 let engm = document.getElementById("m1");
                 let ukrm = document.getElementById("m2");
@@ -133,10 +135,10 @@ export function HomeHeader() {
                         {apanel}
                     </div>
                     <div className="flex flex-row space-x-5">
-                        <a href="/ver" onClick={() => {
+                        <a id="verifier" href="/ver" onClick={() => {
                             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
                                 .then(resp => {
-                                    nav("ver")
+                                    nav("/ver")
                                 })
                                 .catch(err => {
                                     switch (err.response.status) {

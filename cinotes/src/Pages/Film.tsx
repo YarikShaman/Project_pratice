@@ -145,8 +145,8 @@ export function Film() {
             if (isReview) {
                 axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=3&resp_amount=0`, config)
                     .then(res => {
-                        setComments(undefined);
-                        setComments(res.data.comments.map((comment: Comment) => ({
+                        //setComments(undefined);
+                        setComments(res.data.comments?.map((comment: Comment) => ({
                             ...comment,
                             Type: "public"
                         })));
@@ -170,7 +170,6 @@ export function Film() {
             axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
                 .then(res => {
                     setFilm(res.data);
-                    console.log(res.data)
                 }, err => {
                     console.log(err.response);
                 });
