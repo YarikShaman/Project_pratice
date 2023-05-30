@@ -37,10 +37,7 @@ export function HomeHeader() {
         }
     }
 
-
-
     useEffect(() => {
-
          {
             if (localStorage.getItem("language") == undefined) {
                 localStorage.setItem("language", "2")

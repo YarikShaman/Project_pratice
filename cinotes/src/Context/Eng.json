@@ -44,7 +44,7 @@
   "Email": "Email",
   "Account_type": "Account type",
   "Resign_in_date": "Resign-in date",
-  "User_statistics": "User statistics",
+  "User_information": "User information",
   "Favourite_genre": "Favourite genre",
   "Favourite_actor": "Favourite actor",
   "Favourite_film": "Favourite film",
@@ -131,5 +131,7 @@
   "Password_validation_error": "Password validation error",
   "Set_new_password": "Set new password",
   "Admin":  "Admin",
+  "Log_out": "Log out",
+  "Cancel": "Cancel",
   "Users": "Users"
 }

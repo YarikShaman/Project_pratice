@@ -44,7 +44,7 @@
   "Email": "Електронна пошта",
   "Account_type": "Тип акаунту",
   "Resign_in_date": "Дата переавторизації",
-  "User_statistics": "Статистика користувача",
+  "User_information": "Інформація про користувача",
   "Favourite_genre": "Улюблений жанр",
   "Favourite_actor": "Улюблений актор",
   "Favourite_film": "Улюблений фільм",
@@ -131,5 +131,7 @@
   "Password_validation_error": "Помилка валідації пароля",
   "Set_new_password": "Встановити новий пароль",
   "Admin":  "Адмін",
+  "Log_out": "Вийти",
+  "Cancel": "Назад",
   "Users": "Користувачі"
 }
