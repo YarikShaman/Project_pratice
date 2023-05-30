@@ -1,7 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
 export function FilmInActor(films:any){
-    console.log(films.films.url.split("/")[4])
     return(
         <>
             <Link to={`/films/${films.films.url.split("/")[4]}`} className={"hover:bg-gray-900 flex shadow-gray-900 flex-col bg-neutral-800 rounded-xl border-2 border-stone-900 shadow-lg w-44 h-72 hover:shadow-white mx-5 my-5"}>
