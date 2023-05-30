@@ -185,10 +185,10 @@ export function APanel() {
         <div className="bg-neutral-700 flex flex-col min-h-screen">
             <HomeHeader/>
             <div
-                className={"mt-[20%] md:mt-[5%]  self-center text-white w-3/5"}>
-                <div className=" text-2xl bg-gray-600 m-2 rounded-xl" onClick={()=>setIsExpandedFilm(!isExpandedFilm)}>{GetLang().Film_addition}</div>
+                className={"mt-[20%] md:mt-[5%] self-center text-white w-3/5"}>
+                <div className=" text-2xl bg-gray-600 m-2 pl-[40%] rounded-xl" onClick={()=>setIsExpandedFilm(!isExpandedFilm)}>{GetLang().Film_addition}</div>
                 {isExpandedFilm && (
-                    <div className={"flex flex-col justify-centers "}>
+                    <div className={"flex flex-col space-y-2"}>
                     <p className={"m-2"}>{GetLang().Title}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
@@ -342,9 +342,9 @@ export function APanel() {
                     </button>
                 <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_film}</button>
                     </div>)}
-                <div onClick={()=>setIsExpandedActor(!isExpandedActor)} className={"text-2xl bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Actor_addition}</div>
+                <div onClick={()=>setIsExpandedActor(!isExpandedActor)} className={"text-2xl pl-[40%] bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Actor_addition}</div>
                 {isExpandedActor && (
-                    <div className={"text-white flex flex-col"}>
+                    <div className={"text-white flex space-y-2 flex-col"}>
                         <p>{GetLang().Name}</p>
                         <input className="bg-slate-700 px-4 py-2 rounded-md"
                                value={actor}
