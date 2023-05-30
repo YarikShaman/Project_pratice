@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {GetLang} from "../../Utilities/Lang";
 import {DecodeB64} from "../../Utilities/DecodeB64";
 import {CheckJWT} from "../../Utilities/CheckJWT";
+import Table from "../../Components/Table";
 
 interface Actor {
     pk: number;
@@ -45,6 +46,7 @@ export function APanel() {
     const nav = useNavigate()
     const [isExpandedFilm, setIsExpandedFilm] = useState(false);
     const [isExpandedActor, setIsExpandedActor] = useState(false);
+    const [isExpandedGenre, setIsExpandedGenre] = useState(false);
     const [filmsOptions, setFilmOptions] = useState<{ url: string; title: string; }[]>([]);
     const [film, setFilm] = useState("");
     const [films, setFilms] = useState<{ url: string; title: string; }[]>([]);
@@ -57,9 +59,11 @@ export function APanel() {
     const [poster_image, setPoster_image] = useState("");
     const [rating, setRating] = useState("");
     const [imdb_id, setImdb_id] = useState("");
+    const [genreName, setGenreName] = useState("");
     const [genre, setGenre] = useState("");
     const [genreOptions, setGenreOptions] = useState<{ pk: string; title: string; }[]>([]);
     const [genres, setGenres] = useState<{ pk: string; title: string; }[]>([]);
+    const [selectedGenreId, setSelectedGenreId] = useState("");
     const [actorName, setActorName] = useState("");
     const [actorsRaw, setActorsRaw] = useState<{ pk: string; name: string; photo_file: string; url: string; }[]>([]);
     const [actorsOptions, setActorsOptions] = useState<string[]>([]);
@@ -169,8 +173,8 @@ export function APanel() {
             screenshots: arr,
         }, config)
     }
+
     function Add_Actor() {
-        console.log(films.map(item => item.url))
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/", {
             name: actor,
             photo_image: actorPhoto,
@@ -180,169 +184,185 @@ export function APanel() {
             films: films.map(item => item.url)
         }, config)
     }
-
+    function Add_Genre(){
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/", {
+            title: genreName
+        }, config)
+    }
+    function Change_Genre(){
+        axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/"+selectedGenreId+"/update/", {
+            title: genreName
+        }, config)
+    }
+    function Delete_Genre(){
+        axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/"+selectedGenreId+"/delete/", config)
+    }
+    // @ts-ignore
     return (
         <div className="bg-neutral-700 flex flex-col min-h-screen">
             <HomeHeader/>
             <div
                 className={"mt-[20%] md:mt-[5%] self-center text-white w-3/5"}>
-                <div className=" text-2xl bg-gray-600 m-2 pl-[40%] rounded-xl" onClick={()=>setIsExpandedFilm(!isExpandedFilm)}>{GetLang().Film_addition}</div>
+                <div className=" text-2xl bg-gray-600 m-2 pl-[40%] rounded-xl"
+                     onClick={() => setIsExpandedFilm(!isExpandedFilm)}>{GetLang().Film_addition}</div>
                 {isExpandedFilm && (
                     <div className={"flex flex-col space-y-2"}>
-                    <p className={"m-2"}>{GetLang().Title}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Title"
-                    />
-                    <p className={"m-2"}>{GetLang().Poster_image}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type={"file"}
-                        accept={"image/* "}
-                        onChange={(e) => handleAddPoster(e)}
-                        placeholder="Poster image"
-                    />
-                    <p className={"m-2"}>{GetLang().Rating}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={rating}
-                        onChange={(e) => setRating(e.target.value)}
-                        placeholder="Rating"
-                    />
-                    <p className={"m-2"}>{GetLang().IMDb_id}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={imdb_id}
-                        onChange={(e) => setImdb_id(e.target.value)}
-                        placeholder="IMDb id"
-                    />
-                    <p className={"m-2"}>{GetLang().Genre}</p>
-                    <DropdownWithSearch options={genreOptions.map((genre) => genre.title)} onSelect={setGenre}/>
-                    <button
-                        className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={() => {
-                            const foundGenre = genreOptions.find((genreo) => genreo.title === genre);
-                            if (foundGenre) {
-                                setGenres([...genres, foundGenre])
-                            }
-                        }}
-                    >
-                        {GetLang().Add_genre}
-                    </button>
+                        <p className={"m-2"}>{GetLang().Title}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Title"
+                        />
+                        <p className={"m-2"}>{GetLang().Poster_image}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type={"file"}
+                            accept={"image/* "}
+                            onChange={(e) => handleAddPoster(e)}
+                            placeholder="Poster image"
+                        />
+                        <p className={"m-2"}>{GetLang().Rating}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                            placeholder="Rating"
+                        />
+                        <p className={"m-2"}>{GetLang().IMDb_id}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={imdb_id}
+                            onChange={(e) => setImdb_id(e.target.value)}
+                            placeholder="IMDb id"
+                        />
+                        <p className={"m-2"}>{GetLang().Genre}</p>
+                        <DropdownWithSearch options={genreOptions.map((genre) => genre.title)} onSelect={setGenre}/>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={() => {
+                                const foundGenre = genreOptions.find((genreo) => genreo.title === genre);
+                                if (foundGenre) {
+                                    setGenres([...genres, foundGenre])
+                                }
+                            }}
+                        >
+                            {GetLang().Add_genre}
+                        </button>
 
-                    <h1>{GetLang().Genres_list}:</h1>
-                    <ul>
-                        {genres.map((genre, index) => (
-                            <li key={index}>
-                                {GetLang().PK}: {genre.pk}, {GetLang().Title}: {genre.title}
-                            </li>
-                        ))}
-                    </ul>
-                    <p className={"m-2"}>{GetLang().Actor}</p>
-                    <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
-                    <button
-                        className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={() => {
-                            const foundActor = actorsRaw.find((actor) => actor.name === actorName);
-                            if (foundActor) {
-                                setActors([...actors, foundActor]);
-                            }
-                        }}
-                    >
-                        {GetLang().Add_actor}
-                    </button>
+                        <h1>{GetLang().Genres_list}:</h1>
+                        <ul>
+                            {genres.map((genre, index) => (
+                                <li key={index}>
+                                    {GetLang().PK}: {genre.pk}, {GetLang().Title}: {genre.title}
+                                </li>
+                            ))}
+                        </ul>
+                        <p className={"m-2"}>{GetLang().Actor}</p>
+                        <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={() => {
+                                const foundActor = actorsRaw.find((actor) => actor.name === actorName);
+                                if (foundActor) {
+                                    setActors([...actors, foundActor]);
+                                }
+                            }}
+                        >
+                            {GetLang().Add_actor}
+                        </button>
 
-                    <h1>{GetLang().Actors_list}:</h1>
-                    <ul>
-                        {actors.map((actor, index) => (
-                            <li key={index}>
-                                {GetLang().PK}: {actor.pk}, {GetLang().Name}: {actor.name}, {GetLang().Photo}: {actor.photo_file}, {GetLang().URL}: {actor.url}
-                            </li>
-                        ))}
-                    </ul>
-                    <p className={"m-2"}>{GetLang().Country}</p>
-                    <DropdownWithSearch options={countryOptions} onSelect={setCountry}/>
-                    <button
-                        className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={handleAddCountry}
-                    >
-                        {GetLang().Add_country}
-                    </button>
-                    <h1>{GetLang().Countries_list}:</h1>
-                    <ul>
-                        {countries?.map((value, index) => (
-                            <li key={index}>{value}</li>
-                        ))}
-                    </ul>
-                    <p className={"m-2"}>{GetLang().Release_date}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="date"
-                        value={release_date}
-                        onChange={(e) => setRelease_date(e.target.value)}
-                        placeholder="Release date"
-                    />
-                    <p className={"m-2"}>{GetLang().Director}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={director}
-                        onChange={(e) => setDirector(e.target.value)}
-                        placeholder="Director"
-                    />
-                    <p className={"m-2"}>{GetLang().Description}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Description"
-                    />
-                    <p className={"m-2"}>{GetLang().Age_restriction}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={age_restriction}
-                        onChange={(e) => setAge_restriction(e.target.value)}
-                        placeholder="Age restriction"
-                    />
-                    <p className={"m-2"}>{GetLang().Studio}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type="text"
-                        value={studio}
-                        onChange={(e) => setStudio(e.target.value)}
-                        placeholder="Studio"
-                    />
-                    <p className={"m-2"}>{GetLang().Screenshot}</p>
-                    <input
-                        className="bg-slate-700 px-4 py-2 rounded-md"
-                        type={"file"}
-                        accept={"image/* "}
-                        onChange={(e) => {
-                            handleAddScreenshot(e)
-                        }}
-                    />
-                    <h1>{GetLang().Screenshots_list}:</h1>
-                    <ul>
-                        {screenshots?.map((value, index) => (
-                            <li key={index}>{value.name}</li>
-                        ))}
-                    </ul>
-                    <button
-                        className="bg-gray-600 px-4 py-2 rounded-md"
-                        onClick={handleAddScreenshots}
-                    >
-                        {GetLang().Add_screenshot}
-                    </button>
-                <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_film}</button>
+                        <h1>{GetLang().Actors_list}:</h1>
+                        <ul>
+                            {actors.map((actor, index) => (
+                                <li key={index}>
+                                    {GetLang().PK}: {actor.pk}, {GetLang().Name}: {actor.name}, {GetLang().Photo}: {actor.photo_file}, {GetLang().URL}: {actor.url}
+                                </li>
+                            ))}
+                        </ul>
+                        <p className={"m-2"}>{GetLang().Country}</p>
+                        <DropdownWithSearch options={countryOptions} onSelect={setCountry}/>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={handleAddCountry}
+                        >
+                            {GetLang().Add_country}
+                        </button>
+                        <h1>{GetLang().Countries_list}:</h1>
+                        <ul>
+                            {countries?.map((value, index) => (
+                                <li key={index}>{value}</li>
+                            ))}
+                        </ul>
+                        <p className={"m-2"}>{GetLang().Release_date}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="date"
+                            value={release_date}
+                            onChange={(e) => setRelease_date(e.target.value)}
+                            placeholder="Release date"
+                        />
+                        <p className={"m-2"}>{GetLang().Director}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={director}
+                            onChange={(e) => setDirector(e.target.value)}
+                            placeholder="Director"
+                        />
+                        <p className={"m-2"}>{GetLang().Description}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Description"
+                        />
+                        <p className={"m-2"}>{GetLang().Age_restriction}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={age_restriction}
+                            onChange={(e) => setAge_restriction(e.target.value)}
+                            placeholder="Age restriction"
+                        />
+                        <p className={"m-2"}>{GetLang().Studio}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type="text"
+                            value={studio}
+                            onChange={(e) => setStudio(e.target.value)}
+                            placeholder="Studio"
+                        />
+                        <p className={"m-2"}>{GetLang().Screenshot}</p>
+                        <input
+                            className="bg-slate-700 px-4 py-2 rounded-md"
+                            type={"file"}
+                            accept={"image/* "}
+                            onChange={(e) => {
+                                handleAddScreenshot(e)
+                            }}
+                        />
+                        <h1>{GetLang().Screenshots_list}:</h1>
+                        <ul>
+                            {screenshots?.map((value, index) => (
+                                <li key={index}>{value.name}</li>
+                            ))}
+                        </ul>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={handleAddScreenshots}
+                        >
+                            {GetLang().Add_screenshot}
+                        </button>
+                        <button onClick={Add_Film}
+                                className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_film}</button>
                     </div>)}
-                <div onClick={()=>setIsExpandedActor(!isExpandedActor)} className={"text-2xl pl-[40%] bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Actor_addition}</div>
+                <div onClick={() => setIsExpandedActor(!isExpandedActor)}
+                     className={"text-2xl pl-[40%] bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Actor_addition}</div>
                 {isExpandedActor && (
                     <div className={"text-white flex space-y-2 flex-col"}>
                         <p>{GetLang().Name}</p>
@@ -386,8 +406,41 @@ export function APanel() {
                                 <li key={index}>{value.title}</li>
                             ))}
                         </ul>
-                        <button onClick={Add_Actor} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
+                        <button onClick={Add_Actor}
+                                className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
                     </div>)}
+                <div onClick={() => setIsExpandedGenre(!isExpandedGenre)}
+                     className={"text-2xl pl-[40%] bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Genres}</div>
+                {isExpandedGenre && (
+                <div className={"flex flex-row ml-[35%] relative items-stretch"}>
+                <Table data={genreOptions} />
+                    <div className="mx-5 space-y-4 flex flex-col">
+                        <div>{GetLang().Genre}</div>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                            value={genreName}
+                            onChange={(e) => setGenreName(e.target.value)}
+                            type="text"/>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={() => {Add_Genre()}}>
+                            {GetLang().Add_genre}
+                        </button>
+                        <div>{GetLang().Genre+" Id"}</div>
+                        <select value={selectedGenreId} onChange={(e)=>setSelectedGenreId(e.target.value)} className={"bg-slate-700 custom-select"}><option value="-">-</option>{Object.entries(genreOptions).map(([key, genre]) => {
+                            return <option key={genre.pk} value={genre.pk}>{genre.pk}</option>;
+                        })}</select>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={() => {Change_Genre()}}>
+                            Change the genre
+                        </button>
+                        <button
+                            className="bg-gray-600 px-4 py-2 rounded-md"
+                            onClick={() => {Delete_Genre()}}>
+                            Delete the genre
+                        </button>
+                    </div>
+                </div>)}
             </div>
 
         </div>
