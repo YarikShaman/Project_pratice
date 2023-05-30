@@ -5,7 +5,7 @@ import axios from "axios";
 import DropdownWithSearch from "../../Components/DropdownWithSearch";
 import {toBase64} from "js-base64";
 import {useNavigate} from "react-router-dom";
-import {GetLang, SetLang} from "../Utilities/Lang";
+import {GetLang} from "../../Utilities/Lang";
 import {DecodeB64} from "../../Utilities/DecodeB64";
 import {CheckJWT} from "../../Utilities/CheckJWT";
 
