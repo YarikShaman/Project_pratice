@@ -1,14 +1,10 @@
 import {HomeHeader} from "../Components/HomeHeader";
-import Not from "../Img/Not_Found.png"
 import axios from "axios";
 import React, {useEffect, useState} from "react";
-import {ActorInActors} from "../Components/ActorInActors";
 import {ActorInFilm} from "../Components/ActorInFilm";
 import {ScreenshotInFilm} from "../Components/ScreenshotInFilm";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {GetLang} from "../Utilities/Lang";
-import {Simulate} from "react-dom/test-utils";
-import blur = Simulate.blur;
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {ReviewsInFilms} from "../Components/ReviewsInFilms";
 import {CheckJWT} from "../Utilities/CheckJWT";
@@ -33,6 +29,7 @@ interface Comment {
 interface Film {
     pk: number;
     title: string;
+    compressed_poster_file: string;
     poster_file: string;
     rating: string;
     country: string;
@@ -64,9 +61,11 @@ let c = 0;
 export function Film() {
     const {id} = useParams();
     const [isReview, setIsReview] = useState(true);
+    const [srcForPoster,setSrcForPoster] = useState("");
     const [comments, setComments] = useState<Comment[]>();
     const [comment, setComment] = useState("");
     const [film, setFilm] = useState<Film | null>(null);
+    const [scale, setScale] = useState(1);
     const nav = useNavigate();
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
@@ -157,17 +156,49 @@ export function Film() {
             axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
                 .then(res => {
                     setFilm(res.data);
+
+                    console.log(film)
                 }, err => {
                     console.log(err.response);
                 });
         }
     }, [isReview]);
+    const handleZoomIn = () => {
+        setScale(scale + 0.1);
+    };
 
+    const handleZoomOut = () => {
+        if (scale > 0.1) {
+            setScale(scale - 0.1);
+        }
+    };
+    function visChange(id:any){
+        let el = document.getElementById(id);
+        if(el == null) return
+        if(el.style.display=="block"){
+            el.style.display = "none";
+        } else{
+            if (film?.poster_file !== undefined)
+            setSrcForPoster(film?.poster_file);
+            el.style.display = "block";
+        }
+    }
     return (
         <div
             style={{background: "repeating-linear-gradient(45deg, rgba(255, 130, 0, 1), rgba(255, 130, 0, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
             className={"min-h-screen h-auto flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
+            <div id="poster" className={"fixed bg-black divimg overflow-auto hidden top-[10%] h-[88%] w-2/5 left-[30%] rounded-xl border-4 border-white"}>
+                <button onClick={()=>{visChange("poster")}} className={"w-10 h-10 fixed right-[31%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X</button>
+                <img src={srcForPoster} alt={"screenshot"}  style={{transform: `scale(${scale})`,pointerEvents: 'none',position: "absolute",
+                    top: "0", left: "0", transformOrigin:"top left"}} className={"object-contain h-full w-full"}/>
+                <button onClick={handleZoomOut} className="w-10 h-10 text-3xl bg-opacity-50 bg-black fixed rounded-full right-[47%] bottom-[3%]">
+                    -
+                </button>
+                <button onClick={handleZoomIn} className="w-10 h-10 text-3xl bg-opacity-50 bg-black fixed rounded-full right-[51%] bottom-[3%]">
+                    +
+                </button>
+            </div>
             <div style={{borderWidth: 2, borderImageSlice: 1, borderColor: ""}}
                  className=" pb-[100px] md:w-4/5 w-[100%] self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
                 <div className={"flex w-full  my-2 self-center flex-row"}>
@@ -180,14 +211,14 @@ export function Film() {
                             <div className={"w-96 flex h-2/3 self-center justify-end"}>
                                 {tools}
                                 <button
-                                    className={"w-1/2  bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
+                                    className={"w-full  bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
                                     {GetLang().Add_to_playlist}
                                 </button>
                             </div>
                         </div>
                         <div className={"flex flex-row mt-[50px]"}>
                             <div className={"p-1 rounded-xl pl-10"}>
-                                <img className={"rounded-xl  w-[500px]"} src={film?.poster_file}/>
+                                <img onClick={()=>{visChange("poster")}} alt={"screenshot"}  className={"rounded-xl  w-[500px]"} src={film?.compressed_poster_file}/>
                             </div>
                             <div className={"mx-5 p-3 w-full text-[24px]"}>
                                 <p className="pt-0"><b>{GetLang().Genres}:</b> {film?.genres.map(genre => genre.title).join(', ')}
@@ -242,15 +273,15 @@ export function Film() {
                         </button>
                     </div>
                     <div className={"m-4 flex flex-row"}>
-                        <textarea value={comment} onChange={(e) => setComment(e.target.value)} maxLength={500}
+                        <textarea value={comment} onChange={(e) => setComment(e.target.value)} maxLength={maxLength}
                                   className={"w-full h-40 ring-slate-700 text-black block text-xl rounded-md border-0 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-indigo-600 "}/>
                         <div className={"w-[20%]"}>
                             <button id={"review_add"} onClick={Add_Review}
-                                    className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
+                                    className={"m-4 bg-black h-[60px] rounded-xl w-[140px]"}>
                                 {GetLang().Add_public_review}
                             </button>
                             <button id={"note_add"} onClick={Add_Note}
-                                    className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
+                                    className={"m-4 bg-black h-[60px] rounded-xl w-[140px]"}>
                                 {GetLang().Add_private_note}
                             </button>
                         </div>
