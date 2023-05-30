@@ -38,14 +38,14 @@ function FilmInPlaylist(combo:any) {
             }}
                  className="p-4 shadow-gray-900 flex justify-center flex-col rounded-xl border-2 border-stone-900 shadow-lg h-[390px] hover:shadow-white">
                 <a className="self-center m-[10%] text-center text-white text-[20px]"><b>{film.film.title}</b><br/><br/>
-                    Ви дійсно бажаєте видалити цей фільм з плейлисту
+                    {GetLang().Approve_remove_from_playlist}
                 </a>
                 <div className="flex flex-row justify-around mt-10 font-bold">
                     <button onClick={getBack}
-                            className="bg-red-600 w-[40%] hover:border-2 border-white hover:bg-red-500 rounded-xl text-[20px]">Ні
+                            className="bg-red-600 w-[40%] hover:border-2 border-white hover:bg-red-500 rounded-xl text-[20px]">{GetLang().No}
                     </button>
                     <button onClick={Delete}
-                        className="bg-blue-600 w-[40%] hover:border-2 border-white hover:bg-blue-500  rounded-xl  text-[20px]">Так
+                        className="bg-blue-600 w-[40%] hover:border-2 border-white hover:bg-blue-500  rounded-xl  text-[20px]">{GetLang().Yes}
                     </button>
                 </div>
 

@@ -4,6 +4,7 @@ import logo from '../Img/logo.png';
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {CheckPas} from "../Utilities/CheckPas";
 
 
@@ -36,29 +37,29 @@ function Registr() {
                     localStorage["jwt"] = resp.data.jwt;
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + resp.data.jwt}})
                         .then(resp=>{
-                            alert("Account is successfully created")
+                            alert(GetLang().Account_created)
                             nav("ver")
                         })
                         .catch(err=>{
                             switch (err.response.status) {
                                 case 417:
-                                    setErrorEmail("This email is not available");
+                                    setErrorEmail(GetLang().Email_not_available);
                                     break;
                                 case 500:
-                                    alert("Account is successfully created, but email-verification server do not response, try to verify later");
+                                    alert(GetLang().Account_created_without_verification);
                                     break;
                             }
                         })
                 }).catch(err => {
                     switch (err.response.status) {
                         case 400:
-                            setError1("bad data (validation error)");
+                            setError1(GetLang().Bad_data_validation_error);
                             break;
                         case 409:
-                            setErrorEmail("Account with this e-mail is already exists");
+                            setErrorEmail(GetLang().Account_already_exists);
                             break;
                         case 500:
-                            alert("Server do not response, try later");
+                            alert(GetLang().Server_do_not_response);
                             break;
                     }
                 });
@@ -77,7 +78,7 @@ function Registr() {
                             alt="Cinotes"/>
                     </Link>
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-                        Create a new account
+                        {GetLang().Create_account}
                     </h2>
                 </div>
 
@@ -88,14 +89,14 @@ function Registr() {
                     }}>
                         <div>
                             <label htmlFor="login" className="block text-sm font-medium leading-6 text-white">
-                                Username
+                                {GetLang().Username}
                             </label>
                             <div className="mt-2">
                                 <input
                                     onChange={(e) => {
                                         setUsername(e.target.value)
                                         if ((RegExp("^[a-zA-Z0-9!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~]{1,20}$")).test(username) != true)
-                                            setErrorUser("Password may include only latin, numeric and special symbols(2-20 symbols)")
+                                            setErrorUser(GetLang().Password_symbols_validation)
                                         else
                                             setErrorUser("")
                                     }}
@@ -111,7 +112,7 @@ function Registr() {
                         </div>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
-                                Email
+                                {GetLang().Email}
                             </label>
                             <div className="mt-2">
                                 <input onChange={(e) => {
@@ -131,7 +132,7 @@ function Registr() {
 
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
-                                Password
+                                {GetLang().Password}
                             </label>
                             <div className="mt-2">
                                 <input onChange={(e) => {
@@ -152,7 +153,7 @@ function Registr() {
                         <div>
                             <label htmlFor="password-repeat"
                                    className="block text-sm font-medium leading-6 text-white">
-                                Repeat password
+                                {GetLang().Repeat_password}
                             </label>
                             <div className="mt-2">
                                 <input onChange={(e) => {
@@ -176,16 +177,16 @@ function Registr() {
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                                Register
+                                {GetLang().Register}
                             </button>
                         </div>
                     </form>
 
                     <p className="mt-10 mb-5 text-center text-sm text-gray-500">
-                        Already have account?{' '}
+                        {GetLang().Already_have_account}{' '}
                         <a href="/sign_in"
                            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                            Sign in!
+                            {GetLang().Sign_in}!
                         </a>
                     </p>
                 </div>

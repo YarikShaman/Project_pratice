@@ -6,6 +6,7 @@ import {useState} from "react";
 import acc from "../Img/Account.png"
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {CheckJWT} from "../Utilities/CheckJWT";
 
 export function Account() {
@@ -35,16 +36,16 @@ export function Account() {
                     <img className="bg-white h-40 self-center w-40" src={data?.ImageLink}/>
                     <p className="self-center">{DecodeB64(localStorage["jwt"]).username}</p>
                     <button></button>
-                    <p  className="self-center">Email<p>{DecodeB64(localStorage["jwt"]).email}</p></p>
-                    <p  className="self-center">Account type: {DecodeB64(localStorage["jwt"]).username}</p>
-                    <p  className="self-center">Resign-in date: { date}</p>
+                    <p  className="self-center">{GetLang().Email}<p>{DecodeB64(localStorage["jwt"]).email}</p></p>
+                    <p  className="self-center">{GetLang().Account_type}: {DecodeB64(localStorage["jwt"]).username}</p>
+                    <p  className="self-center">{GetLang().Resign_in_date}: { date}</p>
                 </div>
                 <div className="w-1/2 min-w-[400px] self-center bg-blue-500 flex flex-col justify-center self-center">
-                    <p>User statistics</p>
+                    <p>{GetLang().User_statistics}</p>
                     <hr/>
-                    <p>Favourite genre: <p>{data?.FavGenre}</p></p>
-                    <p>Favourite actor: <Link to={"/actors/"+data?.FavActor}>{data?.FavActor}</Link></p>
-                    <p>Favourite film: <Link to={"/films/"+data?.FavFilm}>{data?.FavFilm}</Link></p>
+                    <p>{GetLang().Favourite_genre}: <p>{data?.FavGenre}</p></p>
+                    <p>{GetLang().Favourite_actor}: <Link to={"/actors/"+data?.FavActor}>{data?.FavActor}</Link></p>
+                    <p>{GetLang().Favourite_film}: <Link to={"/films/"+data?.FavFilm}>{data?.FavFilm}</Link></p>
                 </div>
             </div>
         </div>

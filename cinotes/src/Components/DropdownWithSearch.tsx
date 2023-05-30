@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {GetLang, SetLang} from "../Utilities/Lang";
 interface DropdownWithSearchProps {
     options: string[];
     onSelect: (option: string) => void;
@@ -30,7 +31,7 @@ const DropdownWithSearch : React.FC<DropdownWithSearchProps> = ({options, onSele
                 value={selectedOption}
                 onChange={(e) => handleSelect(e.target.value)}
             >
-                <option value="">Select an option</option>
+                <option value="">{GetLang().Select_an_option}</option>
                 {filteredOptions.map((option) => (
                     <option key={option} value={option}>
                         {option}

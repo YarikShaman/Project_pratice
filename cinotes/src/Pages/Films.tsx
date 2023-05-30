@@ -5,6 +5,7 @@ import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import '../CustomStyles.css';
 import {Navigate, useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {CheckJWT} from "../Utilities/CheckJWT";
 
@@ -226,13 +227,13 @@ export function Films() {
                             type={"text"}/>
                         <button
                             className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            type={"submit"} onClick={() => {setIsSearch(true);saveFilmNameToCookie()}}>Search
+                            type={"submit"} onClick={() => {setIsSearch(true);saveFilmNameToCookie()}}>{GetLang().Search}
                         </button>
                     </div>
                     <div className={"text-white"}>
-                        <p className={"text-center text-xl m-3"}>Filtration</p>
+                        <p className={"text-center text-xl m-3"}>{GetLang().Filtration}</p>
                         <div className={"m-5 flex flex-row"}>
-                            <p className={"m-2 w-5/12"}>Date from </p>
+                            <p className={"m-2 w-5/12"}>{GetLang().Date_from}</p>
                             <select className={"bg-slate-700 custom-select"}
                                     id={"selectedFDate"}
                                     value={selectedFDate}
@@ -242,7 +243,7 @@ export function Films() {
 
                         </div>
                         <div className={"m-5 flex flex-row"}>
-                            <p className={"m-2 w-4/12"}>to</p>
+                            <p className={"m-2 w-4/12"}>{GetLang().To}</p>
                             <select className={"bg-slate-700 custom-select"}
                                     value={selectedSDate}
                                     id={"selectedSDate"}
@@ -250,52 +251,52 @@ export function Films() {
                                 <option value="-">-</option>
                                 {dates}</select></div>
                         <div className={"m-5 flex flex-row"}>
-                            <p className={"m-2 w-4/12"}>Genre</p> <select className={"bg-slate-700 custom-select"}
+                            <p className={"m-2 w-4/12"}>{GetLang().Genre}</p> <select className={"bg-slate-700 custom-select"}
                                                                           value={selectedGenre}
                                                                           onChange={(e) => setSelectedGenre(e.target.value)}>
                             <option value="-">-</option>
                             {genres}</select>
                         </div>
                         <div className={"m-5 flex flex-row"}>
-                            <p className={"m-2 w-4/12"}>Country</p>
+                            <p className={"m-2 w-4/12"}>{GetLang().Country}</p>
                             <select className={"bg-slate-700 custom-select"} value={selectedCountry}
                                     id={"selectedCountry"}
                                     onChange={(e) => setSelectedCountry(e.target.value)}>
                                 <option value="-">-</option>
                                 {countries}</select>
                         </div>
-                        <p className={"text-center text-xl m-3"}>Sorting</p>
+                        <p className={"text-center text-xl m-3"}>{GetLang().Sorting}</p>
                         <input className={"m-2 ml-8"} name={"sortBy"} id={"selectedCountry"} type={"radio"} value={"date"}
                                onChange={handleSortByChange}/>
-                        <label className={"m-2"}>By Date</label><br/>
+                        <label className={"m-2"}>{GetLang().By_date}</label><br/>
                         <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"imdbRate"}
                                onChange={handleSortByChange}/>
-                        <label className={"m-2"}>By IMDb rating</label><br/>
+                        <label className={"m-2"}>{GetLang().By_IMDb_rating}</label><br/>
                         <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"rate"}
                                onChange={handleSortByChange}/>
-                        <label className={"m-2"}>By user rating</label><br/>
+                        <label className={"m-2"}>{GetLang().By_user_rating}</label><br/>
                         <input className={"m-2 ml-8"} name={"sortBy"} type={"radio"} value={"num"}
                                onChange={handleSortByChange}/>
-                        <label className={"m-2"}>By number of ratings</label><br/>
+                        <label className={"m-2"}>{GetLang().By_number_of_ratings}</label><br/>
                         <hr/>
                         <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"as"}
                                onChange={handleSortChange}/>
-                        <label className={"m-2"}>Ascending</label><br/>
+                        <label className={"m-2"}>{GetLang().Ascending}</label><br/>
                         <input className={"m-2 ml-8"} name={"sort"} type={"radio"} value={"des"}
                                onChange={handleSortChange}/>
-                        <label className={"m-2"}>Descending</label><br/>
+                        <label className={"m-2"}>{GetLang().Descending}</label><br/>
                         <hr/>
                         <button onClick={() => setChange(!change)}
                                 id={"filtrateButton"}
-                                className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Filtrate
+                                className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>{GetLang().Filtrate}
                         </button>
                         <button onClick={() => hideMenu()}
-                                className={"md:hidden fixed right-0 bottom-0 rounded-full bg-gray-700 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
+                                className={"md:hidden fixed right-0 bottom-0 rounded-full bg-gray-700 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>{GetLang().Search}
                         </button>
                     </div>
                 </div>
                 <button onClick={() => sideMenu()}
-                        className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>Search
+                        className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>{GetLang().Search}
                 </button>
                 <div id={"films"}
                      className="flex flex-row justify-center mt-[15%] md:mt-[4%] justify-self-center h-auto flex-wrap">

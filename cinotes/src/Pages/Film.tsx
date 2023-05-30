@@ -83,12 +83,12 @@ export function Film() {
                 <button onClick={() => {
                 }}
                         className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
-                    Delete
+                    {GetLang().Delete}
                 </button>
                 <button onClick={() => {
                 }}
                         className={"w-1/3 bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
-                    Edit
+                    {GetLang().Edit}
                 </button>
             </>
         )
@@ -178,7 +178,7 @@ export function Film() {
                                 {tools}
                                 <button
                                     className={"w-1/2  bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
-                                    Add to playlist
+                                    {GetLang().Add_to_playlist}
                                 </button>
                             </div>
                         </div>
@@ -187,16 +187,16 @@ export function Film() {
                                 <img className={"rounded-xl  w-[500px]"} src={film?.poster_file}/>
                             </div>
                             <div className={"mx-5 p-3 w-full text-[24px]"}>
-                                <p className="pt-0"><b>Genres:</b> {film?.genres.map(genre => genre.title).join(', ')}
+                                <p className="pt-0"><b>{GetLang().Genres}:</b> {film?.genres.map(genre => genre.title).join(', ')}
                                 </p>
-                                <p className="pt-3"><b>Release date:</b> {film?.release_date}</p>
-                                <p className="pt-3"><b>Country:</b> {film?.country}</p>
-                                <p className="pt-3"><b>User rating:</b> {film?.rating}</p>
-                                <p className="pt-3"><b>Imdb rating:</b> {film?.imdb_rating}</p>
-                                <p className="pt-3"><b>Director:</b> {film?.director}</p>
-                                <p className="pt-3"><b>Studio:</b> {film?.studio}</p>
-                                <p className="pt-3"><b>Age restriction:</b> {film?.content_rating}</p>
-                                <p className="pt-3"><b>Description:</b> {film?.description}</p>
+                                <p className="pt-3"><b>{GetLang().Release_date}:</b> {film?.release_date}</p>
+                                <p className="pt-3"><b>{GetLang().Country}:</b> {film?.country}</p>
+                                <p className="pt-3"><b>{GetLang().Rating}:</b> {film?.rating}</p>
+                                <p className="pt-3"><b>{GetLang().IMDb_rating}:</b> {film?.imdb_rating}</p>
+                                <p className="pt-3"><b>{GetLang().Director}:</b> {film?.director}</p>
+                                <p className="pt-3"><b>{GetLang().Studio}:</b> {film?.studio}</p>
+                                <p className="pt-3"><b>{GetLang().Age_restriction}:</b> {film?.content_rating}</p>
+                                <p className="pt-3"><b>{GetLang().Description}:</b> {film?.description}</p>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@ export function Film() {
                         }</div>
                 </div>
                 <div className={"flex w-full  my-2 self-center flex-col"}>
-                    <div className={"text-[42px] mt-[40px] text-center"}>The cast</div>
+                    <div className={"text-[42px] mt-[40px] text-center"}>{GetLang().The_cast}</div>
                     <div className={"flex flex-row justify-center mt-[40px]"}>
                         {
                             film?.actors.map(actor => {
@@ -230,12 +230,12 @@ export function Film() {
                         <button id="reviews" onClick={() => setIsReview(true)}
                                 style={{backgroundColor: "rgb(31 41 55)"}}
                                 className={" text-[20px] px-5 py-2 "}>
-                            Reviews
+                            {GetLang().Reviews}
                         </button>
                         <button id="my_notes" onClick={() => setIsReview(false)}
                                 style={{backgroundColor: "rgb(62 82 110)"}}
                                 className={"text-[20px] px-5 py-2 "}>
-                            My notes
+                            {GetLang().My_notes}
                         </button>
                     </div>
                     <div className={"m-4 flex flex-row"}>
@@ -244,11 +244,11 @@ export function Film() {
                         <div className={"w-[20%]"}>
                             <button id={"review_add"} onClick={Add_Review}
                                     className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
-                                Add public review
+                                {GetLang().Add_public_review}
                             </button>
                             <button id={"note_add"} onClick={Add_Note}
                                     className={"m-4 bg-black h-[40px] rounded-xl w-[140px]"}>
-                                Add private note
+                                {GetLang().Add_private_note}
                             </button>
                         </div>
                     </div>

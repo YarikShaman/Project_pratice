@@ -4,6 +4,7 @@ import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import logo from "../Img/logo.png"
+import {GetLang, SetLang} from "../Utilities/Lang";
 
 function MainPage() {
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
@@ -39,12 +40,12 @@ function MainPage() {
 
                         className="block w-full">
                         <a className="self-center text-white text-[40px] font-mono text-center font-semibold flex flex-col">
-                            <br/>Не знаєш чого-б подивитися? Тобі до нас!<br/>
-                            У Cinotes одна з найбільших баз<br/>
-                            фільмів усіх часів та країн.<br/>
-                            Тут можна обрати фільм собі до душі<br/>
-                            та поділитися своїми враженнями з іншими,<br/>
-                            або залишити їх тільки для себе<br/>
+                            <br/>{GetLang().Main_page_welcome_text_1}<br/>
+                            {GetLang().Main_page_welcome_text_2}<br/>
+                            {GetLang().Main_page_welcome_text_3}<br/>
+                            {GetLang().Main_page_welcome_text_4}<br/>
+                            {GetLang().Main_page_welcome_text_5}<br/>
+                            {GetLang().Main_page_welcome_text_6}<br/>
                         </a>
                     </div>
 
@@ -61,8 +62,7 @@ function MainPage() {
                         })
                     }
                     <a style={{fontFamily: "fantasy"}}
-                       className="self-center object-center text-white text-[40px] mr-[10%] text-center  italic">Хіти
-                        серед<br/>новинок!</a>
+                       className="self-center object-center text-white text-[40px] mr-[10%] text-center  italic">{GetLang().Main_page_hits_text_1}<br/>{GetLang().Main_page_hits_text_2}!</a>
                 </div>
                 {/*"repeating-linear-gradient(45deg, rgba(64, 64, 64, 1) 1px, rgba(85, 85, 135, 1) 200px)"*/}
                 <div
@@ -70,8 +70,7 @@ function MainPage() {
                     style={{background: "rgba(205, 205, 5, 0.07)"}}
                     className="flex flex-row w-[100%] self-end mt-[100px] border-[rgba(0,0,0,0.4)] border-t-8 border-b-8 py-12 px-[6%] flex-wrap justify-around">
                     <a style={{fontFamily: "fantasy"}}
-                       className="self-center text-white text-[40px]  text-center w-grow  italic">Найпопулярніші<br/><br/>фільми
-                        за<br/><br/>версією IMDB</a>
+                       className="self-center text-white text-[40px]  text-center w-grow  italic">{GetLang().Main_page_populars_text_1}<br/><br/>{GetLang().Main_page_populars_text_2}<br/><br/>{GetLang().Main_page_populars_text_3}</a>
                     {
                         films.iFilms?.map(film => {
                             return <>
@@ -90,7 +89,7 @@ function MainPage() {
                         })
                     }
                     <a style={{fontFamily: "fantasy"}}
-                       className="self-center text-white text-[40px]  text-center w-grow  italic">Фільми, що<br/>сподобались<br/>нашим<br/>користувачам</a>
+                       className="self-center text-white text-[40px]  text-center w-grow  italic">{GetLang().Main_page_liked_text_1}<br/>{GetLang().Main_page_liked_text_2}<br/>{GetLang().Main_page_liked_text_3}<br/>{GetLang().Main_page_liked_text_4}</a>
                 </div>
 
             </div>

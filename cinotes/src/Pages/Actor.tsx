@@ -4,6 +4,7 @@ import {DecodeB64} from "../Utilities/DecodeB64";
 import axios from "axios";
 import {HomeHeader} from "../Components/HomeHeader";
 import {FilmInActor} from "../Components/FIlmInActors";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {CheckJWT} from "../Utilities/CheckJWT";
 
 interface Actor {
@@ -38,11 +39,11 @@ export function Actor() {
             <>
                 <button
                     className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
-                    Delete
+                    {GetLang().Delete}
                 </button>
                 <button
                     className={"w-1/3 bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
-                    Edit
+                    {GetLang().Edit}
                 </button>
             </>
         )
@@ -86,15 +87,15 @@ export function Actor() {
                                 <img className={"rounded-xl  w-[500px]"} src={actor?.photo_file}/>
                             </div>
                             <div className={"mx-5 p-3 w-full text-[24px]"}>
-                                <p className="pt-0"><b>Birth date:</b> {actor?.birth_date}</p>
-                                <p className="pt-3"><b>Death date:</b> {alive}</p>
-                                <p className="pt-3"><b>Description:</b> {actor?.description}</p>
+                                <p className="pt-0"><b>{GetLang().Birth_date}:</b> {actor?.birth_date}</p>
+                                <p className="pt-3"><b>{GetLang().Death_date}:</b> {alive}</p>
+                                <p className="pt-3"><b>{GetLang().Description}:</b> {actor?.description}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className={"flex w-full  my-2 self-center flex-col"}>
-                    <div className={"text-[42px] mt-[40px] text-center"}>Films</div>
+                    <div className={"text-[42px] mt-[40px] text-center"}>{GetLang().Films}</div>
                     <div className={"flex flex-row justify-center mt-[40px]"}>
                         {
                             actor?.films.map(films => {

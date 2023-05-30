@@ -7,6 +7,7 @@ import {ReactComponent as F_logo} from "../Img/F_Logo.svg";
 import {ReactComponent as G_logo} from "../Img/G_Logo.svg";
 import {useGoogleLogin} from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {useNavigate} from "react-router-dom";
 
@@ -25,19 +26,19 @@ function Author() {
             if (DecodeB64(res.data.jwt).isVerified == "false")
                 axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + res.data.jwt}})
                     .then(resp => {
-                        alert("Account is successfully created")
+                        alert(GetLang().Account_created)
                         nav("ver")
                     })
                     .catch(err => {
                         switch (err.response.status) {
                             case 400:
-                                setError("bad data (validation error)");
+                                setError(GetLang().Bad_data_validation_error);
                                 break;
                             case 417:
-                                setError("This email is no more available");
+                                setError(GetLang().Email_not_available);
                                 break;
                             case 500:
-                                alert("Account is successfully created, but email-verification server do not response, try to verify later");
+                                alert(GetLang().Account_created_without_verification);
                                 break;
                         }
                     })
@@ -46,13 +47,13 @@ function Author() {
             console.log(err.response.status);
             switch (err.response.status) {
                 case 403:
-                    setError("Wrong password, try again");
+                    setError(GetLang().Wrong_password);
                     break;
                 case 404:
-                    setError("No such user, please register an account or check the email");
+                    setError(GetLang().No_such_user);
                     break;
                 case 500:
-                    setError("Server do not response, try later");
+                    setError(GetLang().Server_do_not_response);
                     break;
             }
         });
@@ -70,10 +71,10 @@ function Author() {
             console.log(err.response.status);
             switch (err.response.status) {
                 case 404:
-                    setError("No such email, set correct email to recover password");
+                    setError(GetLang().No_such_email);
                     break;
                 case 500:
-                    setError("Server do not response, try later");
+                    setError(GetLang().Server_do_not_response);
                     break;
             }
         });
@@ -91,13 +92,13 @@ function Author() {
                 }, err => {
                     switch (err.response.status) {
                         case 404:
-                            setError("No such user, please register an account");
+                            setError(GetLang().No_such_user);
                             break;
                         case 500:
-                            setError("Server do not response, try later");
+                            setError(GetLang().Server_do_not_response);
                             break;
                         case 503:
-                            setError("Google do not response, try later");
+                            setError(GetLang().Google_do_not_response);
                             break;
                     }
                 })
@@ -121,7 +122,7 @@ function Author() {
                         />
                     </Link>
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-                        Sign in to your account
+                        {GetLang().Sign_in_to_account}
                     </h2>
                 </div>
 
@@ -132,7 +133,7 @@ function Author() {
                     }} action="#" method="POST">
                         <div>
                             <label htmlFor="login" className="block text-sm font-medium leading-6 text-white">
-                                Login
+                                {GetLang().Login}
                             </label>
                             <div className="mt-2">
                                 <input onChange={(e) => {
@@ -151,13 +152,13 @@ function Author() {
                         <div>
                             <div className="flex items-center justify-between">
                                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
-                                    Password
+                                    {GetLang().Password}
                                 </label>
                                 <div className="text-sm">
                                     <a onClick={() => {
                                         Recovery()
                                     }} className="font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer">
-                                        Forgot password?
+                                        {GetLang().Forgot_password}
                                     </a>
                                 </div>
                             </div>
@@ -181,21 +182,21 @@ function Author() {
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                                Sign in
+                                {GetLang().Sign_in}
                             </button>
                         </div>
                     </form>
 
                     <p className="mt-10 mb-5 text-center text-sm text-gray-500">
-                        Don`t have an account?{' '}
+                        {GetLang().Do_not_have_an_account}{' '}
                         <a href="/reg" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                            Register now!
+                            {GetLang().Register_now}
                         </a>
                     </p>
                     <span className={"flex flex-col "}>
                         <a onClick={() => signIn()}
                            className={"flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}><G_logo
-                            className={"mr-2 w-6 h-auto inline"}/>Sign in with Google</a>
+                            className={"mr-2 w-6 h-auto inline"}/>{GetLang().Sign_in_with_Google}</a>
                         <FacebookLogin
                             className="flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             appId="268389395613658"
@@ -210,18 +211,18 @@ function Author() {
                                 }, err => {
                                     switch (err.response.status) {
                                         case 404:
-                                            setError("No such user, please register an account");
+                                            setError(GetLang().No_such_user);
                                             break;
                                         case 500:
-                                            setError("Server do not response, try later");
+                                            setError(GetLang().Server_do_not_response);
                                             break;
                                         case 503:
-                                            setError("Facebook do not response, try later");
+                                            setError(GetLang().Facebook_do_not_response);
                                             break;
                                     }
                                 })
                             }}
-                        ><F_logo className={"mr-2 w-6 h-auto inline"}/>Sign in with Facebook</FacebookLogin>
+                        ><F_logo className={"mr-2 w-6 h-auto inline"}/>{GetLang().Sign_in_with_Facebook}</FacebookLogin>
                     </span>
                 </div>
             </div>

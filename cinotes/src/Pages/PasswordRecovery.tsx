@@ -5,6 +5,7 @@ import logo from "../Img/logo.png";
 import axios from "axios";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {CheckPas} from "../Utilities/CheckPas";
 
 function PRec() {
@@ -30,7 +31,7 @@ function PRec() {
                             alt="Cinotes"
                         /></Link>
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
-                        Password recovery
+                        {GetLang().Password_recovery}
                     </h2>
                 </div>
 
@@ -38,40 +39,39 @@ function PRec() {
                 <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
 
                     <label className="block text-sm font-medium leading-6 text-white">
-                        E-mail
+                        {GetLang().Email}
                     </label>
                     <a className="text-neutral-300 mt-2 p-1.5 pl-2 block w-full bg-slate-800 rounded select-none">{localStorage["email"]}</a>
 
                     <div className="block flex mt-10 flex-row w-full justify-between">
-                        <a className="text-white font-semibold">We sent verification code on<br/> your e-mail. Confirm
-                            it to continue</a>
+                        <a className="text-white font-semibold">{GetLang().Sent_code_text_1}<br/> {GetLang().Sent_code_text_2}</a>
                         <button
                             id="resend_but"
                             onClick={() => {
                                 axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/send", {
                                     email: localStorage["email"]
                                 }).then(res => {
-                                    alert("Email successfully resent!");
+                                    alert(GetLang().Email_successfully_resent);
                                 }, err => {
                                     console.log(err.response.status);
                                     switch (err.response.status) {
                                         case 404:
-                                            alert("No such email, set correct email to recover password");
+                                            alert(GetLang().No_such_email);
                                             break;
                                         case 500:
-                                            alert("Server do not response, try later");
+                                            alert(GetLang().Server_do_not_response);
                                             break;
                                     }
                                 });
                             }}
                             className="rounded-md bg-indigo-600 px-3 py-1.5 text-sm h-2/3 self-center font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500  focus-visible:outline-indigo-600">
-                            Resend code
+                            {GetLang().Resend_code}
                         </button>
                     </div>
 
                     <div className="flex flex-row mt-14 justify-center space-x-10">
                         <label htmlFor="login" className="self-center text-2xl font-medium leading-6 text-white">
-                            Code
+                            {GetLang().Code}
                         </label>
                         <div className="mt-2 flex flex-row">
                             <input onChange={(e) => {
@@ -102,7 +102,7 @@ function PRec() {
                                 console.log(res)
                                 //@ts-ignore
                                 document.getElementById("errorCode").style.color = "green"
-                                setErrorCode("Code confirmed");
+                                setErrorCode(GetLang().Code_confirmed);
                                 //@ts-ignore
                                 document.getElementById("conf_but").disabled = true;
                                 //@ts-ignore
@@ -117,26 +117,26 @@ function PRec() {
                                 console.log(err.response.status);
                                 switch (err.response.status) {
                                     case 404:
-                                        setErrorCode("No such email, set correct email to recover password");
+                                        setErrorCode(GetLang().No_such_email);
                                         break;
                                     case 417:
-                                        setErrorCode("Wrong code");
+                                        setErrorCode(GetLang().Wrong_code);
                                         break;
                                     case 500:
-                                        setErrorCode("Server do not response, try later");
+                                        setErrorCode(GetLang().Server_do_not_response);
                                         break;
                                 }
                             });
                         }}
                         className="flex w-full mt-14 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                        Confirm code
+                        {GetLang().Confirm_code}
                     </button>
 
                     <div id="passes" className="mt-16">
                         <div className="flex items-center justify-between">
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
-                                New password
+                                {GetLang().New_password}
                             </label>
                         </div>
                         <div className="mt-2">
@@ -152,7 +152,7 @@ function PRec() {
                         <div className={"text-red-700"}>{error1}</div>
                         <div className="flex mt-6 items-center justify-between">
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-white">
-                                Repeat new password
+                                {GetLang().Repeat_new_password}
                             </label>
                         </div>
                         <div className="mt-2">
@@ -173,7 +173,7 @@ function PRec() {
                             onClick={() => {
                                 setError1(CheckPas(password1).res)
                                 if (password2 != password1)
-                                    setError2("Wrong repeat")
+                                    setError2(GetLang().Wrong_repeat)
                                 else {
                                     setError2("")
                                     if (CheckPas(password1).code === 0) {
@@ -181,16 +181,16 @@ function PRec() {
                                         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/change", {
                                             password: password1
                                         }, config).then(res => {
-                                            alert("Password successfully changed");
+                                            alert(GetLang().Password_successfully_changed);
                                             nav("/sign_in")
                                         }, err => {
                                             console.log(err.response);
                                             switch (err.response.status) {
                                                 case 400:
-                                                    setError1("password validation error");
+                                                    setError1(GetLang().Password_validation_error);
                                                     break;
                                                 case 500:
-                                                    setError1("Server do not response, try later");
+                                                    setError1(GetLang().Server_do_not_response);
                                                     break;
                                             }
                                         });
@@ -200,7 +200,7 @@ function PRec() {
                             }}
                             className="flex w-full mt-14 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
-                            Set new password
+                            {GetLang().Set_new_password}
                         </button>
                     </div>
                 </div>

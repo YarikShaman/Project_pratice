@@ -3,6 +3,7 @@ import '../App.css';
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import logo from "../Img/logo.png";
+import {GetLang, SetLang} from "../Utilities/Lang";
 
 export function Ver() {
     const [code, setCode] = useState(1);
@@ -13,16 +14,16 @@ export function Ver() {
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
             .then(res => {
-                alert("Successfully verified. Sign in with the verified email")
+                alert(GetLang().Successfully_verified)
                 nav("../account")
             })
             .catch(err => {
                 switch (err.response.status) {
                     case 403:
-                        setError("Wrong code");
+                        setError(GetLang().Wrong_code);
                         break;
                     case 500:
-                        alert("Account is successfully created, but email-verification server do not response, try to verify later");
+                        alert(GetLang().Account_created_without_verification);
                         break;
                 }
             })
@@ -41,9 +42,8 @@ export function Ver() {
                         alt="Cinotes"
                     />
                 </Link>
-                <h1 className="m-2 self-center text-3xl font-bold"> Verification</h1>
-                <h1 className="mt-6 self-center text-xl font-bold w-2/3 text-center"> Confirm your e-mail. We send
-                    verification code to your e-mail. <br/>After verification registration will be finished.</h1>
+                <h1 className="m-2 self-center text-3xl font-bold">{GetLang().Verification}</h1>
+                <h1 className="mt-6 self-center text-xl font-bold w-2/3 text-center">{GetLang().Confirm_email}<br/>{GetLang().Verification_will_be_finished}</h1>
                 <input onChange={(e) => {
                     setError("")
                     setCode(Number(e.target.value))
@@ -55,26 +55,26 @@ export function Ver() {
                     <button onClick={() => {
                         Verify()
                     }} className=" self-center hover:bg-neutral-600 h-10 w-28 bg-neutral-500 rounded">
-                        Confirm
+                        {GetLang().Confirm}
                     </button>
                     <button onClick={() => {
                         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
                             .then(resp => {
-                                alert("Account is successfully created")
+                                alert(GetLang().Account_created)
                                 nav("ver")
                             })
                             .catch(err => {
                                 switch (err.response.status) {
                                     case 417:
-                                        alert("This email is not available");
+                                        alert(GetLang().Email_not_available);
                                         break;
                                     case 500:
-                                        alert("Server do not response, try to verify later");
+                                        alert(GetLang().Server_do_not_response);
                                         break;
                                 }
                             })
                     }} className="self-center hover:bg-neutral-600 h-10 w-28 bg-neutral-500 rounded">
-                        Resend code
+                        {GetLang().Resend_code}
                     </button>
                 </div>
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import DropdownWithSearch from "../../Components/DropdownWithSearch";
 import {toBase64} from "js-base64";
 import {useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../../Utilities/DecodeB64";
 import {CheckJWT} from "../../Utilities/CheckJWT";
 
@@ -168,9 +169,9 @@ export function APanel() {
             <HomeHeader/>
             <div
                 className={"grid grid-cols-2 col-start-1 content-start gap-4 mt-[20%] md:mt-[10%] text-white justify-items-center"}>
-                <div className="col-span-2 text-2xl">Film Addition</div>
+                <div className="col-span-2 text-2xl">{GetLang().Film_addition}</div>
                 <div className="flex flex-col w-full space-y-2">
-                    <p className={"m-2"}>Title</p>
+                    <p className={"m-2"}>{GetLang().Title}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -178,7 +179,7 @@ export function APanel() {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="Title"
                     />
-                    <p className={"m-2"}>Poster Image</p>
+                    <p className={"m-2"}>{GetLang().Poster_image}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type={"file"}
@@ -186,7 +187,7 @@ export function APanel() {
                         onChange={(e) => handleAddPoster(e)}
                         placeholder="Poster image"
                     />
-                    <p className={"m-2"}>Rating</p>
+                    <p className={"m-2"}>{GetLang().Rating}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -194,7 +195,7 @@ export function APanel() {
                         onChange={(e) => setRating(e.target.value)}
                         placeholder="Rating"
                     />
-                    <p className={"m-2"}>IMDb id</p>
+                    <p className={"m-2"}>{GetLang().IMDb_id}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -202,7 +203,7 @@ export function APanel() {
                         onChange={(e) => setImdb_id(e.target.value)}
                         placeholder="IMDb id"
                     />
-                    <p className={"m-2"}>Genre</p>
+                    <p className={"m-2"}>{GetLang().Genre}</p>
                     <DropdownWithSearch options={genreOptions.map((genre) => genre.title)} onSelect={setGenre}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
@@ -213,20 +214,20 @@ export function APanel() {
                             }
                         }}
                     >
-                        Add genre
+                        {GetLang().Add_genre}
                     </button>
 
-                    <h1>Genres Arrey:</h1>
+                    <h1>{GetLang().Genres_list}:</h1>
                     <ul>
                         {genres.map((genre, index) => (
                             <li key={index}>
-                                PK: {genre.pk}, Title: {genre.title}
+                                {GetLang().PK}: {genre.pk}, {GetLang().Title}: {genre.title}
                             </li>
                         ))}
                     </ul>
                 </div>
                 <div className="flex flex-col w-full space-y-2">
-                    <p className={"m-2"}>Actor</p>
+                    <p className={"m-2"}>{GetLang().Actor}</p>
                     <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
@@ -237,34 +238,34 @@ export function APanel() {
                             }
                         }}
                     >
-                        Add Actor
+                        {GetLang().Add_actor}
                     </button>
 
-                    <h1>Actors Array:</h1>
+                    <h1>{GetLang().Actors_list}:</h1>
                     <ul>
                         {actors.map((actor, index) => (
                             <li key={index}>
-                                PK: {actor.pk}, Name: {actor.name}, Photo: {actor.photo_file}, URL: {actor.url}
+                                {GetLang().PK}: {actor.pk}, {GetLang().Name}: {actor.name}, {GetLang().Photo}: {actor.photo_file}, {GetLang().URL}: {actor.url}
                             </li>
                         ))}
                     </ul>
                 </div>
                 <div className="flex flex-col w-full space-y-2">
-                    <p className={"m-2"}>Country</p>
+                    <p className={"m-2"}>{GetLang().Country}</p>
                     <DropdownWithSearch options={countryOptions} onSelect={setCountry}/>
                     <button
                         className="bg-gray-600 px-4 py-2 rounded-md"
                         onClick={handleAddCountry}
                     >
-                        Add Country
+                        {GetLang().Add_country}
                     </button>
-                    <h1>Countries Array:</h1>
+                    <h1>{GetLang().Countries_list}:</h1>
                     <ul>
                         {countries?.map((value, index) => (
                             <li key={index}>{value}</li>
                         ))}
                     </ul>
-                    <p className={"m-2"}>Release date</p>
+                    <p className={"m-2"}>{GetLang().Release_date}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="date"
@@ -272,7 +273,7 @@ export function APanel() {
                         onChange={(e) => setRelease_date(e.target.value)}
                         placeholder="Release date"
                     />
-                    <p className={"m-2"}>Director</p>
+                    <p className={"m-2"}>{GetLang().Director}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -282,7 +283,7 @@ export function APanel() {
                     />
                 </div>
                 <div className="flex flex-col w-full space-y-2">
-                    <p className={"m-2"}>Description</p>
+                    <p className={"m-2"}>{GetLang().Description}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -290,7 +291,7 @@ export function APanel() {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Description"
                     />
-                    <p className={"m-2"}>Age restriction</p>
+                    <p className={"m-2"}>{GetLang().Age_restriction}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -298,7 +299,7 @@ export function APanel() {
                         onChange={(e) => setAge_restriction(e.target.value)}
                         placeholder="Age restriction"
                     />
-                    <p className={"m-2"}>Studio</p>
+                    <p className={"m-2"}>{GetLang().Studio}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type="text"
@@ -306,7 +307,7 @@ export function APanel() {
                         onChange={(e) => setStudio(e.target.value)}
                         placeholder="Studio"
                     />
-                    <p className={"m-2"}>Screenshot</p>
+                    <p className={"m-2"}>{GetLang().Screenshot}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
                         type={"file"}
@@ -315,7 +316,7 @@ export function APanel() {
                             handleAddScreenshot(e)
                         }}
                     />
-                    <h1>Screenshots Array:</h1>
+                    <h1>{GetLang().Screenshots_list}:</h1>
                     <ul>
                         {screenshots?.map((value, index) => (
                             <li key={index}>{value.name}</li>
@@ -325,55 +326,55 @@ export function APanel() {
                         className="bg-gray-600 px-4 py-2 rounded-md"
                         onClick={handleAddScreenshots}
                     >
-                        Add Screenshot
+                        {GetLang().Add_screenshot}
                     </button>
                 </div>
-                <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">Add film</button>
+                <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_film}</button>
             </div>
             <div className={"text-white mt-[10%]"}>
-                <div className={"text-2xl"}>Actor addiction</div>
-                <p>Name</p>
+                <div className={"text-2xl"}>{GetLang().Actor_addition}</div>
+                <p>{GetLang().Name}</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
                        value={actor}
                        onChange={(e) => setActor(e.target.value)}
                        type="text"/>
-                <p>Birth date</p>
+                <p>{GetLang().Birth_date}</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
                        onChange={(e) => setBirth(e.target.value)}
                        value={birth}
                        type="date"/>
-                <p>Death date</p>
+                <p>{GetLang().Death_date}</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
                        onChange={(e) => setDeath(e.target.value)}
                        value={death}
                        type="date"/>
-                <p>Description</p>
+                <p>{GetLang().Description}</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
                        onChange={(e) => setActorDescription(e.target.value)}
                        value={actorDescription}
                        type="text"/>
-                <p>Photo</p>
+                <p>{GetLang().Photo}</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
                        value={actorPhoto}
                        onChange={(e) => handleAddPhoto(e)}
                        type={"file"}
                        accept={"image/* "}/>
-                <p>Films</p>
+                <p>{GetLang().Films}</p>
                 <DropdownWithSearch options={filmsOptions.map((film) => film.title)} onSelect={setFilm}/>
                 <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {
                     const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
                     if (foundFilm) {
                         setFilms([...films, foundFilm])
                     }
-                }}>Add Film
+                }}>{GetLang().Add_film}
                 </button>
-                <h1>Films Array:</h1>
+                <h1>{GetLang().Films_list}:</h1>
                 <ul>
                     {films?.map((value, index) => (
                         <li key={index}>{value.title}</li>
                     ))}
                 </ul>
-                <button className="bg-gray-600 px-4 py-2 rounded-md">Add actor</button>
+                <button className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
             </div>
         </div>
     )

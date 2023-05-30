@@ -4,6 +4,7 @@ import {HomeHeader} from "../Components/HomeHeader";
 import {ActorInActors} from "../Components/ActorInActors";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {CheckJWT} from "../Utilities/CheckJWT";
 
@@ -46,7 +47,7 @@ export function Actors() {
                     type={"text"}/>
                 <button
                     className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    type={"submit"} onClick={() => setIsSearch(true)}>Search
+                    type={"submit"} onClick={() => setIsSearch(true)}>{GetLang().Search}
                 </button>
             </div>
             <div id={"actors"} className="flex w-5/6 flex-row h-auto justify-center flex-wrap">

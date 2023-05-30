@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.css';
 import {HomeHeader} from "../Components/HomeHeader";
 import {useNavigate} from "react-router-dom";
+import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {CheckJWT} from "../Utilities/CheckJWT";
 
@@ -15,7 +16,7 @@ export function Prem() {
             className="min-h-screen w-full">
             <HomeHeader/>
             <body className="App-body">
-            Premium
+            {GetLang().Premium}
             </body>
             <footer className="App-footer">
 

@@ -141,7 +141,7 @@ export function HomeHeader() {
                                     }
                                 })
                         }} className="font-semibold self-center leading-6 text-indigo-600 hover:text-indigo-500">
-                            Verify this account
+                            {GetLang().Verify_account}
                         </a>
                         <div
                             className="flex flex-col mt-3 overflow-hidden rounded-xl border-2 border-slate-700 hover:border-slate-600 h-10"
