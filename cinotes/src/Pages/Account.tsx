@@ -8,6 +8,7 @@ import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import {GetLang} from "../Utilities/Lang";
 import {CheckJWT} from "../Utilities/CheckJWT";
+import DropdownWithSearch from "../Components/DropdownWithSearch";
 
 export function Account() {
     const nav = useNavigate()
@@ -19,11 +20,40 @@ export function Account() {
     const [filmS, setFilmS] = useState("");
     const [genreS, setGenreS] = useState("")
     const [actorS, setActorS] = useState("")
+    const [actorsRaw, setActorsRaw] = useState<{ pk: string; name: string; photo_file: string; url: string; }[]>([]);
+    const [genreRaw, setGenreRaw] = useState<any[]>([])
     const [filmOptions, setFilmOptions] = useState<any[]>([]);
     const [genreOptions, setGenreOptions] = useState<any[]>([])
     const [actorOptions, setActorOptions] = useState<any[]>([])
 
 
+    function OpenEditor() {
+        //@ts-ignore
+        document.getElementById("accData").style.display = "none";
+        //@ts-ignore
+        document.getElementById("accDataEditor").style.display = "block";
+        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=1000", config)
+            .then((res) => {
+                console.log(res.data.results)
+                setGenreRaw(res.data.results)
+                setGenreOptions(res.data.results.map((genre: { title: any; }) => genre.title))
+                console.log(res.data.results.map((genre: { title: any; }) => genre.title))
+            })
+    }
+
+    function HideEditor() {
+        //@ts-ignore
+        document.getElementById("accDataEditor").style.display = "none";
+        //@ts-ignore
+        document.getElementById("accData").style.display = "block";
+    }
+    function SetFavorite() {
+        let data = new FormData();
+        if(genre) data.append("fav-genre",genre);
+        if(film) data.append("fav-film",film);
+        if(actor) data.append("fav-actor",actor);
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
+    }
     useEffect(() => {
         if (CheckJWT() != 0)
             nav("/sign_in")
@@ -44,7 +74,21 @@ export function Account() {
                         .then((resp) => {
                             setActor(resp.data.name)
                         })
+
                 })
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=500", config)
+                .then(res => {
+                    setFilmOptions(res.data.results.map((film: { url: any; title: any; }) => ({
+                        url: film.url.match(/\/films\/(\d+)\//)[1],
+                        title: film.title,
+                    })));
+
+                });
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
+                .then(res => {
+                    setActorsRaw(res.data.results);
+                    setActorOptions((res.data.results).map((actor: { name: any; }) => actor.name))
+                });
         }
     }, [])
     return (
@@ -88,79 +132,15 @@ export function Account() {
                     <div id="accDataEditor" style={{display: "none"}}
                          className="flex flex-col space-y-6 justify-between flex-wrap">
                         <p className="text-[25px]">{GetLang().Favourite_genre}</p>
-                        <select className="bg-slate-700 px-4 py-2 min-w-[300px]  rounded-md"
-                                value="select favorite genre"
-                        >
-                            <option value=""
-                                    onClick={(e) => {
-                                        console.log(1)
-                                        setGenreS(genre)
-                                    }}
-                            >
-                                {GetLang().Select_an_option}</option>
-                            {genreOptions.map((option) => (
-                                <option key={option.id} onSelect={(e)=>{
-                                    //setGenreS()
-                                    console.log(e.target)
-                                }} value={option.title}>
-                                    {option.title}
-                                </option>
-                            ))}
-                        </select>
+                        <DropdownWithSearch options={genreOptions} onSelect={setGenre}/>
 
                         <p className="text-[25px]">{GetLang().Favourite_actor}</p>
                         <div className="flex flex-row">
-                            <input className="bg-slate-700 px-4 py-2 rounded-md w-[250px]" onChange={() => {
-                                setTimeout(() => {
-
-                                }, 2000)
-                            }}/>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                 stroke="currentColor" className="w-12 h-12">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/>
-                            </svg>
-
-                            <select className="bg-slate-700 px-4 py-2 rounded-md min-w-[300px] w-grow"
-                                    value="select favorite genre"
-                                    onChange={(e) => {
-                                        setGenreS(e.target.value)
-                                    }}
-                            >
-                                <option value="">{GetLang().Select_an_option}</option>
-                                {actorOptions.map((option) => (
-                                    <option key={option.id} value={option.title}>
-                                        {option.title}
-                                    </option>
-                                ))}
-                            </select>
+                            <DropdownWithSearch options={actorOptions} onSelect={setActor}/>
                         </div>
                         <p className="text-[25px]">{GetLang().Favourite_film}</p>
                         <div className="flex flex-row">
-                            <input className="bg-slate-700 px-4 py-2 rounded-md w-[250px]" onChange={() => {
-                                setTimeout(() => {
-
-                                }, 2000)
-                            }}/>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                                 stroke="currentColor" className="w-12 h-12">
-                                <path strokeLinecap="round" strokeLinejoin="round"
-                                      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/>
-                            </svg>
-                            <select
-                                className="bg-slate-700 px-4 py-2 min-w-[300px] rounded-md"
-                                value="select favorite genre"
-                                onChange={(e) => {
-                                    setGenreS(e.target.value)
-                                }}
-                            >
-                                <option value="">{GetLang().Select_an_option}</option>
-                                {filmOptions.map((option) => (
-                                    <option key={option.id} value={option.title}>
-                                        {option.title}
-                                    </option>
-                                ))}
-                            </select>
+                            <DropdownWithSearch options={filmOptions.map((film) => film.title)} onSelect={setFilm}/>
                         </div>
                         <div className="flex flex-row justify-around">
                             <button
@@ -172,7 +152,8 @@ export function Account() {
                             </button>
                             <button
                                 onClick={() => {
-
+                                    SetFavorite();
+                                    HideEditor();
                                 }}
                                 className="h-12 w-40 rounded-3xl hover:border-2 text-[25px] bg-green-700">
                                 {GetLang().Edit}
@@ -184,24 +165,6 @@ export function Account() {
         </div>
     );
 
-    function OpenEditor() {
-        //@ts-ignore
-        document.getElementById("accData").style.display = "none";
-        //@ts-ignore
-        document.getElementById("accDataEditor").style.display = "block";
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=1000", config)
-            .then((res) => {
-                console.log(res.data.results)
-                setGenreOptions(res.data.results)
-            })
-    }
-
-    function HideEditor() {
-        //@ts-ignore
-        document.getElementById("accDataEditor").style.display = "none";
-        //@ts-ignore
-        document.getElementById("accData").style.display = "block";
-    }
 }
 
 
