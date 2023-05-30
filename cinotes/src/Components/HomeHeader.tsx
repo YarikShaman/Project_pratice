@@ -7,6 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {GetLang, SetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import axios from "axios";
+import {CheckJWT} from "../Utilities/CheckJWT";
 
 //let lang=GetLang();
 let c = 0
@@ -19,7 +20,7 @@ export function HomeHeader() {
     const [link, setLink] = useState("/sign_in")
     const [label, setLabel] = useState(GetLang().Sign_in)
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-    const nav=useNavigate()
+    const nav = useNavigate()
     const OpenMenu = () => {
         if (!mstate) {
             // @ts-ignore
@@ -35,44 +36,52 @@ export function HomeHeader() {
             mstate = false;
         }
     }
-    if (localStorage.getItem("language") != undefined) {
-        localStorage.setItem("language", "2")
-    }
 
-    SetLang(Number(localStorage.getItem("language")));
+
+    console.log(1)
+
     useEffect(() => {
-        if (localStorage["jwt"])
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
-                .then(res => {
-                    if (DecodeB64(localStorage["jwt"]).isVerified == true) {
-                        setLink("/account")
-                        setSourse(res.data.ImageLink)
-                    } else {
-                        setLink("/sign_in")
-                        setSourse(Acc)
-                    }
-                    setLabel(DecodeB64(localStorage["jwt"]).username)
-                })
-        else {
-            setLink("/sign_in")
-            setSourse(Acc)
+        let ignore = false
+        console.log(2)
+        if (!ignore) {
+            console.log(3)
+            if (localStorage.getItem("language") == undefined) {
+                localStorage.setItem("language", "2")
+            }
+            SetLang(Number(localStorage.getItem("language")));
+            if (CheckJWT() > 0) {
+                if (!ignore) {
+                    axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
+                        .then(res => {
+                            setLink("/account")
+                            setSourse(res.data.ImageLink)
+                            setLabel(DecodeB64(localStorage["jwt"]).username)
+                        })
+                }
+            } else {
+                setLink("/sign_in")
+                setSourse(Acc)
+            }
+            if (localStorage.getItem("language") == "2") {
+                let engm = document.getElementById("m1");
+                let ukrm = document.getElementById("m2");
+                let eng = document.getElementById("1");
+                let ukr = document.getElementById("2");
+                // @ts-ignore
+                engm.style.filter = "brightness(0.5)";
+                // @ts-ignore
+                ukrm.style.filter = "brightness(1.25)";
+                // @ts-ignore
+                eng.style.filter = "brightness(0.5)";
+                // @ts-ignore
+                ukr.style.filter = "brightness(1.25)";
+            }
         }
-        if (localStorage.getItem("language") == "2") {
-            let engm = document.getElementById("m1");
-            let ukrm = document.getElementById("m2");
-            let eng = document.getElementById("1");
-            let ukr = document.getElementById("2");
-            // @ts-ignore
-            engm.style.filter = "brightness(0.5)";
-            // @ts-ignore
-            ukrm.style.filter = "brightness(1.25)";
-            // @ts-ignore
-            eng.style.filter = "brightness(0.5)";
-            // @ts-ignore
-            ukr.style.filter = "brightness(1.25)";
-        }
+        return () => {
+            ignore = true;
+        };
     }, []);
-    if (localStorage["jwt"]!=undefined && DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
+    if (CheckJWT() != 1 && DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         apanel = (
             <Link className={"flex flex-grow"} to={"/a_panel"}>
@@ -125,12 +134,12 @@ export function HomeHeader() {
                         {apanel}
                     </div>
                     <div className="flex flex-row space-x-5">
-                        <a href="/ver" onClick={()=>{
+                        <a href="/ver" onClick={() => {
                             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
-                                .then(resp=>{
+                                .then(resp => {
                                     nav("ver")
                                 })
-                                .catch(err=>{
+                                .catch(err => {
                                     switch (err.response.status) {
                                         case 417:
                                             alert("Email of this account is unavailable");
@@ -214,6 +223,7 @@ export function HomeHeader() {
 function LangCh() {
     if (!localStorage.getItem("language")) {
         localStorage.setItem("language", "1")
+        console.log(5)
     }
     // @ts-ignore
     let language = localStorage.getItem("language");
