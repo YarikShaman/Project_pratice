@@ -25,7 +25,7 @@ export function Actors() {
             let query = '?page=';
             const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
             if (isSearch == true) {
-                query = "search?q=" + actorName + '&page=';
+                query = "search/?q=" + actorName + '&page=';
             }
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/" + query + selectedPage, config)
                 .then(res => {

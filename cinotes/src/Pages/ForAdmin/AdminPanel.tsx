@@ -43,9 +43,9 @@ interface Actor {
 }*/
 export function APanel() {
     const nav = useNavigate()
-    const [filmsOptions, setFilmOptions] = useState<{ pk: string; title: string; }[]>([]);
+    const [filmsOptions, setFilmOptions] = useState<{ url: string; title: string; }[]>([]);
     const [film, setFilm] = useState("");
-    const [films, setFilms] = useState<{ pk: string; title: string; }[]>([]);
+    const [films, setFilms] = useState<{ url: string; title: string; }[]>([]);
     const [actor, setActor] = useState("");
     const [birth, setBirth] = useState("");
     const [death, setDeath] = useState("");
@@ -80,7 +80,11 @@ export function APanel() {
         else {
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
                 .then(res => {
-                    setFilmOptions(res.data.results);
+                    setFilmOptions(res.data.results.map((film: { url: any; title: any; }) => ({
+                        url: film.url.match(/\/films\/(\d+)\//)[1],
+                        title: film.title,
+                    })));
+
                 });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
                 .then(res => {
@@ -161,6 +165,17 @@ export function APanel() {
             studio: studio,
             country: countries.toString(),
             screenshots: arr,
+        }, config)
+    }
+    function Add_Actor() {
+        console.log(films.map(item => item.url))
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/", {
+            name: actor,
+            photo_image: actorPhoto,
+            description: actorDescription,
+            birth_date: birth,
+            death_date: death,
+            films: films.map(item => item.url)
         }, config)
     }
 
@@ -355,7 +370,6 @@ export function APanel() {
                        type="text"/>
                 <p>{GetLang().Photo}</p>
                 <input className="bg-slate-700 px-4 py-2 rounded-md"
-                       value={actorPhoto}
                        onChange={(e) => handleAddPhoto(e)}
                        type={"file"}
                        accept={"image/* "}/>
@@ -363,6 +377,7 @@ export function APanel() {
                 <DropdownWithSearch options={filmsOptions.map((film) => film.title)} onSelect={setFilm}/>
                 <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {
                     const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
+                    console.log(foundFilm)
                     if (foundFilm) {
                         setFilms([...films, foundFilm])
                     }
@@ -374,7 +389,7 @@ export function APanel() {
                         <li key={index}>{value.title}</li>
                     ))}
                 </ul>
-                <button className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
+                <button onClick={Add_Actor} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
             </div>
         </div>
     )

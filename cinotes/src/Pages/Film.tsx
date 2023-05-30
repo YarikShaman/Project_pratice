@@ -62,12 +62,12 @@ let tools = (<></>);
 let c = 0;
 
 export function Film() {
-    const {id} = useParams()
+    const {id} = useParams();
     const [isReview, setIsReview] = useState(true);
     const [comments, setComments] = useState<Comment[]>();
     const [comment, setComment] = useState("");
     const [film, setFilm] = useState<Film | null>(null);
-    const nav = useNavigate()
+    const nav = useNavigate();
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
     if (CheckJWT() > 0)
@@ -80,7 +80,7 @@ export function Film() {
         maxLength = 2000;
         tools = (
             <>
-                <button onClick={() => {
+                <button onClick={() => {deleteFilm()
                 }}
                         className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
                     {GetLang().Delete}
@@ -93,7 +93,10 @@ export function Film() {
             </>
         )
     }
-
+    const deleteFilm = () => {
+        axios.delete(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/delete/`, config);
+        nav("../");
+    }
     function Add_Review() {
         if (CheckJWT() > 0)
             nav("/sign_in")

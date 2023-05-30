@@ -28,16 +28,23 @@ let c = 0
 let alive;
 
 export function Actor() {
-    const nav = useNavigate()
+    const nav = useNavigate();
     if (CheckJWT() > 0)
-        nav("/sign_in")
-    const {id} = useParams()
+        nav("/sign_in");
+    const {id} = useParams();
     const [actor, setActor] = useState<Actor | null>(null);
+    const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+    const deleteActor = () => {
+        axios.delete(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/delete/`, config);
+        nav("../");
+    }
+
     if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
         tools = (
             <>
                 <button
+                    onClick={deleteActor}
                     className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
                     {GetLang().Delete}
                 </button>
@@ -54,7 +61,7 @@ export function Actor() {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
-            const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+
             axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/`, config)
                 .then(res => {
                     setActor(res.data);
