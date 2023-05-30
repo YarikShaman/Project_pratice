@@ -8,6 +8,8 @@ import {GetLang} from "../Utilities/Lang";
 import {DecodeB64} from "../Utilities/DecodeB64";
 import {ReviewsInFilms} from "../Components/ReviewsInFilms";
 import {CheckJWT} from "../Utilities/CheckJWT";
+import {ActorEdit} from "../Components/ActorEdit";
+import {FilmEdit} from "../Components/FilmEdit";
 
 interface Comment {
     Id: number;
@@ -58,8 +60,26 @@ interface Film {
     }[];
 }
 
-let tools = (<></>);
-let c = 0;
+const Tool = ({deleteFilm, setIsExpandedFilm, isExpandedFilm}:any) => {
+    if (DecodeB64(localStorage["jwt"]).userType == "admin") {
+        return (
+            <>
+                <button
+                    onClick={deleteFilm}
+                    className={"w-1/2 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
+                    {GetLang().Delete}
+                </button>
+                <button
+                    onClick={() =>setIsExpandedFilm(!isExpandedFilm)}
+                    className={"w-1/2  bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
+                    {GetLang().Edit}
+                </button>
+            </>
+        )
+    }
+
+    return <></>
+}
 
 export function Film() {
     const {id} = useParams();
@@ -70,6 +90,7 @@ export function Film() {
     const [comment, setComment] = useState("");
     const [film, setFilm] = useState<Film | null>(null);
     const [scale, setScale] = useState(1);
+    const [isExpandedFilm, setIsExpandedFilm] = useState(false);
     const nav = useNavigate();
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
@@ -77,24 +98,6 @@ export function Film() {
         nav("/sign_in")
     if (DecodeB64(localStorage["jwt"]).userType == "premium") {
         maxLength = 2000;
-    }
-    if (DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
-        c++
-        maxLength = 2000;
-        tools = (
-            <>
-                <button onClick={() => {deleteFilm()
-                }}
-                        className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
-                    {GetLang().Delete}
-                </button>
-                <button onClick={() => {
-                }}
-                        className={"w-1/3 bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
-                    {GetLang().Edit}
-                </button>
-            </>
-        )
     }
     const deleteFilm = () => {
         axios.delete(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/delete/`, config);
@@ -196,6 +199,9 @@ export function Film() {
             style={{background: "repeating-linear-gradient(45deg, rgba(255, 130, 0, 1), rgba(255, 130, 0, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
             className={"min-h-screen h-auto flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
+            {isExpandedFilm && (
+                <FilmEdit film={film}/>
+            )}
             <div id="poster" className={"fixed bg-black divimg overflow-auto hidden top-[10%] h-[88%] w-2/5 left-[30%] rounded-xl border-4 border-white"}>
                 <button onClick={()=>{visChange("poster")}} className={"w-10 h-10 fixed right-[31%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X</button>
                 <img src={srcForPoster} alt={"screenshot"}  style={{transform: `scale(${scale})`,pointerEvents: 'none',position: "absolute",
@@ -216,10 +222,12 @@ export function Film() {
                                  className={"text-[40px] mx-5 w-full "}>
                                 {film?.title}
                             </div>
-                            <div className={"w-96 flex h-2/3 self-center justify-end"}>
-                                {tools}
+                            <div className={"w-[600px] flex h-2/3 self-center justify-end"}>
+                                <div className={"flex h-full w-[180px] self-center justify-end"}>
+                                    <Tool deleteFilm={deleteFilm} setIsExpandedFilm={setIsExpandedFilm} isExpandedFilm={isExpandedFilm}/>
+                                </div>
                                 <button
-                                    className={"w-full  bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
+                                    className={"bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
                                     {GetLang().Add_to_playlist}
                                 </button>
                             </div>
