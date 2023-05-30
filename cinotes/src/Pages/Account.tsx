@@ -13,15 +13,12 @@ import DropdownWithSearch from "../Components/DropdownWithSearch";
 export function Account() {
     const nav = useNavigate()
     const [isVisible, setIsVisible] = useState(false);
-    const [profilePhoto, setProfilePhoto] = useState("");
+    const [profilePhoto, setProfilePhoto] = useState<any>();
     const [data, setData] = useState<{ ImageLink: string, FavFilm: number, FavGenre: number, FavActor: number, UserId: number }>()
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const [film, setFilm] = useState("");
     const [genre, setGenre] = useState("")
     const [actor, setActor] = useState("")
-    const [filmS, setFilmS] = useState("");
-    const [genreS, setGenreS] = useState("")
-    const [actorS, setActorS] = useState("")
     const [actorsRaw, setActorsRaw] = useState<{ pk: string; name: string; photo_file: string; url: string; }[]>([]);
     const [genreRaw, setGenreRaw] = useState<any[]>([])
     const [filmOptions, setFilmOptions] = useState<any[]>([]);
@@ -58,16 +55,16 @@ export function Account() {
     }
     const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files != null && e.target.files.length != 0) {
-            const reader = new FileReader();
-            reader.readAsDataURL(e.target.files[0]);
-            reader.onloadend = () => {
-                const base64String = reader.result as string;
-                setProfilePhoto(base64String);
-            }
+            setProfilePhoto(e.target.files[0]);
         }
     }
     function AddPicture(){
         let data = new FormData();
+        if(genre) data.append("fav-genre",genreRaw.find((genreo) => genreo.title === genre).pk);
+        if(film) data.append("fav-film",filmOptions.find((genreo) => genreo.title === film).url);
+        if(actor) { // @ts-ignore
+            data.append("fav-actor",actorsRaw?.find((genreo) => genreo.name === actor).pk);
+        }
         if(profilePhoto) data.append("img",profilePhoto);
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
     }
@@ -78,6 +75,7 @@ export function Account() {
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id, config)
                 .then(res => {
                     setData(res.data)
+                    console.log(res)
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/" + res.data.FavFilm.toString() + "/", config)
                         .then((resp) => {
                             setFilm(resp.data.title)
@@ -99,7 +97,6 @@ export function Account() {
                         url: film.url.match(/\/films\/(\d+)\//)[1],
                         title: film.title,
                     })));
-
                 });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
                 .then(res => {
@@ -128,7 +125,7 @@ export function Account() {
                     <p className="self-center text-[40px]">{DecodeB64(localStorage["jwt"]).username}</p>
                     <p className="self-center text-[25px]">{GetLang().Email}: {DecodeB64(localStorage["jwt"]).email}</p>
                     <p className="self-center text-[25px]">{GetLang().Account_type}: {DecodeB64(localStorage["jwt"]).userType}</p>
-                    <button onClick={()=>{localStorage.clear();window.location.reload()}}
+                    <button onClick={()=>{localStorage.clear();nav('../')}}
                         className="h-12 text-[25px]  hover:border-2 w-40 bg-red-500 rounded-3xl mt-10 self-center">{GetLang().Log_out}</button>
                 </div>
                 <div
