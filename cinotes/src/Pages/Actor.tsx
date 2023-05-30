@@ -25,8 +25,26 @@ interface Film {
     url: string;
 }
 
-let tools = (<></>)
-let c = 0
+const Tool = ({deleteActor, setIsExpandedActor, isExpandedActor}:any) => {
+    if (DecodeB64(localStorage["jwt"]).userType == "admin") {
+        return (
+            <>
+                <button
+                    onClick={deleteActor}
+                    className={"w-1/3 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
+                    {GetLang().Delete}
+                </button>
+                <button
+                    onClick={() =>setIsExpandedActor(!isExpandedActor)}
+                    className={"w-1/3 bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
+                    {GetLang().Edit}
+                </button>
+            </>
+        )
+    }
+
+    return <></>
+}
 let alive;
 
 export function Actor() {
@@ -75,7 +93,7 @@ export function Actor() {
                                 {actor?.name}
                             </div>
                             <div className={"w-96 flex h-2/3 self-center justify-end"}>
-                                {tools}
+                                <Tool deleteActor={deleteActor} setIsExpandedActor={setIsExpandedActor} isExpandedActor={isExpandedActor}/>
                             </div>
                         </div>
                         <div className={"flex flex-row mt-[50px]"}>
