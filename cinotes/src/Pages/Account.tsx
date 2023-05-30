@@ -12,6 +12,8 @@ import DropdownWithSearch from "../Components/DropdownWithSearch";
 
 export function Account() {
     const nav = useNavigate()
+    const [isVisible, setIsVisible] = useState(false);
+    const [profilePhoto, setProfilePhoto] = useState("");
     const [data, setData] = useState<{ ImageLink: string, FavFilm: number, FavGenre: number, FavActor: number, UserId: number }>()
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const [film, setFilm] = useState("");
@@ -52,6 +54,21 @@ export function Account() {
         if(genre) data.append("fav-genre",genre);
         if(film) data.append("fav-film",film);
         if(actor) data.append("fav-actor",actor);
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
+    }
+    const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files != null && e.target.files.length != 0) {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setProfilePhoto(base64String);
+            }
+        }
+    }
+    function AddPicture(){
+        let data = new FormData();
+        if(profilePhoto) data.append("img",profilePhoto);
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
     }
     useEffect(() => {
@@ -100,11 +117,18 @@ export function Account() {
                 className="w-5/6 mt-20 md:min-h-[80vh] self-center p-5 rounded-xl  bg-neutral-800 flex flex-row flex-wrap">
                 <div
                     className=" w-1/2 self-center block h-full min-w-[400px] flex  flex-col justify-center self-center">
-                    <img className="bg-white h-[300px] self-center w-[300px] rounded" src={data?.ImageLink}/>
+                    <img className="bg-white h-[300px] self-center w-[300px] rounded" onClick={()=>{setIsVisible(!isVisible)}} src={data?.ImageLink}/>
+                    {isVisible&&(<div className={"self-center"}>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                            onChange={(e) => handleAddPhoto(e)}
+                            type={"file"}
+                            accept={"image/* "}></input>
+                        <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={()=>{AddPicture()}}>Change profile picture</button>
+                    </div>)}
                     <p className="self-center text-[40px]">{DecodeB64(localStorage["jwt"]).username}</p>
                     <p className="self-center text-[25px]">{GetLang().Email}: {DecodeB64(localStorage["jwt"]).email}</p>
                     <p className="self-center text-[25px]">{GetLang().Account_type}: {DecodeB64(localStorage["jwt"]).userType}</p>
-                    <button
+                    <button onClick={()=>{localStorage.clear();window.location.reload()}}
                         className="h-12 text-[25px]  hover:border-2 w-40 bg-red-500 rounded-3xl mt-10 self-center">{GetLang().Log_out}</button>
                 </div>
                 <div
