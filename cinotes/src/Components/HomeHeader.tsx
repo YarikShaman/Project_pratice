@@ -38,13 +38,10 @@ export function HomeHeader() {
     }
 
 
-    console.log(1)
 
     useEffect(() => {
 
-        console.log(2)
          {
-            console.log(3)
             if (localStorage.getItem("language") == undefined) {
                 localStorage.setItem("language", "2")
             }

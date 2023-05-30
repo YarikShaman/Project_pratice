@@ -13,6 +13,7 @@ interface Comment {
     Id: number;
     FilmId: number;
     Text: string;
+    LikesAmount: number;
     UserId: number;
     CreatedAt: {
         seconds: number;
@@ -24,6 +25,8 @@ interface Comment {
     };
     AvatarLink: string;
     Username: string;
+    Type:string;
+    IsLiked?: boolean;
 }
 
 interface Film {
@@ -61,6 +64,7 @@ let c = 0;
 export function Film() {
     const {id} = useParams();
     const [isReview, setIsReview] = useState(true);
+    const [isState, setIsState] = useState(true);
     const [srcForPoster,setSrcForPoster] = useState("");
     const [comments, setComments] = useState<Comment[]>();
     const [comment, setComment] = useState("");
@@ -136,7 +140,11 @@ export function Film() {
             if (isReview) {
                 axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=3&resp_amount=0`, config)
                     .then(res => {
-                        setComments(res.data.comments);
+                        setComments(undefined);
+                        setComments(res.data.comments.map((comment: Comment) => ({
+                            ...comment,
+                            Type: "public"
+                        })));
                     }, err => {
                         console.log(err.response);
                     })
@@ -147,7 +155,8 @@ export function Film() {
                         setComments(res.data.comments.map((comment: Comment) => ({
                             ...comment,
                             Username: comment.Username || DecodeB64(localStorage["jwt"]).username,
-                            AvatarLink: comment.AvatarLink || (document.getElementById("ProfileImg") as HTMLImageElement).src
+                            AvatarLink: comment.AvatarLink || (document.getElementById("ProfileImg") as HTMLImageElement).src,
+                            Type: "private"
                         })));
                     }, err => {
                         console.log(err.response);
@@ -157,12 +166,11 @@ export function Film() {
                 .then(res => {
                     setFilm(res.data);
 
-                    console.log(film)
                 }, err => {
                     console.log(err.response);
                 });
         }
-    }, [isReview]);
+    }, [isReview,isState]);
     const handleZoomIn = () => {
         setScale(scale + 0.1);
     };
@@ -221,8 +229,7 @@ export function Film() {
                                 <img onClick={()=>{visChange("poster")}} alt={"screenshot"}  className={"rounded-xl  w-[500px]"} src={film?.compressed_poster_file}/>
                             </div>
                             <div className={"mx-5 p-3 w-full text-[24px]"}>
-                                <p className="pt-0"><b>{GetLang().Genres}:</b> {film?.genres.map(genre => genre.title).join(', ')}
-                                </p>
+                                <p className="pt-0"><b>{GetLang().Genres}:</b> {film?.genres.map(genre => genre.title).join(', ')}</p>
                                 <p className="pt-3"><b>{GetLang().Release_date}:</b> {film?.release_date}</p>
                                 <p className="pt-3"><b>{GetLang().Country}:</b> {film?.country}</p>
                                 <p className="pt-3"><b>{GetLang().Rating}:</b> {film?.rating}</p>
@@ -287,9 +294,9 @@ export function Film() {
                         </div>
                     </div>
                     <div>
-                        {comments?.map(comment => {
+                        {comments?.map(commentar => {
                             return <>
-                                <ReviewsInFilms comment={comment}/>
+                                <ReviewsInFilms onUpdateParentState={() => setIsState(!isState)} comment={commentar} pk={commentar.Id}/>
                             </>
                         })}
                     </div>
