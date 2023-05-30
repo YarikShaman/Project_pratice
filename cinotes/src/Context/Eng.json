@@ -129,5 +129,6 @@
   "Wrong_repeat": "Wrong repeat",
   "Password_successfully_changed": "Password successfully changed",
   "Password_validation_error": "Password validation error",
-  "Set_new_password": "Set new password"
+  "Set_new_password": "Set new password",
+  "Admin":  "Admin"
 }

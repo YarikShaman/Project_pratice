@@ -41,16 +41,16 @@ export function HomeHeader() {
     console.log(1)
 
     useEffect(() => {
-        let ignore = false
+
         console.log(2)
-        if (!ignore) {
+         {
             console.log(3)
             if (localStorage.getItem("language") == undefined) {
                 localStorage.setItem("language", "2")
             }
             SetLang(Number(localStorage.getItem("language")));
-            if (CheckJWT() > 0) {
-                if (!ignore) {
+            if (CheckJWT() == 0) {
+                 {
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                         .then(res => {
                             setLink("/account")
@@ -58,7 +58,14 @@ export function HomeHeader() {
                             setLabel(DecodeB64(localStorage["jwt"]).username)
                         })
                 }
-            } else {
+            }
+            else if (CheckJWT() != 1)
+            {
+                setLabel(DecodeB64(localStorage["jwt"]).username)
+                setLink("/sign_in")
+                setSourse(Acc)
+            }
+            else {
                 setLink("/sign_in")
                 setSourse(Acc)
             }
@@ -77,9 +84,7 @@ export function HomeHeader() {
                 ukr.style.filter = "brightness(1.25)";
             }
         }
-        return () => {
-            ignore = true;
-        };
+
     }, []);
     if (CheckJWT() != 1 && DecodeB64(localStorage["jwt"]).userType == "admin" && c == 0) {
         c++
@@ -87,7 +92,7 @@ export function HomeHeader() {
             <Link className={"flex flex-grow"} to={"/a_panel"}>
                 <div
                     className="hover:bg-sky-900 rounded-lg h-full  flex py-7 self-center flex-grow justify-center text-white cursor-pointer">
-                    <p className="self-center">{GetLang().Premium}</p>
+                    <p className="self-center">{GetLang().Admin}</p>
                 </div>
             </Link>
         )

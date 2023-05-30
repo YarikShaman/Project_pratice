@@ -130,5 +130,6 @@
   "Wrong_repeat": "Неправильний повтор",
   "Password_successfully_changed": "Пароль успішно змінено",
   "Password_validation_error": "Помилка валідації пароля",
-  "Set_new_password": "Установити новий пароль"
+  "Set_new_password": "Встановити новий пароль",
+  "Admin":  "Адмін"
 }
