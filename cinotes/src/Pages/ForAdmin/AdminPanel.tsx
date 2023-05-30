@@ -43,6 +43,8 @@ interface Actor {
 }*/
 export function APanel() {
     const nav = useNavigate()
+    const [isExpandedFilm, setIsExpandedFilm] = useState(false);
+    const [isExpandedActor, setIsExpandedActor] = useState(false);
     const [filmsOptions, setFilmOptions] = useState<{ url: string; title: string; }[]>([]);
     const [film, setFilm] = useState("");
     const [films, setFilms] = useState<{ url: string; title: string; }[]>([]);
@@ -180,12 +182,13 @@ export function APanel() {
     }
 
     return (
-        <div className="bg-neutral-700 grid grid-cols-2 content-center gap-4 justify-items-center min-h-screen">
+        <div className="bg-neutral-700 flex flex-col min-h-screen">
             <HomeHeader/>
             <div
-                className={"grid grid-cols-2 col-start-1 content-start gap-4 mt-[20%] md:mt-[10%] text-white justify-items-center"}>
-                <div className="col-span-2 text-2xl">{GetLang().Film_addition}</div>
-                <div className="flex flex-col w-full space-y-2">
+                className={"mt-[20%] md:mt-[5%]  self-center text-white w-3/5"}>
+                <div className=" text-2xl bg-gray-600 m-2 rounded-xl" onClick={()=>setIsExpandedFilm(!isExpandedFilm)}>{GetLang().Film_addition}</div>
+                {isExpandedFilm && (
+                    <div className={"flex flex-col justify-centers "}>
                     <p className={"m-2"}>{GetLang().Title}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
@@ -240,8 +243,6 @@ export function APanel() {
                             </li>
                         ))}
                     </ul>
-                </div>
-                <div className="flex flex-col w-full space-y-2">
                     <p className={"m-2"}>{GetLang().Actor}</p>
                     <DropdownWithSearch options={actorsOptions} onSelect={setActorName}/>
                     <button
@@ -264,8 +265,6 @@ export function APanel() {
                             </li>
                         ))}
                     </ul>
-                </div>
-                <div className="flex flex-col w-full space-y-2">
                     <p className={"m-2"}>{GetLang().Country}</p>
                     <DropdownWithSearch options={countryOptions} onSelect={setCountry}/>
                     <button
@@ -296,8 +295,6 @@ export function APanel() {
                         onChange={(e) => setDirector(e.target.value)}
                         placeholder="Director"
                     />
-                </div>
-                <div className="flex flex-col w-full space-y-2">
                     <p className={"m-2"}>{GetLang().Description}</p>
                     <input
                         className="bg-slate-700 px-4 py-2 rounded-md"
@@ -343,54 +340,56 @@ export function APanel() {
                     >
                         {GetLang().Add_screenshot}
                     </button>
-                </div>
                 <button onClick={Add_Film} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_film}</button>
+                    </div>)}
+                <div onClick={()=>setIsExpandedActor(!isExpandedActor)} className={"text-2xl bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Actor_addition}</div>
+                {isExpandedActor && (
+                    <div className={"text-white flex flex-col"}>
+                        <p>{GetLang().Name}</p>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                               value={actor}
+                               onChange={(e) => setActor(e.target.value)}
+                               type="text"/>
+                        <p>{GetLang().Birth_date}</p>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                               onChange={(e) => setBirth(e.target.value)}
+                               value={birth}
+                               type="date"/>
+                        <p>{GetLang().Death_date}</p>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                               onChange={(e) => setDeath(e.target.value)}
+                               value={death}
+                               type="date"/>
+                        <p>{GetLang().Description}</p>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                               onChange={(e) => setActorDescription(e.target.value)}
+                               value={actorDescription}
+                               type="text"/>
+                        <p>{GetLang().Photo}</p>
+                        <input className="bg-slate-700 px-4 py-2 rounded-md"
+                               onChange={(e) => handleAddPhoto(e)}
+                               type={"file"}
+                               accept={"image/* "}/>
+                        <p>{GetLang().Films}</p>
+                        <DropdownWithSearch options={filmsOptions.map((film) => film.title)} onSelect={setFilm}/>
+                        <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {
+                            const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
+                            console.log(foundFilm)
+                            if (foundFilm) {
+                                setFilms([...films, foundFilm])
+                            }
+                        }}>{GetLang().Add_film}
+                        </button>
+                        <h1>{GetLang().Films_list}:</h1>
+                        <ul>
+                            {films?.map((value, index) => (
+                                <li key={index}>{value.title}</li>
+                            ))}
+                        </ul>
+                        <button onClick={Add_Actor} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
+                    </div>)}
             </div>
-            <div className={"text-white mt-[10%]"}>
-                <div className={"text-2xl"}>{GetLang().Actor_addition}</div>
-                <p>{GetLang().Name}</p>
-                <input className="bg-slate-700 px-4 py-2 rounded-md"
-                       value={actor}
-                       onChange={(e) => setActor(e.target.value)}
-                       type="text"/>
-                <p>{GetLang().Birth_date}</p>
-                <input className="bg-slate-700 px-4 py-2 rounded-md"
-                       onChange={(e) => setBirth(e.target.value)}
-                       value={birth}
-                       type="date"/>
-                <p>{GetLang().Death_date}</p>
-                <input className="bg-slate-700 px-4 py-2 rounded-md"
-                       onChange={(e) => setDeath(e.target.value)}
-                       value={death}
-                       type="date"/>
-                <p>{GetLang().Description}</p>
-                <input className="bg-slate-700 px-4 py-2 rounded-md"
-                       onChange={(e) => setActorDescription(e.target.value)}
-                       value={actorDescription}
-                       type="text"/>
-                <p>{GetLang().Photo}</p>
-                <input className="bg-slate-700 px-4 py-2 rounded-md"
-                       onChange={(e) => handleAddPhoto(e)}
-                       type={"file"}
-                       accept={"image/* "}/>
-                <p>{GetLang().Films}</p>
-                <DropdownWithSearch options={filmsOptions.map((film) => film.title)} onSelect={setFilm}/>
-                <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {
-                    const foundFilm = filmsOptions.find((filmo) => filmo.title === film);
-                    console.log(foundFilm)
-                    if (foundFilm) {
-                        setFilms([...films, foundFilm])
-                    }
-                }}>{GetLang().Add_film}
-                </button>
-                <h1>{GetLang().Films_list}:</h1>
-                <ul>
-                    {films?.map((value, index) => (
-                        <li key={index}>{value.title}</li>
-                    ))}
-                </ul>
-                <button onClick={Add_Actor} className="bg-gray-600 px-4 py-2 rounded-md">{GetLang().Add_actor}</button>
-            </div>
+
         </div>
     )
 }
