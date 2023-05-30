@@ -47,6 +47,10 @@ export function APanel() {
     const [isExpandedFilm, setIsExpandedFilm] = useState(false);
     const [isExpandedActor, setIsExpandedActor] = useState(false);
     const [isExpandedGenre, setIsExpandedGenre] = useState(false);
+    const [isExpandedUser, setIsExpandedUser] = useState(false);
+    const [users, setUsers] = useState<{ UserId: number; Email: string, UserType: string, Username: string }[]>([]);
+    const [user, setUser] = useState<string>("");
+    const [selectedUserType, setSelectedUserType] = useState<string>("basic");
     const [filmsOptions, setFilmOptions] = useState<{ url: string; title: string; }[]>([]);
     const [film, setFilm] = useState("");
     const [films, setFilms] = useState<{ url: string; title: string; }[]>([]);
@@ -95,6 +99,11 @@ export function APanel() {
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
                 .then(res => {
                     setGenreOptions(res.data.results);
+                });
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin", config)
+                .then(res => {
+                    setUsers(res.data.Users);
+                    console.log(res.data.Users)
                 });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/?page_size=100", config)
                 .then(res => {
@@ -154,7 +163,7 @@ export function APanel() {
         screenshots.map(({base64string}) => {
             const d = {
                 image: base64string,
-            }
+            };
             arr.push(d);
         });
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/", {
@@ -171,7 +180,7 @@ export function APanel() {
             studio: studio,
             country: countries.toString(),
             screenshots: arr,
-        }, config)
+        }, config);
     }
 
     function Add_Actor() {
@@ -182,22 +191,40 @@ export function APanel() {
             birth_date: birth,
             death_date: death,
             films: films.map(item => item.url)
-        }, config)
+        }, config);
     }
-    function Add_Genre(){
+
+    function Add_Genre() {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/", {
             title: genreName
-        }, config)
+        }, config);
     }
-    function Change_Genre(){
-        axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/"+selectedGenreId+"/update/", {
+
+    function Change_Genre() {
+        axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/update/", {
             title: genreName
-        }, config)
+        }, config);
     }
-    function Delete_Genre(){
-        axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/"+selectedGenreId+"/delete/", config)
+
+    function Delete_Genre() {
+        axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/delete/", config);
     }
-    // @ts-ignore
+
+    function Change_User() {
+        // @ts-ignore
+        let userid = users.find((userS) => userS.Email === user).UserId
+        axios.patch("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user-type", {
+            UserId: userid,
+            UserType: selectedUserType
+        }, config);
+    }
+
+    function Delete_User() {
+        // @ts-ignore
+        let userid = users.find((userS) => userS.Email === user).UserId
+        axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user?user_id=" + userid, config);
+    }
+
     return (
         <div className="bg-neutral-700 flex flex-col min-h-screen">
             <HomeHeader/>
@@ -412,35 +439,72 @@ export function APanel() {
                 <div onClick={() => setIsExpandedGenre(!isExpandedGenre)}
                      className={"text-2xl pl-[40%] bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Genres}</div>
                 {isExpandedGenre && (
-                <div className={"flex flex-row ml-[35%] relative items-stretch"}>
-                <Table data={genreOptions} />
-                    <div className="mx-5 space-y-4 flex flex-col">
-                        <div>{GetLang().Genre}</div>
-                        <input className="bg-slate-700 px-4 py-2 rounded-md"
-                            value={genreName}
-                            onChange={(e) => setGenreName(e.target.value)}
-                            type="text"/>
-                        <button
-                            className="bg-gray-600 px-4 py-2 rounded-md"
-                            onClick={() => {Add_Genre()}}>
-                            {GetLang().Add_genre}
-                        </button>
-                        <div>{GetLang().Genre+" Id"}</div>
-                        <select value={selectedGenreId} onChange={(e)=>setSelectedGenreId(e.target.value)} className={"bg-slate-700 custom-select"}><option value="-">-</option>{Object.entries(genreOptions).map(([key, genre]) => {
-                            return <option key={genre.pk} value={genre.pk}>{genre.pk}</option>;
-                        })}</select>
-                        <button
-                            className="bg-gray-600 px-4 py-2 rounded-md"
-                            onClick={() => {Change_Genre()}}>
-                            Change the genre
-                        </button>
-                        <button
-                            className="bg-gray-600 px-4 py-2 rounded-md"
-                            onClick={() => {Delete_Genre()}}>
-                            Delete the genre
-                        </button>
+                    <div className={"flex flex-row ml-[35%] relative items-stretch"}>
+                        <Table data={genreOptions}/>
+                        <div className="mx-5 space-y-4 flex flex-col">
+                            <div>{GetLang().Genre}</div>
+                            <input className="bg-slate-700 px-4 py-2 rounded-md"
+                                   value={genreName}
+                                   onChange={(e) => setGenreName(e.target.value)}
+                                   type="text"/>
+                            <button
+                                className="bg-gray-600 px-4 py-2 rounded-md"
+                                onClick={() => {
+                                    Add_Genre()
+                                }}>
+                                {GetLang().Add_genre}
+                            </button>
+                            <div>{GetLang().Genre + " Id"}</div>
+                            <select value={selectedGenreId} onChange={(e) => setSelectedGenreId(e.target.value)}
+                                    className={"bg-slate-700 custom-select"}>
+                                <option value="-">-</option>
+                                {Object.entries(genreOptions).map(([key, genre]) => {
+                                    return <option key={genre.pk} value={genre.pk}>{genre.pk}</option>;
+                                })}</select>
+                            <button
+                                className="bg-gray-600 px-4 py-2 rounded-md"
+                                onClick={() => {
+                                    Change_Genre()
+                                }}>
+                                Change the genre
+                            </button>
+                            <button
+                                className="bg-gray-600 px-4 py-2 rounded-md"
+                                onClick={() => {
+                                    Delete_Genre()
+                                }}>
+                                Delete the genre
+                            </button>
+                        </div>
+                    </div>)}
+                <div onClick={() => setIsExpandedUser(!isExpandedUser)}
+                     className={"text-2xl pl-[40%] bg-gray-600 rounded-xl m-2 text-white"}>{GetLang().Users}</div>
+                {isExpandedUser && (
+                    <div>
+                        <div className={"flex justify-around"}>
+                            <DropdownWithSearch options={users.map((genre) => genre.Email)} onSelect={setUser}/>
+                            <select value={selectedUserType} onChange={(e) => {
+                                setSelectedUserType(e.target.value);
+                                console.log(selectedUserType)
+                            }}
+                                    className={"bg-slate-700 custom-select"}>
+                                <option value={"premium"}>Premium</option>
+                                <option value={"basic"}>Basic</option>
+                                <option value={"admin"}>Admin</option>
+                            </select>
+                            <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {
+                                Change_User()
+                            }}>
+                                Change user type
+                            </button>
+                            <button className="bg-gray-600 px-4 py-2 rounded-md" onClick={() => {Delete_User()}}>
+                                Delete user
+                            </button>
+
+                        </div>
+                        <Table data={users}/>
                     </div>
-                </div>)}
+                )}
             </div>
 
         </div>

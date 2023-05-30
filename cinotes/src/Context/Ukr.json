@@ -37,7 +37,7 @@
   "Screenshots_list": "Список кадрів",
   "Add_screenshot": "Додати кадр",
   "Add_film": "Додати фільм",
-  "Actor_addition": "Акторська залежність",
+  "Actor_addition": "Додавання актора",
   "Birth_date": "Дата народження",
   "Death_date": "Дата смерті",
   "Films_list": "Список фільмів",
@@ -73,7 +73,6 @@
   "Genres": "Жанри",
   "IMDb_rating": "Рейтинг IMDb",
   "The_cast": "Акторський склад",
-
   "Reviews": "Рецензії",
   "My_notes": "Мої нотатки",
   "Add_public_review": "Додати публічну рецензію",
@@ -131,5 +130,6 @@
   "Password_successfully_changed": "Пароль успішно змінено",
   "Password_validation_error": "Помилка валідації пароля",
   "Set_new_password": "Встановити новий пароль",
-  "Admin":  "Адмін"
+  "Admin":  "Адмін",
+  "Users": "Користувачі"
 }

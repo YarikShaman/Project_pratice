@@ -113,6 +113,7 @@ export function Film() {
                 commentType: "public"
             }, config)
         }
+        setIsState(!isState);
     }
 
     function Add_Note() {
@@ -125,6 +126,7 @@ export function Film() {
                 commentType: "private"
             }, config)
         }
+        setIsState(!isState);
     }
 
     useEffect(() => {
@@ -168,7 +170,7 @@ export function Film() {
             axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
                 .then(res => {
                     setFilm(res.data);
-
+                    console.log(res.data)
                 }, err => {
                     console.log(err.response);
                 });

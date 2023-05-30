@@ -98,9 +98,12 @@ export function FilmEdit(film: any) {
         if (director) formData.append('director', director);
         if (studio) formData.append('studio', studio);
         if (countries.length > 0) formData.append('country', countries.join(','));
-        if (arr.length > 0) { // @ts-ignore
-            formData.append(`screenshots`, arr);
-        };
+        if (arr.length > 0) {
+            arr.forEach((screenshot, index) => {
+                // @ts-ignore
+                return formData.append(`screenshot_${index}`, screenshot);
+            });
+        }
         axios.patch("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/"+film.film.pk+"/update/", formData, config)
     }
 
