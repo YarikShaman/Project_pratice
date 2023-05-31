@@ -80,9 +80,11 @@ export function Actor() {
             style={{background: "repeating-linear-gradient(45deg, rgba(0, 255, 255, 1), rgba(0, 255, 255, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
             className={"min-h-screen h-auto  flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
-            {isExpandedActor && (
+            {isExpandedActor && (<div>
                 <ActorEdit actor={actor}/>
-            )}
+                <button onClick={() =>setIsExpandedActor(!isExpandedActor)} className={"w-10 h-10 fixed top-[16%] right-[20%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X</button>
+                </div>
+                )}
             <div style={{borderWidth: 2, borderImageSlice: 1, borderColor: ""}}
                  className=" pb-[100px] md:w-4/5 self-center h-auto mt-[20%] md:mt-[5%] rounded-xl px-4 flex flex-col bg-neutral-700">
                 <div className={"flex w-full  my-2 self-center flex-row"}>
