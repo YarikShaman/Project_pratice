@@ -311,7 +311,7 @@ export function Films() {
                 </div>
             </div>
             <div
-                className={"relative w-[200px] left-[53%] rounded-xl bg-slate-700 flex flex-row justify-center space-x-2 my-5 text-white"}>
+                className={"relative w-[200px] left-[53%] rounded-xl hidden bg-slate-700 md:flex flex-row justify-center space-x-2 my-5 text-white"}>
                 <button onClick={() => {
                     if (selectedPage != 1) setSelectedPage(selectedPage - 1)
                 }} className={" text-4xl pb-2"}>{"<"}</button>

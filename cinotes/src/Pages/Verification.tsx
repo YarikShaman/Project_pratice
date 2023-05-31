@@ -14,7 +14,6 @@ export function Ver() {
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
             .then(res => {
-                alert(GetLang().Successfully_verified)
                 nav("../sign_in")
             })
             .catch(err => {
@@ -23,7 +22,7 @@ export function Ver() {
                         setError(GetLang().Wrong_code);
                         break;
                     case 500:
-                        alert(GetLang().Account_created_without_verification);
+                        setError(GetLang().Account_created_without_verification);
                         break;
                 }
             })
@@ -60,16 +59,15 @@ export function Ver() {
                     <button onClick={() => {
                         axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
                             .then(resp => {
-                                alert(GetLang().Account_created)
-                                nav("/ver")
+                                nav("../ver")
                             })
                             .catch(err => {
                                 switch (err.response.status) {
                                     case 417:
-                                        alert(GetLang().Email_not_available);
+                                        setError(GetLang().Email_not_available);
                                         break;
                                     case 500:
-                                        alert(GetLang().Server_do_not_response);
+                                        setError(GetLang().Server_do_not_response);
                                         break;
                                 }
                             })

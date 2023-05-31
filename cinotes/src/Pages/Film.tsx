@@ -161,8 +161,7 @@ export function Film() {
             } else {
                 axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=1`, config)
                     .then(res => {
-                        setComments(undefined);
-                        setComments(res.data.comments.map((comment: Comment) => ({
+                        setComments(res.data.comments?.map((comment: Comment) => ({
                             ...comment,
                             Username: comment.Username || DecodeB64(localStorage["jwt"]).username,
                             AvatarLink: comment.AvatarLink || (document.getElementById("ProfileImg") as HTMLImageElement).src,
@@ -208,7 +207,10 @@ export function Film() {
             className={"min-h-screen h-auto flex flex-col pb-10 text-white bg-neutral-800"}>
             <HomeHeader/>
             {isExpandedFilm && (
+                <div>
                 <FilmEdit film={film}/>
+                <button onClick={() =>setIsExpandedFilm(!isExpandedFilm)} className={"w-10 h-10 fixed top-[16%] right-[21%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X</button>
+                </div>
             )}
             <div id="poster"
                  className={"fixed bg-black divimg overflow-auto hidden top-[10%] h-[88%] w-2/5 left-[30%] rounded-xl border-4 border-white"}>

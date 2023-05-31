@@ -95,7 +95,7 @@ function MainPage() {
                     <a style={{fontFamily: "fantasy"}}
                        className="self-center text-white text-[40px]  text-center w-grow  italic">{GetLang().Main_page_liked_text_1}<br/>{GetLang().Main_page_liked_text_2}<br/>{GetLang().Main_page_liked_text_3}<br/>{GetLang().Main_page_liked_text_4}</a>
                 </div>
-                <div className="block w-full text-white flex flex-row mb-8 justify-around">
+                <div className="block w-full text-white flex flex-wrap flex-row mb-8 justify-around">
                     <p className="self-center">Contact us:</p>
                     <div className="flex flex-col justify-around">
                         <p>(055) 55 55 555</p>

@@ -29,8 +29,7 @@ function Author() {
             if (DecodeB64(res.data.jwt).isVerified == "false")
                 axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + res.data.jwt}})
                     .then(resp => {
-                        alert(GetLang().Account_created)
-                        nav("ver")
+                        nav("../ver")
                     })
                     .catch(err => {
                         switch (err.response.status) {
@@ -41,7 +40,7 @@ function Author() {
                                 setError(GetLang().Email_not_available);
                                 break;
                             case 500:
-                                alert(GetLang().Account_created_without_verification);
+                                setError(GetLang().Account_created_without_verification);
                                 break;
                         }
                     })
