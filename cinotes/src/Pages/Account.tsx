@@ -31,13 +31,7 @@ export function Account() {
         document.getElementById("accData").style.display = "none";
         //@ts-ignore
         document.getElementById("accDataEditor").style.display = "block";
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=1000", config)
-            .then((res) => {
-                console.log(res.data.results)
-                setGenreRaw(res.data.results)
-                setGenreOptions(res.data.results.map((genre: { title: any; }) => genre.title))
-                console.log(res.data.results.map((genre: { title: any; }) => genre.title))
-            })
+
     }
 
     function HideEditor() {
@@ -48,9 +42,10 @@ export function Account() {
     }
     function SetFavorite() {
         let data = new FormData();
-        if(genre) data.append("fav-genre",genre);
-        if(film) data.append("fav-film",film);
-        if(actor) data.append("fav-actor",actor);
+        if(genre) data.append("fav-genre",genreRaw.find((genreo) => genreo.title === genre).pk);
+        if(film) data.append("fav-film",filmOptions.find((genreo) => genreo.title === film).url);
+        if(actor) { // @ts-ignore
+            data.append("fav-actor",actorsRaw?.find((genreo) => genreo.name === actor).pk);}
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
     }
     const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +99,11 @@ export function Account() {
                 .then(res => {
                     setActorsRaw(res.data.results);
                     setActorOptions((res.data.results).map((actor: { name: any; }) => actor.name))
+                });
+            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=1000", config)
+                .then((res) => {
+                    setGenreRaw(res.data.results)
+                    setGenreOptions(res.data.results.map((genre: { title: any; }) => genre.title))
                 });
         }
     }, [])
