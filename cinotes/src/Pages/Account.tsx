@@ -75,16 +75,18 @@ export function Account() {
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id, config)
                 .then(res => {
                     setData(res.data)
-                    console.log(res)
+                    if(res.data.FavFilm)
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/" + res.data.FavFilm.toString() + "/", config)
                         .then((resp) => {
                             setFilm(resp.data.title)
                         })
+                    if(res.data.FavGenre)
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + res.data.FavGenre.toString() + "/", config)
                         .then((resp) => {
 
                             setGenre(resp.data.title)
                         })
+                    if(res.data.FavActor)
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/" + res.data.FavActor.toString() + "/", config)
                         .then((resp) => {
                             setActor(resp.data.name)
