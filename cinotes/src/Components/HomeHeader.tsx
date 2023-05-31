@@ -43,6 +43,9 @@ export function HomeHeader() {
                 localStorage.setItem("language", "2")
             }
             SetLang(Number(localStorage.getItem("language")));
+            if (CheckJWT()!=3)
+                //@ts-ignore
+                document.getElementById("verifier").style.display="none"
             if (CheckJWT() == 0) {
                 {
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
@@ -54,9 +57,6 @@ export function HomeHeader() {
                         })
                 }
             } else if (CheckJWT() != 1) {
-                if (CheckJWT()==2)
-                    //@ts-ignore
-                    document.getElementById("verifier").style.display="none"
                 setLabel(DecodeB64(localStorage["jwt"]).username)
                 setLink("/sign_in")
                 setSourse(Acc)
@@ -163,7 +163,7 @@ export function HomeHeader() {
                         </div>
                         <Link to={link}>
                             <div
-                                className="hover:bg-neutral-900 bg-stone-900 my-1 flex flex-col w-20 border-2 border-gray-800 rounded-xl mr-2 text-white hover:text-sky-500 hover:border-sky-900 cursor-pointer select-none">
+                                className="hover:bg-neutral-900 bg-neutral-800 my-1 flex flex-col w-20 border-2 border-gray-700 rounded-xl mr-2 text-white hover:text-sky-500 hover:border-sky-900 cursor-pointer select-none">
                                 <img className=" w-7 h-7 mt-1 bg-cover bg-repeat rounded-full self-center "
                                      id={"ProfileImg"}
                                      alt={"Profile_Pic"}

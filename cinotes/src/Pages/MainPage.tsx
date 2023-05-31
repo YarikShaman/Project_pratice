@@ -5,6 +5,10 @@ import {FilmInFilms} from "../Components/FilmInFilms";
 import axios from "axios";
 import logo from "../Img/logo.png"
 import {GetLang, SetLang} from "../Utilities/Lang";
+import DS from "../Img/discord.svg"
+import INST from "../Img/instagram.svg"
+import Viber from "../Img/viber.svg"
+import {Link} from "react-router-dom";
 
 function MainPage() {
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
@@ -33,7 +37,7 @@ function MainPage() {
             <div
 
                 style={{background: "repeating-linear-gradient(45deg, rgba(65, 65, 135, 0.3) , rgba(64, 64, 64, 0.3) 250px, rgba(65, 65, 95, 0.3) 500px, rgba(64, 64, 74, 0.3) 750px, rgba(65, 65, 135, 0.3) 1000px), rgba(0,0,0,1)"}}
-                 className="w-[100%] pt-[10vh] rounded-2xl flex-col border-0 border-white mt-[0%] self-center flex justify-center ">
+                 className="w-[100%] pt-[10vh] flex-col border-0 border-white mt-[0%] self-center flex justify-center ">
                 <div className="flex flex-col mt-[100px] w-[100%] justify-center ">
                     <img src={logo} className=" w-fit self-center h-[200px] float-right"/>
                     <div
@@ -91,7 +95,18 @@ function MainPage() {
                     <a style={{fontFamily: "fantasy"}}
                        className="self-center text-white text-[40px]  text-center w-grow  italic">{GetLang().Main_page_liked_text_1}<br/>{GetLang().Main_page_liked_text_2}<br/>{GetLang().Main_page_liked_text_3}<br/>{GetLang().Main_page_liked_text_4}</a>
                 </div>
-
+                <div className="block w-full text-white flex flex-row mb-8 justify-around">
+                    <p className="self-center">Contact us:</p>
+                    <div className="flex flex-col justify-around">
+                        <p>(055) 55 55 555</p>
+                        <p>(077) 77 77 777</p>
+                        <p>(099) 99 99 999</p>
+                    </div>
+                    <p className="self-center">cinotes@gmail.com</p>
+                    <Link className="self-center" to="https://discord.com/"><img className="w-10 h-10" src={DS}/></Link>
+                    <Link className="self-center" to="https://instagram.com/"><img className="w-10 h-10" src={INST}/></Link>
+                    <Link className="self-center" to="https://viber.com/"><img className="w-10 h-10" src={Viber}/></Link>
+                </div>
             </div>
         </div>
     );
