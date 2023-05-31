@@ -88,6 +88,7 @@ export function Film() {
     const [srcForPoster,setSrcForPoster] = useState("");
     const [comments, setComments] = useState<Comment[]>();
     const [comment, setComment] = useState("");
+    const [commentCount, setCommentCount] = useState(3);
     const [film, setFilm] = useState<Film | null>(null);
     const [scale, setScale] = useState(1);
     const [isExpandedFilm, setIsExpandedFilm] = useState(false);
@@ -143,7 +144,7 @@ export function Film() {
                 buttonR.style.display = "block";
             }
             if (isReview) {
-                axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=3&resp_amount=0`, config)
+                axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=${commentCount}&resp_amount=0`, config)
                     .then(res => {
                         //setComments(undefined);
                         setComments(res.data.comments?.map((comment: Comment) => ({
@@ -174,7 +175,7 @@ export function Film() {
                     console.log(err.response);
                 });
         }
-    }, [isReview,isState]);
+    }, [isReview,isState,commentCount]);
     const handleZoomIn = () => {
         setScale(scale + 0.1);
     };
@@ -302,12 +303,15 @@ export function Film() {
                             </button>
                         </div>
                     </div>
-                    <div>
+                    <div className={"mb-5"}>
                         {comments?.map(commentar => {
                             return <>
                                 <ReviewsInFilms onUpdateParentState={() => setIsState(!isState)} comment={commentar} pk={commentar.Id}/>
                             </>
                         })}
+                        {isReview &&(
+                        <button className="bg-gray-800 px-4 py-2 w-[20%] ml-[40%] rounded-md" onClick={()=>{setCommentCount(commentCount+3)}}>Load more comments</button>)
+                        }
                     </div>
                 </div>
             </div>
