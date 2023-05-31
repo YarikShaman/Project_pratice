@@ -12,6 +12,7 @@ export function Actors() {
     const nav = useNavigate()
     if (CheckJWT() > 0)
         nav("/sign_in")
+    const [change, setChange] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
     const [actorName, setActorName] = useState<any>([]);
     const [actors, setActors] = useState([]);
@@ -33,7 +34,7 @@ export function Actors() {
                     setMaxPages(Math.ceil(res.data.count / p_size));
                 });
         }
-    }, [selectedPage, isSearch]);
+    }, [selectedPage, isSearch,change]);
     return (
         <div
             style={{background: "repeating-linear-gradient(45deg, rgba(30, 32, 74, 1), rgba(30, 32, 74, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
@@ -47,7 +48,7 @@ export function Actors() {
                     type={"text"}/>
                 <button
                     className="w-3/12 md:1/4 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    type={"submit"} onClick={() => setIsSearch(true)}>{GetLang().Search}
+                    type={"submit"} onClick={() => {setIsSearch(true);setChange(!change)}}>{GetLang().Search}
                 </button>
             </div>
             <div id={"actors"} className="flex w-5/6 flex-row h-auto justify-center flex-wrap">

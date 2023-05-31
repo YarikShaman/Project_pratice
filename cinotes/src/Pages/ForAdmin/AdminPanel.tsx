@@ -198,16 +198,19 @@ export function APanel() {
         axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/", {
             title: genreName
         }, config);
+        window.location.reload();
     }
 
     function Change_Genre() {
         axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/update/", {
             title: genreName
         }, config);
+        window.location.reload();
     }
 
     function Delete_Genre() {
         axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/delete/", config);
+        window.location.reload();
     }
 
     function Change_User() {
@@ -217,12 +220,14 @@ export function APanel() {
             UserId: userid,
             UserType: selectedUserType
         }, config);
+        window.location.reload();
     }
 
     function Delete_User() {
         // @ts-ignore
         let userid = users.find((userS) => userS.Email === user).UserId
         axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user?user_id=" + userid, config);
+        window.location.reload();
     }
 
     return (

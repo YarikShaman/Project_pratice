@@ -117,7 +117,7 @@ export function Account() {
                 <div
                     className=" w-1/2 self-center block h-full min-w-[400px] flex  flex-col justify-center self-center">
                     <img className="bg-white h-[300px] self-center w-[300px] rounded" onClick={()=>{setIsVisible(!isVisible)}} src={data?.ImageLink}/>
-                    {isVisible&&(<div className={"self-center"}>
+                    {isVisible&&(<div className={"self-center mt-6"}>
                         <input className="bg-slate-700 px-4 py-2 rounded-md"
                             onChange={(e) => handleAddPhoto(e)}
                             type={"file"}

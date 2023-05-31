@@ -5,6 +5,7 @@ import axios from "axios";
 export function ReviewsInFilms({ comment, pk, onUpdateParentState }: { comment: any; pk: number; onUpdateParentState: () => void; }) {
     const [liked, setLiked] = useState(false);
     const [clicked, setClicked] = useState(false);
+    const [isPublic, setIsPublic] = useState(false);
     const date = new Date(comment.CreatedAt.seconds * 1000 + comment.CreatedAt.nanos / Math.pow(10, 6));
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -17,20 +18,14 @@ export function ReviewsInFilms({ comment, pk, onUpdateParentState }: { comment: 
         axios.post(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/like/`+comment.Id,{} ,config)
     }
     useEffect(() => {
-        let likeBtn = document.getElementById("Likes");
-        if(likeBtn && comment.Type=="private"){
-            likeBtn.style.display="none"
-        } else if(likeBtn && comment.Type=="public") {
-            likeBtn.style.display="flex"
-        }
         if (comment.IsLiked == false) {
             setLiked(false);
         }
         if(comment.IsLiked == true){
             setLiked(true);
         }
+        setIsPublic(comment.Type=='public')
     },[comment])
-
     return (
         <div className={"flex m-4 bg-gray-600 rounded-2xl pb-2 flex-col"}>
             <div className={" flex flex-row"}>
@@ -54,6 +49,7 @@ export function ReviewsInFilms({ comment, pk, onUpdateParentState }: { comment: 
                     <div className={"self-center text-2xl"}>
                         {comment.LikesAmount}
                     </div>
+                    {isPublic && (
                     <div onClick={() => {
                         setLiked(!liked);
                         setClicked(true);
@@ -68,7 +64,7 @@ export function ReviewsInFilms({ comment, pk, onUpdateParentState }: { comment: 
                         </svg>
                         <span className={"z-20"}>Like</span>
                         <span className={`z-20 suffix ${liked ? "liked" : ""}`}>d</span>
-                    </div>
+                    </div>)}
                 </div>
             </div>
         </div>

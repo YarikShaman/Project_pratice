@@ -163,7 +163,7 @@ export function Film() {
                         console.log(err.response);
                     })
             } else {
-                axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=1`, config)
+                axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=10`, config)
                     .then(res => {
                         setComments(res.data.comments?.map((comment: Comment) => ({
                             ...comment,
