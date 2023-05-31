@@ -60,28 +60,34 @@ interface Film {
     }[];
 }
 
-const Tool = ({deleteFilm, setIsExpandedFilm, isExpandedFilm}: any) => {
-    if (DecodeB64(localStorage["jwt"]).userType == "admin") {
-        return (
-            <>
-                <button
-                    onClick={deleteFilm}
-                    className={"w-1/2 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
-                    {GetLang().Delete}
-                </button>
-                <button
-                    onClick={() => setIsExpandedFilm(!isExpandedFilm)}
-                    className={"w-1/2  bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
-                    {GetLang().Edit}
-                </button>
-            </>
-        )
-    }
 
-    return <></>
-}
 
 export function Film() {
+    const nav = useNavigate();
+    if (CheckJWT() > 0) {
+        //console.log("errror")
+        nav("/sign_in")
+    }
+    const Tool = ({deleteFilm, setIsExpandedFilm, isExpandedFilm}: any) => {
+        if (CheckJWT()!=1&& DecodeB64(localStorage["jwt"]).userType == "admin") {
+            return (
+                <>
+                    <button
+                        onClick={deleteFilm}
+                        className={"w-1/2 bg-red-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-red-600 hover:border-red-800"}>
+                        {GetLang().Delete}
+                    </button>
+                    <button
+                        onClick={() => setIsExpandedFilm(!isExpandedFilm)}
+                        className={"w-1/2  bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
+                        {GetLang().Edit}
+                    </button>
+                </>
+            )
+        }
+
+        return <></>
+    }
     const {id} = useParams();
     const [isReview, setIsReview] = useState(true);
     const [isState, setIsState] = useState(true);
@@ -92,15 +98,11 @@ export function Film() {
     const [film, setFilm] = useState<Film | null>(null);
     const [scale, setScale] = useState(1);
     const [isExpandedFilm, setIsExpandedFilm] = useState(false);
-    const [selectedPL, setSelectedPL] = useState()
     const [dropPL, setDropPL] = useState(false)
     const [PLOptions, setPLOptions] = useState<{ title: string, url: string }[]>([])
-    const nav = useNavigate();
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
-    if (CheckJWT() > 0)
-        nav("/sign_in")
-    if (DecodeB64(localStorage["jwt"]).userType == "premium") {
+    if (localStorage["jwt"]&& DecodeB64(localStorage["jwt"]).userType == "premium") {
         maxLength = 2000;
     }
     const deleteFilm = () => {
@@ -135,8 +137,10 @@ export function Film() {
     }
 
     useEffect(() => {
-        if (CheckJWT() > 0)
+        if (CheckJWT() > 0) {
+            //console.log("errror")
             nav("/sign_in")
+        }
         else {
             let buttonR = document.getElementById("review_add");
             let buttonN = document.getElementById("note_add");
