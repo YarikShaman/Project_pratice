@@ -14,6 +14,7 @@ import {Ver} from "./Pages/Verification";
 import {Film} from "./Pages/Film";
 import {APanel} from "./Pages/ForAdmin/AdminPanel";
 import {Actor} from "./Pages/Actor";
+import Payment from "./Pages/Payment"
 import PRec from "./Pages/PasswordRecovery";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/actors/:id" element={<Actor />}/>
             <Route path="/a_panel" element={<APanel />}/>
             <Route path="/password_rec" element={<PRec />}/>
+            <Route path="/payment" element={<Payment />}/>
         </Routes>
   );
 }

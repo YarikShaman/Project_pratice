@@ -100,7 +100,7 @@ function FilmInPlaylist(combo:any) {
                 }
             })
             axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/"+playlist.pk+"/update/", formdata, config)
-                .then(()=>{window.location.reload()})
+                .then()
         }
     }
 }
