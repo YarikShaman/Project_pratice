@@ -59,9 +59,8 @@ export function ReviewsInFilms({ comment, pk, onUpdateParentState }: { comment: 
                         setClicked(true);
                         onUpdateParentState();
                         like();
-                    }}
-                         onAnimationEnd={() => setClicked(false)}
-                         className={`like-button-wrapper ${liked ? "liked" : ""} text-white flex flex-row pl-[15px] m-4`}>
+                    }} onAnimationEnd={()=>{setClicked(false)}}
+                         className={`text-white flex flex-row pl-[15px] m-4`+" like-button-wrapper" + (liked ? ' liked' : '') + (clicked ? ' clicked' : '')}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                              stroke="white" className="w-6 h-6 z-20">
                             <path strokeLinecap="round" strokeLinejoin="round"

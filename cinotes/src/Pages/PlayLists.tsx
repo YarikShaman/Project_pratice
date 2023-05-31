@@ -20,7 +20,12 @@ export function Playlists() {
     const nav=useNavigate()
     const [currentPlaylist, setCurrentPlaylist] = useState<{ title: string, films: Film[], pk: number }>();
     const [playlistResponse, setPlaylistResponse] = useState<{ title: string, url: string }[]>([]);
+    const [newPlaylist, setNewPlaylist] = useState("");
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
+    let isPremium = (DecodeB64(localStorage["jwt"]).userType=="admin" || DecodeB64(localStorage["jwt"]).userType=="premium")
+    function Add_Playlist(){
+        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/",{title:newPlaylist,user_id:DecodeB64(localStorage["jwt"]).id},config)
+    }
     useEffect(() => {
         if (CheckJWT() > 0)
             nav("/sign_in")
@@ -60,11 +65,17 @@ export function Playlists() {
                             </button>
                         </>
                     })
-                }
-                <input  className={"m-1 bg-neutral-700 text-center border-2 border-gray-900 hover:border-white px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
+                }{isPremium && (<div>
+                <hr/>
+                <p className={"text-white ml-5"}>{GetLang().Add_playlist}</p>
+                <input value={newPlaylist} onChange={(e)=>{setNewPlaylist(e.target.value)}} className={"m-1 bg-neutral-700 text-center border-2 border-gray-900 hover:border-white px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
                 </input>
-                <button id="add_pl_but" className="self-center rounded-3xl text-[14px] px-4 bg-neutral-700 py-2 border-2 hover:border-white border-gray-900 hover:bg-neutral-600 text-white">{GetLang().Add_playlist}</button>
-                <div id="ads"></div>
+                <button id="add_pl_but"
+                        onClick={()=>{Add_Playlist()}}
+                        className="self-center rounded-3xl text-[14px] ml-3 px-4 bg-neutral-700 py-2 border-2 hover:border-white border-gray-900 hover:bg-neutral-600 text-white">
+                    {GetLang().Add_playlist}
+                </button>
+                </div>)}<a className={"text-white hover:text-blue-600 underline ml-2"} href={"../prem"}  id="ads">Buy premium to have more playlists</a>
             </div>
             <button onClick={() => sideMenu()}
                     className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>{GetLang().Search}

@@ -2,11 +2,11 @@
   "Films": "Фільми",
   "Home": "Головна",
   "Actors": "Актори",
-  "Playlists": "Плейлисти",
+  "Playlists": "Плейлісти",
   "Premium": "Преміум",
   "Sign_in": "Увійти",
   "Select_an_option": "Оберіть опцію",
-  "Approve_remove_from_playlist": "Ви дійсно бажаєте видалити цей фільм з плейлисту?",
+  "Approve_remove_from_playlist": "Ви дійсно бажаєте видалити цей фільм з плейлісту?",
   "No": "Ні",
   "Yes": "Так",
   "Verify_account": "Підтвердити обліковий запис",
@@ -69,7 +69,7 @@
   "Sign_in_with_Google": "Увійти за допомогою Google",
   "Facebook_do_not_response": "Facebook не відповідає, спробуйте пізніше",
   "Sign_in_with_Facebook": "Увійти за допомогою Facebook",
-  "Add_to_playlist": "Додати до плейлисту",
+  "Add_to_playlist": "Додати до плейлісту",
   "Genres": "Жанри",
   "IMDb_rating": "Рейтинг IMDb",
   "The_cast": "Акторський склад",
@@ -134,5 +134,5 @@
   "Log_out": "Вийти",
   "Cancel": "Назад",
   "Users": "Користувачі",
-  "Add_playlist": "Новий плейлист"
+  "Add_playlist": "Новий плейліст"
 }
