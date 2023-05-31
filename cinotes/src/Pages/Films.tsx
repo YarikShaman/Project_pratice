@@ -14,13 +14,15 @@ export function Films() {
     const nav=useNavigate()
     if (CheckJWT() > 0)
         nav("/sign_in")
+
+    const [ignore, setIgnore] = useState(true);
     const [isSearch, setIsSearch] = useState(false);
     const [change, setChange] = useState(false);
     const [genreOptions, setGenreOptions] = useState<{ [key: string]: { pk: number; title: string } }>({});
     const [countryOptions, setCountryOptions] = useState([]);
     const [filmName, setFilmName] = useState<any>([]);
-    const [selectedFDate, setSelectedFDate] = useState("");
-    const [selectedSDate, setSelectedSDate] = useState("");
+    const [selectedFDate, setSelectedFDate] = useState("-");
+    const [selectedSDate, setSelectedSDate] = useState("-");
     const [selectedGenre, setSelectedGenre] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
     const [selectedPage, setSelectedPage] = useState(1);
@@ -55,49 +57,24 @@ export function Films() {
         if (filmName) setCookie("filmName", filmName.value, 30);
     }
     function saveSettingsToCookie() {
-        const selectedFDate = document.getElementById("selectedFDate") as HTMLSelectElement;
-        const selectedSDate = document.getElementById("selectedSDate") as HTMLSelectElement;
-        const selectedGenre = document.getElementById("selectedGenre") as HTMLSelectElement;
-        const selectedCountry = document.getElementById("selectedCountry") as HTMLSelectElement;
-        const sortBy = document.querySelector('input[name="sortBy"]:checked')as HTMLInputElement;
-        const sort = document.querySelector('input[name="sort"]:checked')as HTMLInputElement;
-        if(selectedFDate) setCookie("selectedFDate", selectedFDate.value, 30);
-        if(selectedSDate) setCookie("selectedSDate", selectedSDate.value, 30);
-        if(selectedGenre) setCookie("selectedGenre", selectedGenre.value, 30);
-        if(selectedCountry) setCookie("selectedCountry", selectedCountry.value, 30);
-        if (sortBy) setCookie("sortBy", sortBy.value, 30)
-        if (sort) setCookie("sort", sort.value, 30);
+        console.log(selectedGenre)
+        if (selectedFDate!="-") setCookie("selectedFDate", selectedFDate, 30);
+        if (selectedSDate!="-") setCookie("selectedSDate", selectedSDate, 30);
+        if (selectedGenre) setCookie("selectedGenre", selectedGenre, 30);
+        if (selectedCountry) setCookie("selectedCountry", selectedCountry, 30);
     }
     function loadSettingsFromCookie() {
-        const filmName = document.getElementById("filmName") as HTMLInputElement;
-        const selectedFDate = document.getElementById("selectedFDate") as HTMLSelectElement;
-        const selectedSDate = document.getElementById("selectedSDate") as HTMLSelectElement;
-        const selectedGenre = document.getElementById("selectedGenre") as HTMLSelectElement;
-        const selectedCountry = document.getElementById("selectedCountry") as HTMLSelectElement;
-        const sortBy = document.querySelectorAll('input[name="sortBy"]') as NodeListOf<HTMLInputElement>;
-        const sort = document.querySelectorAll('input[name="sort"]') as NodeListOf<HTMLInputElement>;
-        if(getCookie("filmName")!='')filmName.value = getCookie("filmName");
-        if(getCookie("selectedFDate")!='')selectedFDate.value = getCookie("selectedFDate");
-        if(getCookie("selectedSDate")!='')selectedSDate.value = getCookie("selectedSDate");
-        if(getCookie("selectedGenre")!='')selectedGenre.value = getCookie("selectedGenre");
-        if(getCookie("selectedCountry")!='')selectedCountry.value = getCookie("selectedCountry");
-
-        if(getCookie("sortBy")!=null) for (let i = 0; i < sortBy.length; i++) {
-            if (sortBy[i].value === getCookie("sortBy")) {
-                sortBy[i].checked = true;
-            }
-        }
-
-        if(getCookie("sort")!=null) for (let i = 0; i < sort.length; i++) {
-            if (sort[i].value === getCookie("sort")) {
-                sort[i].checked = true;
-            }
-        }
+        if (getCookie("filmName") !== '') setFilmName(getCookie("filmName"));
+        if (getCookie("selectedFDate") !== '') setSelectedFDate(getCookie("selectedFDate"));
+        if (getCookie("selectedSDate") !== '') setSelectedSDate(getCookie("selectedSDate"));
+        if (getCookie("selectedGenre") !== '') setSelectedGenre(getCookie("selectedGenre"));
+        if (getCookie("selectedCountry") !== '') setSelectedCountry(getCookie("selectedCountry"));
+        setChange(true)
     }
-    const filtrateButton = document.getElementById("filtrateButton");
-    filtrateButton?.addEventListener("click", saveSettingsToCookie);
+
     const handleSDateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = Number(e.target.value);
+        let fDate = document.getElementById("selectedFDate")
         if (e.target.value == '-' || selectedValue >= Number(selectedFDate) || selectedFDate == '-') {
             setSelectedSDate(e.target.value);
         } else {
@@ -129,8 +106,8 @@ export function Films() {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
+            if (ignore)
             loadSettingsFromCookie();
-            let ignore = false;
             let order = "";
             if (sort != "" && sortBy != "") {
                 order += '&order_by=';
@@ -170,29 +147,26 @@ export function Films() {
             }
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
                 .then(res => {
-                    if (!ignore) {
                         setFilms(res.data.results);
                         setMaxPages(Math.ceil(res.data.count / p_size));
                         scrollToTop();
-                    }
                 });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
                 .then(res => {
-                    if (!ignore) {
                         setGenreOptions(res.data.results);
-                    }
                 });
             axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/", config)
                 .then(res => {
-                    if (!ignore) {
                         setCountryOptions(res.data.countries);
-                    }
                 });
             return () => {
-                ignore = true;
+                setIgnore(false);
             };
         }
     }, [selectedPage, change, isSearch]);
+    document.addEventListener("DOMContentLoaded", function() {
+        loadSettingsFromCookie();
+    });
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -286,7 +260,7 @@ export function Films() {
                                onChange={handleSortChange}/>
                         <label className={"m-2"}>{GetLang().Descending}</label><br/>
                         <hr/>
-                        <button onClick={() => setChange(!change)}
+                        <button onClick={() => {setChange(!change);saveSettingsToCookie()}}
                                 id={"filtrateButton"}
                                 className={"w-1/2 my-5 rounded-md bg-indigo-600 px-3 py-1.5 mx-auto relative left-1/4 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>{GetLang().Filtrate}
                         </button>
