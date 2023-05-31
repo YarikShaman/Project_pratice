@@ -1,13 +1,17 @@
 import React from "react";
 import "../App.css";
 import {GetLang, SetLang} from "../Utilities/Lang";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
+import {CheckJWT} from "../Utilities/CheckJWT";
 
 function FilmInPlaylist(combo:any) {
-    //console.log(combo.combo.film.url)
+    const nav= useNavigate()
+    const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const id = combo.combo.film.url.split("/")[4]
     let film = combo.combo
+    let playlist=combo.combo.currentPlaylist
+    //console.log(playlist)
 
     return (
         <div className="flex mx-5 my-5  justify-end">
@@ -84,8 +88,20 @@ function FilmInPlaylist(combo:any) {
     }
 
     function Delete() {
-        //axios.get()
-
+        if (CheckJWT() > 0)
+            nav("/sign_in")
+        else {
+            let formdata = new FormData()
+            formdata.append("title", playlist.title)
+            formdata.append("user_id", playlist.user_id)
+            playlist.films.map((f:any, i:number)=>{
+                if (f.url!=film.film.url) {
+                    formdata.append('films',  f.url.split("/")[4])
+                }
+            })
+            axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/"+playlist.pk+"/update/", formdata, config)
+                .then(()=>{window.location.reload()})
+        }
     }
 }
 

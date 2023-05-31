@@ -55,12 +55,16 @@ export function Playlists() {
                                         })
                                 }
                             }}
-                                    className={"m-1 bg-black px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
+                                    className={"m-1 bg-neutral-700 border-2 border-gray-900 hover:border-white px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
                                 {playlist?.title}
                             </button>
                         </>
                     })
                 }
+                <input  className={"m-1 bg-neutral-700 text-center border-2 border-gray-900 hover:border-white px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
+                </input>
+                <button id="add_pl_but" className="self-center rounded-3xl text-[14px] px-4 bg-neutral-700 py-2 border-2 hover:border-white border-gray-900 hover:bg-neutral-600 text-white">{GetLang().Add_playlist}</button>
+                <div id="ads"></div>
             </div>
             <button onClick={() => sideMenu()}
                     className={"md:hidden fixed right-0 bottom-0 rounded-full bg-slate-800 px-3 py-1.5 w-16 h-16 m-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"}>{GetLang().Search}
