@@ -15,7 +15,7 @@ export function Prem() {
             style={{background:"repeating-linear-gradient(45deg, rgba(255, 205, 0, 1) 1px, rgba(225, 225, 225, 1) 4px, rgba(255, 215, 0, 1) 6px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
             className="min-h-screen flex flex-col w-full">
             <HomeHeader/>
-            <div className={"mt-[5%] rounded-xl pb-8 bg-gray-600 ml-[20%] w-3/5 flex"}>
+            <div className={"mt-[5%] rounded-xl pb-8 px-5 bg-gray-600 ml-[20%] w-3/5 flex"}>
                 <div className={"text-white inline-block content-center justify-center text-xl"}>
                     <p className={"text-3xl ml-[45%]"}>Premium</p>
                     <p>🎥 Upgrade to Premium on our Films Review Site! 🌟
