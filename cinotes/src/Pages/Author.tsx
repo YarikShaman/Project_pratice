@@ -88,6 +88,7 @@ function Author() {
                 {code: resp.access_token})
                 .then(res => {
                     setError("")
+                    localStorage["jwt"]=res.data.jwt
                     if (DecodeB64(res.data.jwt).isVerified == "false")
                         nav("/ver")
                     nav("/")
