@@ -40,7 +40,7 @@ function Registr() {
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + resp.data.jwt}})
                         .then(resp=>{
                             alert(GetLang().Account_created)
-                            nav("ver")
+                            nav("/ver")
                         })
                         .catch(err=>{
                             switch (err.response.status) {

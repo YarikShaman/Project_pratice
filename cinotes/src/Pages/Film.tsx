@@ -27,7 +27,7 @@ interface Comment {
     };
     AvatarLink: string;
     Username: string;
-    Type:string;
+    Type: string;
     IsLiked?: boolean;
 }
 
@@ -60,7 +60,7 @@ interface Film {
     }[];
 }
 
-const Tool = ({deleteFilm, setIsExpandedFilm, isExpandedFilm}:any) => {
+const Tool = ({deleteFilm, setIsExpandedFilm, isExpandedFilm}: any) => {
     if (DecodeB64(localStorage["jwt"]).userType == "admin") {
         return (
             <>
@@ -70,7 +70,7 @@ const Tool = ({deleteFilm, setIsExpandedFilm, isExpandedFilm}:any) => {
                     {GetLang().Delete}
                 </button>
                 <button
-                    onClick={() =>setIsExpandedFilm(!isExpandedFilm)}
+                    onClick={() => setIsExpandedFilm(!isExpandedFilm)}
                     className={"w-1/2  bg-amber-700 border-neutral-400 font-semibold rounded-sm border-2 hover:border-2 hover:bg-amber-600 hover:border-amber-800"}>
                     {GetLang().Edit}
                 </button>
@@ -85,13 +85,16 @@ export function Film() {
     const {id} = useParams();
     const [isReview, setIsReview] = useState(true);
     const [isState, setIsState] = useState(true);
-    const [srcForPoster,setSrcForPoster] = useState("");
+    const [srcForPoster, setSrcForPoster] = useState("");
     const [comments, setComments] = useState<Comment[]>();
     const [comment, setComment] = useState("");
     const [commentCount, setCommentCount] = useState(3);
     const [film, setFilm] = useState<Film | null>(null);
     const [scale, setScale] = useState(1);
     const [isExpandedFilm, setIsExpandedFilm] = useState(false);
+    const [selectedPL, setSelectedPL] = useState()
+    const [dropPL, setDropPL] = useState(false)
+    const [PLOptions, setPLOptions] = useState<{ title: string, url: string }[]>([])
     const nav = useNavigate();
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let maxLength = 500;
@@ -104,6 +107,7 @@ export function Film() {
         axios.delete(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/delete/`, config);
         nav("../");
     }
+
     function Add_Review() {
         if (CheckJWT() > 0)
             nav("/sign_in")
@@ -175,7 +179,7 @@ export function Film() {
                     console.log(err.response);
                 });
         }
-    }, [isReview,isState,commentCount]);
+    }, [isReview, isState, commentCount]);
     const handleZoomIn = () => {
         setScale(scale + 0.1);
     };
@@ -185,17 +189,19 @@ export function Film() {
             setScale(scale - 0.1);
         }
     };
-    function visChange(id:any){
+
+    function visChange(id: any) {
         let el = document.getElementById(id);
-        if(el == null) return
-        if(el.style.display=="block"){
+        if (el == null) return
+        if (el.style.display == "block") {
             el.style.display = "none";
-        } else{
+        } else {
             if (film?.poster_file !== undefined)
-            setSrcForPoster(film?.poster_file);
+                setSrcForPoster(film?.poster_file);
             el.style.display = "block";
         }
     }
+
     return (
         <div
             style={{background: "repeating-linear-gradient(45deg, rgba(255, 130, 0, 1), rgba(255, 130, 0, 1) 1px, rgba(44, 44, 44, 1) 11px, rgba(64, 64, 64, 1) 200px)"}}
@@ -204,14 +210,22 @@ export function Film() {
             {isExpandedFilm && (
                 <FilmEdit film={film}/>
             )}
-            <div id="poster" className={"fixed bg-black divimg overflow-auto hidden top-[10%] h-[88%] w-2/5 left-[30%] rounded-xl border-4 border-white"}>
-                <button onClick={()=>{visChange("poster")}} className={"w-10 h-10 fixed right-[31%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X</button>
-                <img src={srcForPoster} alt={"screenshot"}  style={{transform: `scale(${scale})`,pointerEvents: 'none',position: "absolute",
-                    top: "0", left: "0", transformOrigin:"top left"}} className={"object-contain h-full w-full"}/>
-                <button onClick={handleZoomOut} className="w-10 h-10 text-3xl bg-opacity-50 bg-black fixed rounded-full right-[47%] bottom-[3%]">
+            <div id="poster"
+                 className={"fixed bg-black divimg overflow-auto hidden top-[10%] h-[88%] w-2/5 left-[30%] rounded-xl border-4 border-white"}>
+                <button onClick={() => {
+                    visChange("poster")
+                }} className={"w-10 h-10 fixed right-[31%] bg-opacity-50 bg-black text-3xl rounded-full z-10"}>X
+                </button>
+                <img src={srcForPoster} alt={"screenshot"} style={{
+                    transform: `scale(${scale})`, pointerEvents: 'none', position: "absolute",
+                    top: "0", left: "0", transformOrigin: "top left"
+                }} className={"object-contain h-full w-full"}/>
+                <button onClick={handleZoomOut}
+                        className="w-10 h-10 text-3xl bg-opacity-50 bg-black fixed rounded-full right-[47%] bottom-[3%]">
                     -
                 </button>
-                <button onClick={handleZoomIn} className="w-10 h-10 text-3xl bg-opacity-50 bg-black fixed rounded-full right-[51%] bottom-[3%]">
+                <button onClick={handleZoomIn}
+                        className="w-10 h-10 text-3xl bg-opacity-50 bg-black fixed rounded-full right-[51%] bottom-[3%]">
                     +
                 </button>
             </div>
@@ -226,20 +240,73 @@ export function Film() {
                             </div>
                             <div className={"w-[600px] flex h-2/3 self-center justify-end"}>
                                 <div className={"flex h-full w-[180px] self-center justify-end"}>
-                                    <Tool deleteFilm={deleteFilm} setIsExpandedFilm={setIsExpandedFilm} isExpandedFilm={isExpandedFilm}/>
+                                    <Tool deleteFilm={deleteFilm} setIsExpandedFilm={setIsExpandedFilm}
+                                          isExpandedFilm={isExpandedFilm}/>
                                 </div>
                                 <button
-                                    className={"bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}>
+                                    className={"bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}
+                                    onClick={() => {
+                                        if (!dropPL) {
+                                            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/?user_id=" + DecodeB64(localStorage["jwt"]), config)
+                                                .then((res) => {
+                                                    console.log(res.data.results)
+                                                    setPLOptions(res.data.results)
+                                                })
+                                            setDropPL(true)
+                                        } else
+                                            setDropPL(false)
+                                    }}>
                                     {GetLang().Add_to_playlist}
                                 </button>
+                                {dropPL && (
+                                    <div className=" mt-10 fixed">
+                                        <select id="drop_pl"
+                                                className="bg-slate-700 px-4 w-40 py-2 rounded-md"
+                                                value=""
+                                                onChange={(e) => {
+                                                    if (e.target.value.length > 0) {
+                                                        axios.get(e.target.value, config)
+                                                            .then((res) => {
+                                                                console.log(DecodeB64(localStorage["jwt"]))
+                                                                let formdata = new FormData()
+                                                                formdata.append("title", res.data.title)
+                                                                formdata.append("user_id", DecodeB64(localStorage["jwt"]).id)
+                                                                res.data.films.map((f: any, i: number) => {
+                                                                    formdata.append('films', f.url.split("/")[4])
+                                                                })
+                                                                //@ts-ignore
+                                                                formdata.append("films", id.toString())
+                                                                axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/" + res.data.pk + "/update/", formdata, config)
+                                                                    .then(() => {
+                                                                        setDropPL(false)
+                                                                    })
+                                                            })
+                                                    }
+                                                }}
+                                        >
+                                            <option value="" className="text-end">x</option>
+                                            {PLOptions?.map((option) => {
+                                                return (
+                                                    <option key={option.url} value={option.url}>
+                                                        {option.title}
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                    </div>)
+                                }
                             </div>
                         </div>
                         <div className={"flex flex-row mt-[50px]"}>
                             <div className={"p-1 rounded-xl pl-10"}>
-                                <img onClick={()=>{visChange("poster")}} alt={"screenshot"}  className={"rounded-xl  w-[500px]"} src={film?.compressed_poster_file}/>
+                                <img onClick={() => {
+                                    visChange("poster")
+                                }} alt={"screenshot"} className={"rounded-xl  w-[500px]"}
+                                     src={film?.compressed_poster_file}/>
                             </div>
                             <div className={"mx-5 p-3 w-full text-[24px]"}>
-                                <p className="pt-0"><b>{GetLang().Genres}:</b> {film?.genres.map(genre => genre.title).join(', ')}</p>
+                                <p className="pt-0">
+                                    <b>{GetLang().Genres}:</b> {film?.genres.map(genre => genre.title).join(', ')}</p>
                                 <p className="pt-3"><b>{GetLang().Release_date}:</b> {film?.release_date}</p>
                                 <p className="pt-3"><b>{GetLang().Country}:</b> {film?.country}</p>
                                 <p className="pt-3"><b>{GetLang().Rating}:</b> {film?.rating}</p>
@@ -254,7 +321,6 @@ export function Film() {
                 </div>
                 <div className={"flex w-full my-2 self-center flex-col"}>
                     <div
-                        // style={{backgroundImage:`url(${KinoLenta})`, backdropFilter:"blur(10px)"}}
                         className={"flex justify-center flex-row mt-[40px]  "}>
                         {
                             film?.screenshots.map(screenshot => {
@@ -306,11 +372,14 @@ export function Film() {
                     <div className={"mb-5"}>
                         {comments?.map(commentar => {
                             return <>
-                                <ReviewsInFilms onUpdateParentState={() => setIsState(!isState)} comment={commentar} pk={commentar.Id}/>
+                                <ReviewsInFilms onUpdateParentState={() => setIsState(!isState)} comment={commentar}
+                                                pk={commentar.Id}/>
                             </>
                         })}
-                        {isReview &&(
-                        <button className="bg-gray-800 px-4 py-2 w-[20%] ml-[40%] rounded-md" onClick={()=>{setCommentCount(commentCount+3)}}>Load more comments</button>)
+                        {isReview && (
+                            <button className="bg-gray-800 px-4 py-2 w-[20%] ml-[40%] rounded-md" onClick={() => {
+                                setCommentCount(commentCount + 3)
+                            }}>Load more comments</button>)
                         }
                     </div>
                 </div>
