@@ -67,12 +67,12 @@ export function Playlists() {
                     })
                 }{isPremium && (<div>
                 <hr/>
-                <p className={"text-white ml-5"}>{GetLang().Add_playlist}</p>
+                <p className={"text-white ml-[32%]"}>{GetLang().Add_playlist}</p>
                 <input value={newPlaylist} onChange={(e)=>{setNewPlaylist(e.target.value)}} className={"m-1 bg-neutral-700 text-center border-2 border-gray-900 hover:border-white px-2 py-3 flex-wrap rounded-xl block w-full text-white"}>
                 </input>
                 <button id="add_pl_but"
                         onClick={()=>{Add_Playlist()}}
-                        className="self-center rounded-3xl text-[14px] ml-3 px-4 bg-neutral-700 py-2 border-2 hover:border-white border-gray-900 hover:bg-neutral-600 text-white">
+                        className="self-center rounded-3xl text-[14px] ml-[27%] px-4 bg-neutral-700 py-2 border-2 hover:border-white border-gray-900 hover:bg-neutral-600 text-white">
                     {GetLang().Add_playlist}
                 </button>
                 </div>)}<a className={"text-white hover:text-blue-600 underline ml-2"} href={"../prem"}  id="ads">Buy premium to have more playlists</a>
