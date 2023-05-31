@@ -39,8 +39,7 @@ function Registr() {
                     localStorage["jwt"] = resp.data.jwt;
                     axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + resp.data.jwt}})
                         .then(resp=>{
-                            alert(GetLang().Account_created)
-                            nav("ver")
+                            nav("../ver")
                         })
                         .catch(err=>{
                             switch (err.response.status) {
@@ -48,7 +47,7 @@ function Registr() {
                                     setErrorEmail(GetLang().Email_not_available);
                                     break;
                                 case 500:
-                                    alert(GetLang().Account_created_without_verification);
+                                    setError2(GetLang().Account_created_without_verification);
                                     break;
                             }
                         })
@@ -61,7 +60,7 @@ function Registr() {
                             setErrorEmail(GetLang().Account_already_exists);
                             break;
                         case 500:
-                            alert(GetLang().Server_do_not_response);
+                            setError2(GetLang().Server_do_not_response);
                             break;
                     }
                 });
