@@ -271,7 +271,10 @@ export function Film() {
                                                 value=""
                                                 onChange={(e) => {
                                                     if (e.target.value.length > 0) {
-                                                        axios.get(e.target.value, config)
+                                                        var splitUrl = e.target.value.split('/');
+                                                        splitUrl[2] = 'back.cintoes.link';
+                                                        var newUrl = 'https://' + splitUrl.slice(2).join('/');
+                                                        axios.get(newUrl, config)
                                                             .then((res) => {
                                                                 console.log(DecodeB64(localStorage["jwt"]))
                                                                 let formdata = new FormData()
