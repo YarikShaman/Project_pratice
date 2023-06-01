@@ -19,7 +19,7 @@ function MainPage() {
         rFilms: [],
     })
     useEffect(() => {
-        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/mane-page")
+        axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/mane-page")
             .then((res) => {
                 setFilms({
                     nFilms: res.data.newFilms.results,

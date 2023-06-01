@@ -145,17 +145,17 @@ export function Films() {
             if (isSearch == true) {
                 query = "/search/?page_size=" + p_size.toString() + "&page=" + page.toString() + "&q=" + filmName;
             }
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films" + query, config)
                 .then(res => {
                         setFilms(res.data.results);
                         setMaxPages(Math.ceil(res.data.count / p_size));
                         scrollToTop();
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
                 .then(res => {
                         setGenreOptions(res.data.results);
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/", config)
                 .then(res => {
                         setCountryOptions(res.data.countries);
                 });

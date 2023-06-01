@@ -13,7 +13,7 @@ export function ActorEdit(actor: any) {
     const [actorDescription, setActorDescription] = useState(actor.actor.description);
     const [actorPhoto, setActorPhoto] = useState("");
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-    useEffect(()=>{axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
+    useEffect(()=>{axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
         .then(res => {
             setFilmOptions(res.data.results.map((film: { url: any; title: any; }) => ({
                 url: film.url.match(/\/films\/(\d+)\//)[1],
@@ -40,7 +40,7 @@ export function ActorEdit(actor: any) {
         if(films.length!=0) { // @ts-ignore
             data.append("films",films.map(item => Number(item.url)));
         }
-        axios.patch(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${actor.actor.pk}/update/`,data, config);
+        axios.patch(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${actor.actor.pk}/update/`,data, config);
     }
     return (
         <>

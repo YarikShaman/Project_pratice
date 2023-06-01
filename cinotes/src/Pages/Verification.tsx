@@ -12,7 +12,7 @@ export function Ver() {
 
     function Verify() {
         const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/check", {code: code}, config)
             .then(res => {
                 nav("../sign_in")
             })
@@ -57,7 +57,7 @@ export function Ver() {
                         {GetLang().Confirm}
                     </button>
                     <button onClick={() => {
-                        axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
+                        axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
                             .then(resp => {
                                 nav("../ver")
                             })

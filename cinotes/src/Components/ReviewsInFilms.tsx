@@ -15,7 +15,7 @@ export function ReviewsInFilms({ comment, pk, onUpdateParentState }: { comment: 
     const seconds = date.getSeconds();
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const like = () =>{
-        axios.post(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/like/`+comment.Id,{} ,config)
+        axios.post(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/like/`+comment.Id,{} ,config)
     }
     useEffect(() => {
         if (comment.IsLiked == false) {

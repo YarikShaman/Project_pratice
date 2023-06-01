@@ -46,7 +46,7 @@ export function Account() {
         if(film) data.append("fav-film",filmOptions.find((genreo) => genreo.title === film).url);
         if(actor) { // @ts-ignore
             data.append("fav-actor",actorsRaw?.find((genreo) => genreo.name === actor).pk);}
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
     }
     const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files != null && e.target.files.length != 0) {
@@ -61,46 +61,46 @@ export function Account() {
             data.append("fav-actor",actorsRaw?.find((genreo) => genreo.name === actor).pk);
         }
         if(profilePhoto) data.append("img",profilePhoto);
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/add",data, config);
     }
     useEffect(() => {
         if (CheckJWT() != 0)
             nav("/sign_in")
         else {
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id, config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id, config)
                 .then(res => {
                     setData(res.data)
                     if(res.data.FavFilm)
-                    axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/" + res.data.FavFilm.toString() + "/", config)
+                    axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/" + res.data.FavFilm.toString() + "/", config)
                         .then((resp) => {
                             setFilm(resp.data.title)
                         })
                     if(res.data.FavGenre)
-                    axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + res.data.FavGenre.toString() + "/", config)
+                    axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + res.data.FavGenre.toString() + "/", config)
                         .then((resp) => {
 
                             setGenre(resp.data.title)
                         })
                     if(res.data.FavActor)
-                    axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/" + res.data.FavActor.toString() + "/", config)
+                    axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/" + res.data.FavActor.toString() + "/", config)
                         .then((resp) => {
                             setActor(resp.data.name)
                         })
 
                 })
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=500", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=500", config)
                 .then(res => {
                     setFilmOptions(res.data.results.map((film: { url: any; title: any; }) => ({
                         url: film.url.match(/\/films\/(\d+)\//)[1],
                         title: film.title,
                     })));
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
                 .then(res => {
                     setActorsRaw(res.data.results);
                     setActorOptions((res.data.results).map((actor: { name: any; }) => actor.name))
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=1000", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=1000", config)
                 .then((res) => {
                     setGenreRaw(res.data.results)
                     setGenreOptions(res.data.results.map((genre: { title: any; }) => genre.title))

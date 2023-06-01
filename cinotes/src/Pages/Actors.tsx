@@ -28,7 +28,7 @@ export function Actors() {
             if (isSearch == true) {
                 query = "search/?q=" + actorName + '&page=';
             }
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/" + query + selectedPage, config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/" + query + selectedPage, config)
                 .then(res => {
                     setActors(res.data.results);
                     setMaxPages(Math.ceil(res.data.count / p_size));

@@ -31,13 +31,13 @@ function Registr() {
         else {
             setError2("")
             if (CheckPas(pas1).code == 0) {
-                axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signup", {
+                axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signup", {
                     email: login,
                     username: username,
                     password: pas1
                 }).then(resp => {
                     localStorage["jwt"] = resp.data.jwt;
-                    axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + resp.data.jwt}})
+                    axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + resp.data.jwt}})
                         .then(resp=>{
                             nav("../ver")
                         })

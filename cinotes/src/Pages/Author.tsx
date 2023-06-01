@@ -20,14 +20,14 @@ function Author() {
     const nav = useNavigate()
 
     function Signin(login: string, password: string) {
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/signin", {
             email: login,
             password: password
         }).then(res => {
             setError("");
             localStorage["jwt"] = res.data.jwt;
             if (DecodeB64(res.data.jwt).isVerified == "false")
-                axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + res.data.jwt}})
+                axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + res.data.jwt}})
                     .then(resp => {
                         nav("../ver")
                     })
@@ -63,7 +63,7 @@ function Author() {
     }
 
     function Recovery() {
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/send", {
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/send", {
             email: login
         }).then(res => {
             setError("");
@@ -84,7 +84,7 @@ function Author() {
 
     const signIn = useGoogleLogin({
         onSuccess: (resp) => {
-            axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
+            axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/google",
                 {code: resp.access_token})
                 .then(res => {
                     setError("")
@@ -215,7 +215,7 @@ function Author() {
                             className="flex-1 self-center w-2/3 justify-center text-center rounded-md bg-white mt-2 px-2 py-2 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             appId="268389395613658"
                             onSuccess={(response) => {
-                                axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/facebook",
+                                axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/auth/facebook",
                                     {code: response.accessToken}).then(res => {
                                     setError("");
                                     localStorage["jwt"] = res.data.jwt;

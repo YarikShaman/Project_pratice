@@ -56,7 +56,7 @@ export function Actor() {
     const [isExpandedActor, setIsExpandedActor] = useState(false);
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const deleteActor = () => {
-        axios.delete(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/delete/`, config);
+        axios.delete(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/delete/`, config);
         nav("../");
     }
     if (actor?.death_date == null) alive = 'alive';
@@ -66,7 +66,7 @@ export function Actor() {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
-            axios.get(`http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/`, config)
+            axios.get(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/${id}/`, config)
                 .then(res => {
                     setActor(res.data);
                 }, err => {

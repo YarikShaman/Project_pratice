@@ -88,7 +88,7 @@ export function APanel() {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/?page_size=200", config)
                 .then(res => {
                     setFilmOptions(res.data.results.map((film: { url: any; title: any; }) => ({
                         url: film.url.match(/\/films\/(\d+)\//)[1],
@@ -96,20 +96,20 @@ export function APanel() {
                     })));
 
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
                 .then(res => {
                     setGenreOptions(res.data.results);
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin", config)
                 .then(res => {
                     setUsers(res.data.Users);
                     console.log(res.data.Users)
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/?page_size=100", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/?page_size=100", config)
                 .then(res => {
                     setCountryOptions(res.data.countries);
                 });
-            axios.get("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
+            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
                 .then(res => {
                     setActorsRaw(res.data.results);
                     setActorsOptions((res.data.results).map((actor: { name: any; }) => actor.name))
@@ -166,7 +166,7 @@ export function APanel() {
             };
             arr.push(d);
         });
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/", {
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/", {
             title: title,
             genres: genres.map(({pk}) => (Number(pk))),
             actors: actors.map(({pk}) => (Number(pk))),
@@ -184,7 +184,7 @@ export function APanel() {
     }
 
     function Add_Actor() {
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/", {
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/", {
             name: actor,
             photo_image: actorPhoto,
             description: actorDescription,
@@ -195,28 +195,28 @@ export function APanel() {
     }
 
     function Add_Genre() {
-        axios.post("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/", {
+        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/", {
             title: genreName
         }, config);
         window.location.reload();
     }
 
     function Change_Genre() {
-        axios.put("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/update/", {
+        axios.put("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/update/", {
             title: genreName
         }, config);
         window.location.reload();
     }
 
     function Delete_Genre() {
-        axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/delete/", config);
+        axios.delete("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/" + selectedGenreId + "/delete/", config);
         window.location.reload();
     }
 
     function Change_User() {
         // @ts-ignore
         let userid = users.find((userS) => userS.Email === user).UserId
-        axios.patch("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user-type", {
+        axios.patch("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user-type", {
             UserId: userid,
             UserType: selectedUserType
         }, config);
@@ -226,7 +226,7 @@ export function APanel() {
     function Delete_User() {
         // @ts-ignore
         let userid = users.find((userS) => userS.Email === user).UserId
-        axios.delete("http://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user?user_id=" + userid, config);
+        axios.delete("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/admin/user?user_id=" + userid, config);
         window.location.reload();
     }
 
