@@ -24,14 +24,14 @@ export function Playlists() {
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     let isPremium = (DecodeB64(localStorage["jwt"]).userType=="admin" || DecodeB64(localStorage["jwt"]).userType=="premium")
     function Add_Playlist(){
-        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/",{title:newPlaylist,user_id:DecodeB64(localStorage["jwt"]).id},config)
+        axios.post("https://back.cintoes.link/playlists/",{title:newPlaylist,user_id:DecodeB64(localStorage["jwt"]).id},config)
     }
     useEffect(() => {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
             const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
-            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/", config)
+            axios.get("https://back.cintoes.link/playlists/", config)
                 .then(async (res) => {
                     setPlaylistResponse(res.data.results);
                 }).catch((err) => {

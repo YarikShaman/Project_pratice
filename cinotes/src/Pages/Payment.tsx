@@ -15,7 +15,7 @@ function Payment(){
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     const handlePaymentSubmit = () => {
         if(cardNumber!="" && expirationDate!="" && cvv!="" && nameOnCard!="")
-            axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/premium/buy",{},config).then((res)=>{
+            axios.post("https://back.cintoes.link/premium/buy",{},config).then((res)=>{
                 localStorage.setItem("jwt",res.data.jwt);
                 nav("../")
             })

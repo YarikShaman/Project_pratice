@@ -48,7 +48,7 @@ export function HomeHeader() {
                 document.getElementById("verifier").style.display="none"
             if (CheckJWT() == 0) {
                 {
-                    axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
+                    axios.get("https://back.cintoes.link/user-data/get?user_id=" + DecodeB64(localStorage["jwt"]).id.toString(), config)
                         .then(res => {
                             setLink("/account")
                             if (res.data.ImageLink?.length > 0)
@@ -136,7 +136,7 @@ export function HomeHeader() {
                     </div>
                     <div className="flex flex-row space-x-5">
                         <a id="verifier" href="/ver" onClick={() => {
-                            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
+                            axios.get("https://back.cintoes.link/verify/send", {headers: {Authorization: "Bearer " + localStorage["jwt"]}})
                                 .then(resp => {
                                     nav("/ver")
                                 })

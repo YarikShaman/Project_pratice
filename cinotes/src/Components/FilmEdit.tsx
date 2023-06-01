@@ -30,15 +30,15 @@ export function FilmEdit(film: any) {
     const [screenshots, setScreenshots] = useState<{ base64string: string; name: string }[]>([]);
     const config = {headers: {Authorization: "Bearer " + localStorage["jwt"]}};
     useEffect(() => {
-        axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/genres/?page_size=100", config)
+        axios.get("https://back.cintoes.link/films/genres/?page_size=100", config)
             .then(res => {
                 setGenreOptions(res.data.results);
             });
-        axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/countries/?page_size=100", config)
+        axios.get("https://back.cintoes.link/films/countries/?page_size=100", config)
             .then(res => {
                 setCountryOptions(res.data.countries);
             });
-        axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/actors/?page_size=500", config)
+        axios.get("https://back.cintoes.link/actors/?page_size=500", config)
             .then(res => {
                 setActorsRaw(res.data.results);
                 setActorsOptions((res.data.results).map((actor: { name: any; }) => actor.name))
@@ -104,7 +104,7 @@ export function FilmEdit(film: any) {
                 return formData.append(`screenshot_${index}`, screenshot);
             });
         }
-        axios.patch("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/"+film.film.pk+"/update/", formData, config)
+        axios.patch("https://back.cintoes.link/films/"+film.film.pk+"/update/", formData, config)
     }
 
     return (

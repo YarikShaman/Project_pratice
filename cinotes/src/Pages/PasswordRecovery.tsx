@@ -48,7 +48,7 @@ function PRec() {
                         <button
                             id="resend_but"
                             onClick={() => {
-                                axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/send", {
+                                axios.post("https://back.cintoes.link/recover/send", {
                                     email: localStorage["email"]
                                 }).then(res => {
                                     alert(GetLang().Email_successfully_resent);
@@ -95,7 +95,7 @@ function PRec() {
                     <button
                         id="conf_but"
                         onClick={(e) => {
-                            axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/check", {
+                            axios.post("https://back.cintoes.link/recover/check", {
                                 email: localStorage["email"],
                                 code: Number(code)
                             }).then(res => {
@@ -178,7 +178,7 @@ function PRec() {
                                     setError2("")
                                     if (CheckPas(password1).code === 0) {
                                         const config = {headers: {Authorization: "Bearer " + localStorage["jwt_rec"]}};
-                                        axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/recover/change", {
+                                        axios.post("https://back.cintoes.link/recover/change", {
                                             password: password1
                                         }, config).then(res => {
                                             alert(GetLang().Password_successfully_changed);

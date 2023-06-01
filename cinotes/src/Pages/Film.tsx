@@ -106,7 +106,7 @@ export function Film() {
         maxLength = 2000;
     }
     const deleteFilm = () => {
-        axios.delete(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/delete/`, config);
+        axios.delete(`https://back.cintoes.link/films/${id}/delete/`, config);
         nav("../");
     }
 
@@ -114,7 +114,7 @@ export function Film() {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
-            axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add", {
+            axios.post("https://back.cintoes.link/comment/add", {
                 filmId: Number(id),
                 text: comment,
                 commentType: "public"
@@ -127,7 +127,7 @@ export function Film() {
         if (CheckJWT() > 0)
             nav("/sign_in")
         else {
-            axios.post("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/add", {
+            axios.post("https://back.cintoes.link/comment/add", {
                 filmId: Number(id),
                 text: comment,
                 commentType: "private"
@@ -152,7 +152,7 @@ export function Film() {
                 buttonR.style.display = "block";
             }
             if (isReview) {
-                axios.get(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-public?filmId=${id}&page=1&amount=${commentCount}&resp_amount=0`, config)
+                axios.get(`https://back.cintoes.link/comment/get-public?filmId=${id}&page=1&amount=${commentCount}&resp_amount=0`, config)
                     .then(res => {
                         //setComments(undefined);
                         setComments(res.data.comments?.map((comment: Comment) => ({
@@ -163,7 +163,7 @@ export function Film() {
                         console.log(err.response);
                     })
             } else {
-                axios.get(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/comment/get-private?filmId=${id}&page=1&amount=10`, config)
+                axios.get(`https://back.cintoes.link/comment/get-private?filmId=${id}&page=1&amount=10`, config)
                     .then(res => {
                         setComments(res.data.comments?.map((comment: Comment) => ({
                             ...comment,
@@ -175,7 +175,7 @@ export function Film() {
                         console.log(err.response);
                     })
             }
-            axios.get(`https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/films/${id}/`, config)
+            axios.get(`https://back.cintoes.link/films/${id}/`, config)
                 .then(res => {
                     setFilm(res.data);
                 }, err => {
@@ -253,7 +253,7 @@ export function Film() {
                                     className={"bg-green-700 font-semibold border-neutral-400 hover:bg-green-600 rounded-sm border-2 hover:border-2 hover:border-green-800"}
                                     onClick={() => {
                                         if (!dropPL) {
-                                            axios.get("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/?user_id=" + DecodeB64(localStorage["jwt"]), config)
+                                            axios.get("https://back.cintoes.link/playlists/?user_id=" + DecodeB64(localStorage["jwt"]), config)
                                                 .then((res) => {
                                                     console.log(res.data.results)
                                                     setPLOptions(res.data.results)
@@ -282,7 +282,7 @@ export function Film() {
                                                                 })
                                                                 //@ts-ignore
                                                                 formdata.append("films", id.toString())
-                                                                axios.put("https://cinotes-alb-1929580936.eu-central-1.elb.amazonaws.com/playlists/" + res.data.pk + "/update/", formdata, config)
+                                                                axios.put("https://back.cintoes.link/playlists/" + res.data.pk + "/update/", formdata, config)
                                                                     .then(() => {
                                                                         setDropPL(false)
                                                                     })
